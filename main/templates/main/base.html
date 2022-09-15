@@ -55,6 +55,7 @@
     overflow-y: auto;
     /* Scrollable contents if viewport is shorter than content. */
 }
+    {% block css %} {% endblock %}
 
     </style>
 
@@ -105,23 +106,25 @@
 
           <!-- Brand -->
           <a class="navbar-brand" href="/">
-            <img src="{% static "main/pictures/logo_temp.png" %}" height="100" alt="">
+              <span class="d-none d-lg-inline-block ml-1">
+                  <img src="{% static "main/pictures/logo_temp.png" %}" height="100" alt="">
+              </span>
           </a>
-
-         <div class="clock">
-            <p id="datum"></p>
-            <p id="uhrzeit"></p>
-            <script type="text/javascript" src="{% static 'main/js/clock.js' %}"></script>
-        </div>
 
         <!-- Center links -->
         <ul class="navbar-nav mx-auto d-flex flex-row">
-            <li class="nav-item">
+            <li class="nav-item me-lg-0">
+                <span class="d-none d-lg-inline-block ml-1">
                 Wetter morgen
                 <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" height="50" alt="">
+                </span>
             </li>
-            <li class="nav-item">
-
+            <li class="nav-item me-lg-0 ms-5">
+                <div class="clock d-none d-lg-inline-block ml-1">
+                    <p id="datum">
+                    <p id="uhrzeit">
+                    <script type="text/javascript" src="{% static 'main/js/clock.js' %}"></script>
+                </div>
             </li>
         </ul>
           <!-- Right links -->
@@ -129,9 +132,9 @@
 
             <!-- Notification dropdown -->
               <li class="nav-item">
-              <a class="nav-link me-3 me-lg-0 " href="/settings">
+                <a class="nav-link me-3 me-lg-0 " href="/settings">
                       <img src="{% static "main/pictures/bootstrap_icons/gear-fill.svg" %}" height="50" alt="">
-              </a>
+                </a>
             </li>
               <li class="nav-item">
               <a class="nav-link me-3 me-lg-0 " href="#">

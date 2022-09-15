@@ -1,8 +1,170 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
+{% block css %}
+    .form-check{
+        margin: auto;
+        width: 65px;
+    }
+{% endblock %}
 {% block content %}
     <h1>Home-Commander - Geräte</h1>
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
+                <!--Lampe 1-->
+                <div class="col mb-5">
+                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+                        <div class="card-body p-4" style="transform: rotate(0);">
+                            <div class="text-center">
+                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50" alt="">
+                                <h5 class="fw-bolder mb-3 mt-2">Lampe 1</h5>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
+
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Steckdose 1-->
+                <div class="col mb-5">
+                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+                        <div class="card-body p-4" style="transform: rotate(0);">
+                            <div class="text-center">
+                                <img src="{% static "main/pictures/bootstrap_icons/outlet.svg" %}" height="50" alt="">
+                                <h5 class="fw-bolder mb-3 mt-2">Steckdose 1</h5>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
+
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Lampe 2-->
+                <div class="col mb-5">
+                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+                        <div class="card-body p-4" style="transform: rotate(0);">
+                            <div class="text-center">
+                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50" alt="">
+                                <h5 class="fw-bolder mb-3 mt-2">Lampe 2</h5>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
+
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Stripe 1-->
+                <div class="col mb-5">
+                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+                        <div class="card-body p-4" style="transform: rotate(0);">
+                            <div class="text-center">
+                                <img src="{% static "main/pictures/bootstrap_icons/hurricane.svg" %}" height="50" alt="">
+                                <h5 class="fw-bolder mb-3 mt-2">Stripe 1</h5>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
+
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Lampe 3-->
+                <div class="col mb-5">
+                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+                        <div class="card-body p-4" style="transform: rotate(0);">
+                            <div class="text-center">
+                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50" alt="">
+                                <h5 class="fw-bolder mb-3 mt-2">Lampe 3</h5>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
+
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Lampe 4-->
+                <div class="col mb-5">
+                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+                        <div class="card-body p-4" style="transform: rotate(0);">
+                            <div class="text-center">
+                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50" alt="">
+                                <h5 class="fw-bolder mb-3 mt-2">Lampe 4</h5>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
+
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch6">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TestModal -->
+                <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="testModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title" id="testModalLabel">Lampe XXX</h5>
+                                <div class="text-center">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" style="width: 65px; height: 40px" type="checkbox" id="switch1">
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal-body">
+                                <label for="customBrightness1" class="form-label">Helligkeit</label>
+                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1">
+                                <label for="customBrightness1" class="form-label">Farbe</label>
+                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1">
+                                <label for="customBrightness1" class="form-label">Sättigung</label>
+                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
 
 {% endblock %}
