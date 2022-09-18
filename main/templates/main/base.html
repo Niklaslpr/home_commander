@@ -67,6 +67,9 @@
 
     <script type="text/javascript" src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'main/js/mdb.min.js' %}"></script>
+
+
+    {% block js %} {% endblock %}
 </head>
 <body>
 
@@ -169,14 +172,19 @@
     <!--Main layout-->
     <main style="margin-top: 150px">
       <div class="container pt-4">
+
             {% block content %}
                 No content here.
             {% endblock %}
       </div>
     </main>
     <!--Main layout-->
+    {% block script %}
 
+    {% endblock %}
+    <!--Test Color-Picker
 
+    -->
 
 </body>
 </html>

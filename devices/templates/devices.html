@@ -6,9 +6,18 @@
         margin: auto;
         width: 65px;
     }
+
 {% endblock %}
+
+{% block js %}
+{#    <link rel="stylesheet" href="{% static 'main/css/color-picker.min.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'main/css/index.min.css' %}">#}
+{% endblock %}
+
+
 {% block content %}
     <h1>Home-Commander - Geräte</h1>
+
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
@@ -20,7 +29,6 @@
                                 <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50" alt="">
                                 <h5 class="fw-bolder mb-3 mt-2">Lampe 1</h5>
                                 <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
-
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -41,7 +49,6 @@
                                 <img src="{% static "main/pictures/bootstrap_icons/outlet.svg" %}" height="50" alt="">
                                 <h5 class="fw-bolder mb-3 mt-2">Steckdose 1</h5>
                                 <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
-
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -62,7 +69,6 @@
                                 <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50" alt="">
                                 <h5 class="fw-bolder mb-3 mt-2">Lampe 2</h5>
                                 <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#testModal"></a>
-
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -139,9 +145,11 @@
                 </div>
 
                 <!-- TestModal -->
+
                 <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="testModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
+
                             <div class="modal-header text-center">
                                 <h5 class="modal-title" id="testModalLabel">Lampe XXX</h5>
                                 <div class="text-center">
@@ -150,13 +158,12 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="modal-body">
-                                <label for="customBrightness1" class="form-label">Helligkeit</label>
-                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1">
-                                <label for="customBrightness1" class="form-label">Farbe</label>
-                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1">
-                                <label for="customBrightness1" class="form-label">Sättigung</label>
-                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1">
+                            <div class="modal-body text-center">
+                                <input type="color" style="margin-bottom: 50px; width: 100px; height: 100px">
+                                <br>
+                                <label for="customBrightness1" class="form-label">Helligkeit <p id="color1"></p></label>
+                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1" value="{{ disclaimer }}">
+
                             </div>
                         </div>
                     </div>
@@ -166,5 +173,16 @@
         </div>
     </section>
 
+    <script>
+        var slider = document.getElementById("customBrightness1");
+        var output = document.getElementById("color1");
+        output.innerHTML = slider.value;
+
+        // Update the current slider value (each time you drag the slider handle)
+        slider.oninput = function(){
+            output.innerHTML = this.value;
+        }
+    </script>
 
 {% endblock %}
+
