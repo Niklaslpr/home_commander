@@ -17,7 +17,7 @@
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}" height="50" alt="">
         </a>
     </h1>
-
+    <p id="testOnCheckbox"></p>
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
@@ -34,7 +34,7 @@
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
                                 <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch1">
+                                    <input class="form-check-input" type="checkbox" id="switchLight1">
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
                                 <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch3">
+                                    <input class="form-check-input" type="checkbox" id="switchLight2">
                                 </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                                 <h5 class="modal-title" id="testModalLabel">Lampe XXX</h5>
                                 <div class="text-center">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" style="transform: scale(1.8)" type="checkbox" id="switch1">
+                                    <input class="form-check-input" style="transform: scale(1.8)" type="checkbox" id="switchModalLight1">
                                 </div>
                             </div>
                             </div>
@@ -187,39 +187,37 @@
             </div>
         </div>
     </section>
-
-   <script>
-      var colorPicker = new iro.ColorPicker('#colpicker234', {
-          borderWidth: 2,
-          layout: [
-            {
-              component: iro.ui.Wheel,
-            },
-          ]
-      });
-
-      var headerbg = document.getElementById("modalHeader1");
-      var outputHue = document.getElementById("testModalLabel");
-      outputHue.innerHTML = 'Lampe XXX'
-
-      colorPicker.on('color:change', function(color){
-         console.log(color.hue);
-         console.log(color.saturation);
-         headerbg.style.backgroundColor = color.hexString;
-         outputHue.innerHTML ='Lampe XXX ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
-      });
-    </script>
-
-    <script>
-        var slider = document.getElementById("customBrightness1");
-        var output = document.getElementById("color1");
-        output.innerHTML = slider.value + '%';
-
-        // Update the current slider value (each time you drag the slider handle)
-        slider.oninput = function(){
-            output.innerHTML = this.value + '%';
-        }
-    </script>
+<script type="text/javascript" src="{% static 'devices/js/devices.js' %}"></script>
+{#   <script>#}
+{#      var colorPicker = new iro.ColorPicker('#colpicker234', {#}
+{#          borderWidth: 2,#}
+{#          layout: [#}
+{#            {#}
+{#              component: iro.ui.Wheel,#}
+{#            },#}
+{#          ]#}
+{#      });#}
+{##}
+{#      var headerbg = document.getElementById("modalHeader1");#}
+{#      var outputHue = document.getElementById("testModalLabel");#}
+{#      outputHue.innerHTML = 'Lampe XXX'#}
+{##}
+{#      colorPicker.on('color:change', function(color){#}
+{#         console.log(color.hue);#}
+{#         console.log(color.saturation);#}
+{#         headerbg.style.backgroundColor = color.hexString;#}
+{#         outputHue.innerHTML ='Lampe XXX ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;#}
+{#      });#}
+{##}
+{#        var slider = document.getElementById("customBrightness1");#}
+{#        var output = document.getElementById("color1");#}
+{#        output.innerHTML = slider.value + '%';#}
+{##}
+{#        // Update the current slider value (each time you drag the slider handle)#}
+{#        slider.oninput = function(){#}
+{#            output.innerHTML = this.value + '%';#}
+{#        }#}
+{#    </script>#}
 
 {% endblock %}
 
