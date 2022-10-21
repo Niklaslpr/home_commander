@@ -8,9 +8,10 @@ def putstate1(state):
     print(p.content)
 
 
-def putstate2(state):
+def putstate(state, lightID):
     data = '{"on":' + state + '}'
-    p = requests.put('http://192.168.178.49/api/546117A96A/lights/2/state', data=data)
+    url = 'http://192.168.178.49/api/546117A96A/lights/' + lightID + '/state'
+    p = requests.put(url, data=data)
     print(p.status_code)
     print(p.content)
 

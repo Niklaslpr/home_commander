@@ -1,4 +1,4 @@
-var colorPicker = new iro.ColorPicker('#colpicker234', {
+var colorPicker1 = new iro.ColorPicker('#colpicker1', {
   borderWidth: 2,
   layout: [
     {
@@ -7,15 +7,24 @@ var colorPicker = new iro.ColorPicker('#colpicker234', {
   ]
 });
 
-var headerbg = document.getElementById("modalHeader1");
-var outputHue = document.getElementById("testModalLabel");
-outputHue.innerHTML = 'Lampe XXX'
+var colorPicker2 = new iro.ColorPicker('#colpicker2', {
+  borderWidth: 2,
+  layout: [
+    {
+      component: iro.ui.Wheel,
+    },
+  ]
+});
 
-colorPicker.on('color:change', function(color){
+var headerbg1 = document.getElementById("modalHeader1");
+var outputHue1 = document.getElementById("modalLight1Label");
+outputHue1.innerHTML = 'Lampe 1'
+
+colorPicker1.on('color:change', function(color){
  console.log(color.hue);
  console.log(color.saturation);
- headerbg.style.backgroundColor = color.hexString;
- outputHue.innerHTML ='Lampe XXX ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
+ headerbg1.style.backgroundColor = color.hexString;
+ outputHue1.innerHTML ='Lampe 1 ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
 
  let hue = Math.round(color.hue * 65535 / 360);
  let sat = Math.round(color.saturation * 2.55);
@@ -27,10 +36,30 @@ colorPicker.on('color:change', function(color){
  const http = new XMLHttpRequest();
  http.open('POST', '/sethue/');
  http.send(formData);
-
-
-
 });
+
+var headerbg2 = document.getElementById("modalHeader2");
+var outputHue2 = document.getElementById("modalLight2Label");
+outputHue2.innerHTML = 'Lampe 2'
+
+colorPicker2.on('color:change', function(color){
+ console.log(color.hue);
+ console.log(color.saturation);
+ headerbg2.style.backgroundColor = color.hexString;
+ outputHue2.innerHTML ='Lampe 2 ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
+
+ let hue = Math.round(color.hue * 65535 / 360);
+ let sat = Math.round(color.saturation * 2.55);
+ let formData = new FormData();
+ formData.append('hue', hue);
+ formData.append('sat', sat);
+ formData.append('csrfmiddlewaretoken', csrftoken);
+
+ const http = new XMLHttpRequest();
+ http.open('POST', '/sethue/');
+ http.send(formData);
+});
+
 
 var slider = document.getElementById("customBrightness1");
 var output = document.getElementById("color1");
@@ -56,21 +85,28 @@ slider.oninput = function(){
 // Licht an / aus
 let switchLight1 = document.getElementById('switchLight1');
 let switchModalLight1 = document.getElementById('switchModalLight1');
+let switchModalLight2 = document.getElementById('switchModalLight2');
+let switchLight2 = document.getElementById('switchLight2');
+let switchModalPlug1 = document.getElementById('switchModalPlug1');
+let switchPlug1 = document.getElementById('switchPlug1');
 
-switchLight1.addEventListener('change', function(){lightOnOff(switchLight1.checked); switchModalLight1.checked = switchLight1.checked;});
-switchModalLight1.addEventListener('change', function(){lightOnOff(switchModalLight1.checked); switchLight1.checked = switchModalLight1.checked;});
 
-function lightOnOff(state){
+switchLight1.addEventListener('change', function(){lightOnOff(switchLight1.checked, 2); switchModalLight1.checked = switchLight1.checked;});
+switchLight2.addEventListener('change', function(){lightOnOff(switchLight2.checked, 4); switchModalLight2.checked = switchLight2.checked;});
+switchPlug1.addEventListener('change', function(){lightOnOff(switchPlug1.checked, 3); switchModalPlug1.checked = switchPlug1.checked;});
+switchModalLight1.addEventListener('change', function(){lightOnOff(switchModalLight1.checked, 2); switchLight1.checked = switchModalLight1.checked;});
+switchModalLight2.addEventListener('change', function(){lightOnOff(switchModalLight2.checked, 4); switchLight2.checked = switchModalLight2.checked;});
+switchModalPlug1.addEventListener('change', function(){lightOnOff(switchModalPlug1.checked, 3); switchPlug1.checked = switchModalPlug1.checked;});
+
+function lightOnOff(state, lightID){
     let formData = new FormData();
+    formData.append('lightID', lightID);
     formData.append('state', state);
     formData.append('csrfmiddlewaretoken', csrftoken);
 
     const http = new XMLHttpRequest();
-    http.open('POST', '/devices/');
+    http.open('POST', '/turnonoff/');
     http.send(formData);
-    const http2 = new XMLHttpRequest();
-    http2.open('POST', '/turnonoff/');
-    http2.send(formData);
     }
 
 
