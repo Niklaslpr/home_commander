@@ -16,39 +16,61 @@
     });
 
 
+    var dict = {};
+    dict['Mo, '] = document.getElementById('checkMonday');
+    dict['Di, '] = document.getElementById('checkTuesday');
+    dict['Mi, '] = document.getElementById('checkWednesday');
+    dict['Do, '] = document.getElementById('checkThursday');
+    dict['Fr, '] = document.getElementById('checkFriday');
+    dict['Sa, '] = document.getElementById('checkSaturday');
+    dict['So, '] = document.getElementById('checkSunday');
+
+    document.getElementById('checkboxRepeatRule').addEventListener('change', function(){
+        if(document.getElementById('checkboxRepeatRule').checked == true){
+            for (const [key, value] of Object.entries(dict)){
+                value.disabled = false;
+            }
+        } else{
+            for (const [key, value] of Object.entries(dict)){
+                value.disabled = true;
+            }
+        }
+    })
+
     document.getElementById('saveRule').addEventListener("click", function(){
+
         var savedTime = timePicker.getDate(true);
         document.getElementById('savedTimeRule1').innerHTML = savedTime;
+        console.log(savedTime);
 
-        var checkMonday = document.getElementById('checkMonday');
-        var checkTuesday = document.getElementById('checkTuesday');
-        var checkWednesday = document.getElementById('checkWednesday');
-        var checkThursday = document.getElementById('checkThursday');
-        var checkFriday = document.getElementById('checkFriday');
-        var checkSaturday = document.getElementById('checkSaturday');
-        var checkSunday = document.getElementById('checkSunday');
+
         var savedDaysOutput = '';
+        var selectedDays = '';
+        for (const [key, value] of Object.entries(dict)){
+            if (value.checked == true){
+                savedDaysOutput += key;
+                selectedDays += '1';
+            } else if(value.checked == false){
+            selectedDays += '0';
+            }
+        }
 
-        if (checkMonday.checked == true){
-            savedDaysOutput += 'Mo, ';
+        var days = parseInt(selectedDays, 2); // Format für deCONZ
+        if(document.getElementById('checkboxRepeatRule').checked == false){
+            savedDaysOutput = '';
+            days = 0;
         }
-        if (checkTuesday.checked == true){
-            savedDaysOutput += 'Di, ';
-        }
-        if (checkWednesday.checked == true){
-            savedDaysOutput += 'Mi, ';
-        }
-        if (checkThursday.checked == true){
-            savedDaysOutput += 'Do, ';
-        }
-        if (checkFriday.checked == true){
-            savedDaysOutput += 'Fr, ';
-        }
-        if (checkSaturday.checked == true){
-            savedDaysOutput += 'Sa, ';
-        }
-        if (checkSunday.checked == true){
-            savedDaysOutput += 'So, ';
-        }
-        document.getElementById('savedDays1').innerHTML = savedDaysOutput;
+        document.getElementById('savedDays1').innerHTML = savedDaysOutput; //Ausgabe der gewählten Tage
+        console.log(days); //Consolenausgabe Wert für deCONZ
+
+        let apiTime = 'W' + days + '/T' + savedTime + ':00';
+        let formData = new FormData();
+        formData.append('groupID', 1);
+        formData.append('time', apiTime);
+        formData.append('csrfmiddlewaretoken', csrftoken);
+
+        const http = new XMLHttpRequest();
+        http.open('POST', '/createschedule/');
+        http.send(formData);
+
     });

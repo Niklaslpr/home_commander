@@ -29,53 +29,12 @@
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
                                 <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch1">
+                                    <input class="form-check-input" type="checkbox" id="switchGroup1">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!--Gruppe 2-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/collection-fill.svg" %}" height="50" alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Gruppe 2</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#ModalGroup"></a>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch2">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Gruppe 3-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/collection-fill.svg" %}" height="50" alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Gruppe 3</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#ModalGroup"></a>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch3">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 
                 <!-- ModalGroup -->
 
@@ -87,7 +46,7 @@
                                 <h5 class="modal-title" id="ModalGroupLabel">Gruppe XXX</h5>
                                 <div class="text-center">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" style="transform: scale(1.8)" type="checkbox" id="switch1">
+                                    <input class="form-check-input" style="transform: scale(1.8)" type="checkbox" id="switchModalGroup1">
                                 </div>
                             </div>
                             </div>
@@ -115,10 +74,10 @@
                                         <div class="container text-center">
                                             <div class="row">
                                                 <div class="col-3">
-                                                    <img src="{% static "main/pictures/bootstrap_icons/outlet.svg" %}" height="25" alt="">
+                                                    <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="25" alt="">
                                                 </div>
                                                 <div class="col-6">
-                                                    Steckdose 1
+                                                    Lampe 2
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-check form-switch d-flex justify-content-center">
@@ -132,10 +91,10 @@
                                         <div class="container text-center">
                                             <div class="row">
                                                 <div class="col-3">
-                                                    <img src="{% static "main/pictures/bootstrap_icons/hurricane.svg" %}" height="25" alt="">
+                                                    <img src="{% static "main/pictures/bootstrap_icons/outlet.svg" %}" height="25" alt="">
                                                 </div>
                                                 <div class="col-6">
-                                                    Stripe 1
+                                                    Plug 1
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="form-check form-switch d-flex justify-content-center">
@@ -164,8 +123,13 @@
                                 <h5 class="modal-title" style="margin: auto" id="modalNewGroupLabel">Neue Gruppe erstellen</h5>
                             </div>
                             <div class="modal-body text-center">
+                                <label for="inputGroupName"  class="form-label">Name</label>
+                                <input style="" type="text" id="inputGroupName" class="form-control" aria-describedby="inputGroupName">
+                                <select class="form-select" aria-label="Select Group Icon">
+                                    <option selected>Bitte Icon der Gruppe auswählen</option>
 
-                                <button type="button" class="btn btn-primary">Erstellen</button>
+                                </select>
+                                <button type="button" style="margin-top: 25px" class="btn btn-primary" id="createGroup">Erstellen</button>
                             </div>
                         </div>
                     </div>
@@ -174,39 +138,8 @@
             </div>
         </div>
     </section>
+<script type="text/javascript" src="{% static 'groups/js/groups.js' %}"></script>
 
-   <script>
-      var colorPicker = new iro.ColorPicker('#colpicker234', {
-          borderWidth: 2,
-          layout: [
-            {
-              component: iro.ui.Wheel,
-            },
-          ]
-      });
-
-      var headerbg = document.getElementById("ModalGroupHeader");
-      var outputHue = document.getElementById("ModalGroupLabel");
-      outputHue.innerHTML = 'Gruppe XXX'
-
-      colorPicker.on('color:change', function(color){
-         console.log(color.hue);
-         console.log(color.saturation);
-         headerbg.style.backgroundColor = color.hexString;
-         outputHue.innerHTML ='Gruppe XXX ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
-      });
-    </script>
-
-    <script>
-        var slider = document.getElementById("customBrightness1");
-        var output = document.getElementById("color1");
-        output.innerHTML = slider.value + '%';
-
-        // Update the current slider value (each time you drag the slider handle)
-        slider.oninput = function(){
-            output.innerHTML = this.value + '%';
-        }
-    </script>
 
 {% endblock %}
 
