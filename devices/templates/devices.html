@@ -9,6 +9,10 @@
 
 {% endblock %}
 
+{% block js %}
+    <script type="text/javascript" src="{% static 'devices/js/build.js' %}"></script>
+    <script type="text/javascript" src="{% static 'devices/js/devices.js' %}"></script>
+{% endblock %}
 
 
 {% block content %}
@@ -21,165 +25,168 @@
     <p id="testOnCheckbox"></p>
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
-                <!--Lampe 1-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"
-                                     alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Lampe 1</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal"
-                                   data-bs-target="#testModal"></a>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switchLight1">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="device-list" class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
+{#                <!--Lampe 1-->#}
+{#                <div class="col mb-5">#}
+{#                    <div class="card h-100"#}
+{#                         style="background-color: var(--tertiary-color); box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+{#                            <div class="text-center">#}
+{#                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"#}
+{#                                     alt="">#}
+{#                                <h5 class="fw-bolder mb-3 mt-2">Lampe 1</h5>#}
+{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+{#                                   data-bs-target="#testModal"></a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+{#                            <div class="text-center">#}
+{#                                <div class="form-check form-switch d-flex justify-content-center">#}
+{#                                    <input class="form-check-input" type="checkbox" id="switchLight1">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <!--Steckdose 1-->#}
+{#                <div class="col mb-5">#}
+{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+{#                            <div class="text-center">#}
+{#                                <img src="{% static "main/pictures/bootstrap_icons/outlet.svg" %}" height="50" alt="">#}
+{#                                <h5 class="fw-bolder mb-3 mt-2">Steckdose 1</h5>#}
+{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+{#                                   data-bs-target="#testModal"></a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+{#                            <div class="text-center">#}
+{#                                <div class="form-check form-switch d-flex justify-content-center">#}
+{#                                    <input class="form-check-input" type="checkbox" id="switch2">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <!--Lampe 2-->#}
+{#                <div class="col mb-5">#}
+{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+{#                            <div class="text-center">#}
+{#                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"#}
+{#                                     alt="">#}
+{#                                <h5 class="fw-bolder mb-3 mt-2">Lampe 2</h5>#}
+{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+{#                                   data-bs-target="#testModal"></a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+{#                            <div class="text-center">#}
+{#                                <div class="form-check form-switch d-flex justify-content-center">#}
+{#                                    <input class="form-check-input" type="checkbox" id="switchLight2">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <!--Stripe 1-->#}
+{#                <div class="col mb-5">#}
+{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+{#                            <div class="text-center">#}
+{#                                <img src="{% static "main/pictures/bootstrap_icons/hurricane.svg" %}" height="50"#}
+{#                                     alt="">#}
+{#                                <h5 class="fw-bolder mb-3 mt-2">Stripe 1</h5>#}
+{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+{#                                   data-bs-target="#testModal"></a>#}
+{##}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+{#                            <div class="text-center">#}
+{#                                <div class="form-check form-switch d-flex justify-content-center">#}
+{#                                    <input class="form-check-input" type="checkbox" id="switch4">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <!--Lampe 3-->#}
+{#                <div class="col mb-5">#}
+{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+{#                            <div class="text-center">#}
+{#                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"#}
+{#                                     alt="">#}
+{#                                <h5 class="fw-bolder mb-3 mt-2">Lampe 3</h5>#}
+{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+{#                                   data-bs-target="#testModal"></a>#}
+{##}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+{#                            <div class="text-center">#}
+{#                                <div class="form-check form-switch d-flex justify-content-center">#}
+{#                                    <input class="form-check-input" type="checkbox" id="switch5">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#                <!--Lampe 4-->#}
+{#                <div class="col mb-5">#}
+{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+{#                            <div class="text-center">#}
+{#                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"#}
+{#                                     alt="">#}
+{#                                <h5 class="fw-bolder mb-3 mt-2">Lampe 4</h5>#}
+{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+{#                                   data-bs-target="#testModal"></a>#}
+{##}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+{#                            <div class="text-center">#}
+{#                                <div class="form-check form-switch d-flex justify-content-center">#}
+{#                                    <input class="form-check-input" type="checkbox" id="switch6">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
 
-                <!--Steckdose 1-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/outlet.svg" %}" height="50" alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Steckdose 1</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal"
-                                   data-bs-target="#testModal"></a>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch2">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Lampe 2-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"
-                                     alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Lampe 2</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal"
-                                   data-bs-target="#testModal"></a>
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switchLight2">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Stripe 1-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/hurricane.svg" %}" height="50"
-                                     alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Stripe 1</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal"
-                                   data-bs-target="#testModal"></a>
-
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch4">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Lampe 3-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"
-                                     alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Lampe 3</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal"
-                                   data-bs-target="#testModal"></a>
-
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch5">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Lampe 4-->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-                            <div class="text-center">
-                                <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="50"
-                                     alt="">
-                                <h5 class="fw-bolder mb-3 mt-2">Lampe 4</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal"
-                                   data-bs-target="#testModal"></a>
-
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch6">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TestModal -->
-
-                <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="testModalLabel"
-                     aria-hidden="true">
+                <!-- Device Control Modal -->
+                <div class="modal fade" id="device-control-modal"
+                     onblur="saveDeviceDataToLocalStorage(document.getElementById('device-control-modal').dataset['deviceId'])"
+                     tabindex="-1"
+                     aria-labelledby="device-control-modal-label" data-device-id="unknown" data-device-name="unknown"
+                >
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-
-                            <div class="modal-header text-center" id="modalHeader1">
-                                <h5 class="modal-title" id="testModalLabel">Lampe XXX</h5>
+                            <div class="modal-header text-center" id="device-control-modal-header">
+                                <h5 class="modal-title" id="device-control-modal-label">Lamp name unknown</h5>
                                 <div class="text-center">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
-                                               id="switch1">
+                                               id="device-control-modal-switch">
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-body text-center">
                                 <div style="display: flex; justify-content: center; align-items: center"
-                                     id="colpicker234"></div>
+                                     id="device-control-modal-colorpicker"></div>
                                 <br>
-                                <label for="customBrightness1" class="form-label">Helligkeit <p id="color1"></p></label>
-                                <input type="range" class="form-range" min="0" max="100" id="customBrightness1"
+                                <label for="device-control-modal-brightness" class="form-label">Helligkeit <p
+                                        id="device-control-modal-brightness-display"></p></label>
+                                <input type="range" class="form-range" min="0" max="100"
+                                       id="device-control-modal-brightness"
                                        value="{{ disclaimer }}"/>
-
                             </div>
                         </div>
                     </div>
@@ -207,7 +214,6 @@
         </div>
     </section>
 
-    <script type="text/javascript" src="{% static 'devices/js/devices.js' %}"></script>
     {#   <script>#}
     {#      var colorPicker = new iro.ColorPicker('#colpicker234', {#}
     {#          borderWidth: 2,#}
@@ -239,72 +245,37 @@
     {#        }#}
     {#    </script>#}
 
-    <script>
-        var colorPicker = new iro.ColorPicker('#colpicker234', {
-            borderWidth: 2,
-            layout: [
-                {
-                    component: iro.ui.Wheel,
-                },
-            ]
-        });
-
-        var headerbg = document.getElementById("modalHeader1");
-        var outputHue = document.getElementById("testModalLabel");
-        outputHue.innerHTML = 'Lampe XXX'
-
-        colorPicker.on('color:change', function (color) {
-            console.log(color.hue);
-            console.log(color.saturation);
-            headerbg.style.backgroundColor = color.hexString;
-            outputHue.innerHTML = 'Lampe XXX ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
-        });
-    </script>
-
-    <script>
-        var slider = document.getElementById("customBrightness1");
-        var output = document.getElementById("color1");
-        output.innerHTML = slider.value + '%';
-
-        // Update the current slider value (each time you drag the slider handle)
-        slider.oninput = function () {
-            output.innerHTML = this.value + '%';
-        }
-    </script>
-
-    <script>
-        const request = new Request(
-            '/get_device_data/',
-            {headers: {'X-CSRFToken': getCookie('csrftoken')}}
-        );
-        fetch(request, {
-            method: 'POST',
-            mode: 'same-origin'  // Do not send CSRF token to another domain.
-        }).then(function (response) {
-            console.log(response.body);
-        });
-
-        $("#testtest").click(function () {
-            $.ajax({
-                url: '/get_device_data/',
-                type: 'post',
-                data: {
-                    csrfmiddlewaretoken: getCookie('csrftoken'),
-                    name: "test123"
-                },
-                headers: {
-                    'Content-type': 'application/json', 'Accept': 'text/plain',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                dataType: 'json',
-                mode: 'same-origin',
-                success: function (data) {
-                    console.info(data);
-                }
-            });
-        });
-
-    </script>
+    {#    <script>#}
+    {#        var colorPicker = new iro.ColorPicker('#colpicker234', {#}
+    {#            borderWidth: 2,#}
+    {#            layout: [#}
+    {#                {#}
+    {#                    component: iro.ui.Wheel,#}
+    {#                },#}
+    {#            ]#}
+    {#        });#}
+    {##}
+    {#        var headerbg = document.getElementById("modalHeader1");#}
+    {#        var outputHue = document.getElementById("testModalLabel");#}
+    {#        outputHue.innerHTML = 'Lampe XXX'#}
+    {##}
+    {#        colorPicker.on('color:change', function (color) {#}
+    {#            console.log(color.hue);#}
+    {#            console.log(color.saturation);#}
+    {#            headerbg.style.backgroundColor = color.hexString;#}
+    {#            outputHue.innerHTML = 'Lampe XXX ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;#}
+    {#        });#}
+    {#    </script>#}
+    {##}
+    {#    <script>#}
+    {#        var slider = document.getElementById("customBrightness1");#}
+    {#        var output = document.getElementById("color1");#}
+    {#        output.innerHTML = slider.value + '%';#}
+    {##}
+    {#        // Update the current slider value (each time you drag the slider handle)#}
+    {#        slider.oninput = function () {#}
+    {#            output.innerHTML = this.value + '%';#}
+    {#        }#}
+    {#    </script>#}
 
 {% endblock %}
-

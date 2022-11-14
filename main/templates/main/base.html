@@ -6,8 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <style type="text/css">
+        :root {
+            --main-color: #343DF4;
+            --main-color-dark: #131AA8;
+            --secondary-color: #5CF51B;
+            --secondary-color-dark: #45A81B;
+            --tertiary-color: #F5814C;
+        }
+
         body {
-            background-color: #fbfbfb;
+            {#background-color: #fbfbfb;#}
+            background-color: var(--main-color);
         }
 
         @media (min-width: 991.98px) {
@@ -77,17 +86,18 @@
     <script type="text/javascript" src="{% static 'main/js/picker.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'main/js/jquery-3.6.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'main/js/cookie-handler.js' %}"></script>
+    <script type="text/javascript" src="{% static 'main/js/data-attribute-handler.js' %}"></script>
 
     {% block js %} {% endblock %}
 </head>
-<body>
+<body class="font-family-base font-size-base line-height-base" style="font-family: system-ui;">
 
 <!--Main Navigation-->
 <header>
     <!-- Sidebar -->
-    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-light">
+    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse" style="background-color: var(--main-color)">
         <div class="position-sticky">
-            <div class="list-group list-group-flush mx-3 mt-4">
+            <div class="list-group list-group-flush mx-3 mt-4" style="background-color: var(--main-color-dark)">
                 <a href="/" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
                     <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
                 </a>
@@ -113,7 +123,7 @@
     <!-- Sidebar -->
 
     <!-- Navbar -->
-    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: var(--main-color)">
         <!-- Container wrapper -->
         <div class="container-fluid">
             <!-- Toggle button -->
