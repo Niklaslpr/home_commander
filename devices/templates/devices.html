@@ -6,7 +6,6 @@
     .form-check-input{
         transform: scale(1.8);
     }
-
 {% endblock %}
 
 
@@ -14,10 +13,10 @@
 {% block content %}
     <h1>Geräte
         <a href="" data-bs-toggle="modal" data-bs-target="#modalNewDevice">
-            <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}" height="50" alt="">
+            <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}" height="50" alt="" id="plusimg">
         </a>
     </h1>
-    <p id="testOnCheckbox"></p>
+
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
@@ -183,7 +182,16 @@
                             </div>
                             <div class="modal-body text-center">
                                 <p>Stelle sicher, dass das Gerät, das Du hinzufügen möchtest, an den Strom angeschlossen ist.</p>
-                                <button type="button" class="btn btn-primary">Suche starten</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#searchProgress" aria-expanded="false" aria-controls="searchProgress" id="startDeviceSearch">Suche starten</button>
+
+                                <div id="foundDevices"></div>
+                                <p id="nodevicesfound"></p>
+                                <div class="collapse" id="searchProgress">
+                                    <p class="pt-4" id="searchText"></p>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 1%" aria-valuemin="0" aria-valuemax="100" id="searchProgressBar"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -192,6 +200,7 @@
             </div>
         </div>
     </section>
+
 <script type="text/javascript" src="{% static 'devices/js/devices.js' %}"></script>
 
 

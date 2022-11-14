@@ -43,3 +43,24 @@ function groupOnOff(state, groupID){
     http.open('POST', '/grouponoff/');
     http.send(formData);
 }
+
+let newGroupName = document.getElementById('inputGroupName');
+
+document.getElementById('createGroup').addEventListener('click', function(){
+    let formData = new FormData();
+    formData.append('groupName', newGroupName.value);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+
+    const http = new XMLHttpRequest();
+
+    http.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            location.reload();
+        }
+    }
+
+    http.open('POST','/creategroup/');
+    http.send(formData);
+
+
+})

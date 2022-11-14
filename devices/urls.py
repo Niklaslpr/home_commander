@@ -6,4 +6,5 @@ urlpatterns = [
     path('turnonoff/', views.turnonoff, name='turnonoff'),
     path('setbri/', views.setbri, name='setbri'),
     path('sethue/', views.sethue, name='sethue'),
+    path('startsearch/', views.startsearch, name='startsearch'),
 ]

@@ -92,10 +92,10 @@ let switchPlug1 = document.getElementById('switchPlug1');
 
 
 switchLight1.addEventListener('change', function(){lightOnOff(switchLight1.checked, 2); switchModalLight1.checked = switchLight1.checked;});
-switchLight2.addEventListener('change', function(){lightOnOff(switchLight2.checked, 4); switchModalLight2.checked = switchLight2.checked;});
+switchLight2.addEventListener('change', function(){lightOnOff(switchLight2.checked, 5); switchModalLight2.checked = switchLight2.checked;});
 switchPlug1.addEventListener('change', function(){lightOnOff(switchPlug1.checked, 3); switchModalPlug1.checked = switchPlug1.checked;});
 switchModalLight1.addEventListener('change', function(){lightOnOff(switchModalLight1.checked, 2); switchLight1.checked = switchModalLight1.checked;});
-switchModalLight2.addEventListener('change', function(){lightOnOff(switchModalLight2.checked, 4); switchLight2.checked = switchModalLight2.checked;});
+switchModalLight2.addEventListener('change', function(){lightOnOff(switchModalLight2.checked, 5); switchLight2.checked = switchModalLight2.checked;});
 switchModalPlug1.addEventListener('change', function(){lightOnOff(switchModalPlug1.checked, 3); switchPlug1.checked = switchModalPlug1.checked;});
 
 function lightOnOff(state, lightID){
@@ -108,5 +108,75 @@ function lightOnOff(state, lightID){
     http.open('POST', '/turnonoff/');
     http.send(formData);
     }
+
+
+ // Suche Geräte
+let startDeviceSearch = document.getElementById('startDeviceSearch');
+let searchProgress = document.getElementById('searchProgress');
+startDeviceSearch.addEventListener('click', function(){
+    let buttonClass = startDeviceSearch.className;
+    startDeviceSearch.className += " collapse";
+    searchProgress.className = "collapse show";
+    // API-Start-Search
+    let formData = new FormData();
+    formData.append('csrfmiddlewaretoken', csrftoken);
+
+    const http = new XMLHttpRequest();
+
+    http.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+           if (this.response == 'none'){
+               document.getElementById('nodevicesfound').innerHTML = "Keine Geräte gefunden.";
+           }else {
+
+               var data = JSON.parse(this.response);
+
+               var tag = document.createElement("p");
+               var text = document.createTextNode("Gefundene Geräte: ");
+               tag.appendChild(text);
+               var element = document.getElementById("foundDevices");
+               element.appendChild(tag);
+
+               for (var prop in data) {
+
+                   var tag = document.createElement("p");
+
+                   var text = document.createTextNode(data[prop].manufacturername + ", " + data[prop].name);
+                   tag.appendChild(text);
+                   const node = document.getElementById("plusimg");
+                   node.setAttribute("style", "height:25px; float: right");
+                   const clone = node.cloneNode(true);
+                   tag.appendChild(clone);
+                   var element = document.getElementById("foundDevices");
+                   element.appendChild(tag);
+
+               }
+           }
+        }
+    }
+
+    http.open('POST', '/startsearch/');
+    http.send(formData);
+
+
+    // Progress-Bar
+    var i = 0;
+    document.getElementById('searchText').innerHTML = 'Suche läuft';
+
+    var searchCounter = setInterval(function(){
+      i++;
+      if (i < 101){
+        document.getElementById('searchProgressBar').style.width = i+'%';
+        var progressTime = Math.ceil((180 - (i * 1.8)) / 60);
+        document.getElementById('searchText').innerHTML = 'Suche läuft noch ' + progressTime + " Minuten";
+      } else {
+          clearInterval(searchCounter);
+          startDeviceSearch.className = buttonClass;
+          document.getElementById('searchText').innerHTML = 'Suche beendet';
+      }
+    }, 1800);
+});
+
+
 
 
