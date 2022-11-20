@@ -11,16 +11,12 @@ from devices.apiCalls import putstate
 from devices.apiCalls import putstate1
 from devices.apiCalls import startscan
 
-DECONZ_URL = "http://192.168.178.49"
-API_KEY = "546117A96A"
+from main.views import get_data_from_input
+from main.views import DECONZ_URL, API_KEY, TEST
+
+
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
-TEST = True  # @Niklas set it to False
-
-
-def get_data_from_input(data_input):
-    return {entry.split("=")[0]: entry.split("=")[1] for entry in
-            data_input.read().decode("utf-8").split("&")} if data_input.read().decode("utf-8") != "" else {}
 
 
 @login_required
