@@ -21,30 +21,41 @@ $(document).ready(() => {
     deviceControlModalLabel = document.getElementById('device-control-modal-label');
     // deviceControlModalLabel.innerHTML = 'Lampe XXX';
 
-    colorPicker.on('color:change', function (color) {
-        console.log(color.hue);
-        console.log(color.saturation);
-        deviceControlModalHeader.style.backgroundColor = color.hexString;
-        deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'] + ' ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
 
-        let hue = Math.round(color.hue * 65535 / 360);
-        let sat = Math.round(color.saturation * 2.55);
+        colorPicker.on('color:change', function (color) {
+            if (deviceControlModal.classList.contains('show') == true) {
+                console.log(deviceControlModal.classList.contains('show'));
+                console.log(color.hue);
+                console.log(color.saturation);
 
-        let formData = new FormData();
-        formData.append('hue', hue);
-        formData.append('sat', sat);
-        formData.append('csrfmiddlewaretoken', csrftoken);
+                deviceControlModalHeader.style.backgroundColor = color.hexString;
+                deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'] + ' ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
 
-        const http = new XMLHttpRequest();
-        http.open('POST', '/sethue/');
-        http.send(formData);
-    });
+
+                let hue = Math.round(color.hue * 65535 / 360);
+                let sat = Math.round(color.saturation * 2.55);
+
+                let formData = new FormData();
+                formData.append('hue', hue);
+                formData.append('sat', sat);
+                formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+                formData.append('csrfmiddlewaretoken', csrftoken);
+
+                const http = new XMLHttpRequest();
+                http.open('POST', '/sethue/');
+                http.send(formData);
+            }
+        })
+
 
     deviceControlModalSwitch = document.getElementById('device-control-modal-switch');
     deviceControlModalBrightnessSlider = document.getElementById("device-control-modal-brightness");
     deviceControlModalBrightnessDisplay = document.getElementById("device-control-modal-brightness-display");
     deviceControlModalBrightnessDisplay.innerText = deviceControlModalBrightnessSlider.value + ' %';
 
+    deviceControlModalSwitch.addEventListener('change', function(){
+        lightOnOff(deviceControlModalSwitch.checked, deviceControlModal.dataset['deviceId']);
+    })
 
     deviceControlModalBrightnessSlider.oninput = function () {
         let bri = this.value;
@@ -54,15 +65,16 @@ $(document).ready(() => {
         // sending Brightness
         let formData = new FormData();
         formData.append('bri', bri);
+        formData.append('deviceId', deviceControlModal.dataset['deviceId']);
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
         http.open('POST', '/setbri/');
         http.send(formData);
 
-        http = new XMLHttpRequest();
-        http.open('POST', '/sethue/');
-        http.send(formData);
+        // http = new XMLHttpRequest();
+        // http.open('POST', '/sethue/');
+        // http.send(formData);
     }
 
     // Suche Geräte
@@ -136,6 +148,7 @@ $(document).ready(() => {
     });
 });
 
+
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
     let formData = new FormData();
@@ -143,14 +156,11 @@ function lightOnOff(state, deviceId) {
     formData.append('state', state);
     formData.append('csrfmiddlewaretoken', csrftoken);
 
-
-    // TODO: @Niklas warum zwei Requests?
+    // TODO: @Niklas warum zwei Requests?    --> zweite Request wurde entfernt
     const http = new XMLHttpRequest();
     http.open('POST', '/turnonoff/');
     http.send(formData);
-    const http2 = new XMLHttpRequest();
-    http2.open('POST', '/turnonoff/');
-    http2.send(formData);
+
 
     let data = JSON.parse(window.localStorage.getItem('devices'))
     data[deviceId]['on'] = state;

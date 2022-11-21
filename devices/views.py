@@ -15,7 +15,7 @@ DECONZ_URL = "http://192.168.178.49"
 API_KEY = "546117A96A"
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
-TEST = True  # @Niklas set it to False
+TEST = False  # @Niklas set it to False
 
 
 def get_data_from_input(data_input):
@@ -37,18 +37,18 @@ def turnonoff(request):
     return render(request, "devices.html", {})
 
 
-@login_required
-def setbri(request):
-    if request.method == 'POST':
-        putbri(request.POST['bri'])
-    return render(request, "devices.html", {})
-
-
-@login_required
-def sethue(request):
-    if request.method == 'POST':
-        puthue(request.POST['hue'], request.POST['sat'])
-    return render(request, "devices.html", {})
+# @login_required
+# def setbri(request):
+#     if request.method == 'POST':
+#         putbri(request.POST['bri'])
+#     return render(request, "devices.html", {})
+#
+#
+# @login_required
+# def sethue(request):
+#     if request.method == 'POST':
+#         puthue(request.POST['hue'], request.POST['sat'])
+#     return render(request, "devices.html", {})
 
 
 @login_required
@@ -66,13 +66,13 @@ def startsearch(request):
 
 def setbri(response):
     if response.method == 'POST':
-        putbri(response.POST['bri'])
+        putbri(response.POST['bri'], response.POST['deviceId'])
     return render(response, "devices.html", {})
 
 
 def sethue(response):
     if response.method == 'POST':
-        puthue(response.POST['hue'], response.POST['sat'])
+        puthue(response.POST['hue'], response.POST['sat'], response.POST['deviceId'])
     return render(response, "devices.html", {})
 
 

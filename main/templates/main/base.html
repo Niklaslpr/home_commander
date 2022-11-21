@@ -97,25 +97,25 @@
     <!-- Sidebar -->
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse" style="background-color: var(--main-color)">
         <div class="position-sticky">
-            <div class="list-group list-group-flush mx-3 mt-4" style="background-color: var(--main-color-dark)">
-                <a href="/" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+            <div class="list-group  mx-3 mt-4" style="background-color: var(--main-color-dark)">
+                <a href="/" class="list-group-item list-group-item-action py-2 ripple" aria-current="true" style="background-color: var(--main-color-dark); color: white">
                     <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
                 </a>
-                <a href="/devices/" class="list-group-item list-group-item-action py-2 ripple">
+                <a href="/devices/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white">
                     <i class="fas fa-chart-area fa-fw me-3"></i><span>Geräte</span>
                 </a>
-                <a href="/rooms/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/rooms/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-lock fa-fw me-3"></i><span>Räume</span></a>
-                <a href="/groups/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/groups/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-chart-line fa-fw me-3"></i><span>Gruppen</span></a>
-                <a href="/scenes/" class="list-group-item list-group-item-action py-2 ripple">
+                <a href="/scenes/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white">
                     <i class="fas fa-chart-pie fa-fw me-3"></i><span>Szenen</span>
                 </a>
-                <a href="/rules/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/rules/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-chart-bar fa-fw me-3"></i><span>Regeln</span></a>
-                <a href="/activities/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/activities/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-globe fa-fw me-3"></i><span>Aktivitäten</span></a>
-                <a href="/settings/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/settings/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-building fa-fw me-3"></i><span>Einstellungen</span></a>
             </div>
         </div>
@@ -140,11 +140,11 @@
             </a>
 
             <!-- Center links -->
-            <ul class="navbar-nav mx-auto d-flex flex-row">
+            <ul class="navbar-nav mx-auto d-flex flex-row" style="color: white">
                 <li class="nav-item me-lg-0">
                 <span class="d-none d-lg-inline-block ml-1">
                 Wetter morgen
-                <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" height="50" alt="">
+                <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" fill="currentColor" height="50" alt="">
                 </span>
                 </li>
                 <li class="nav-item me-lg-0 ms-5">

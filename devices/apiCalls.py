@@ -17,19 +17,22 @@ def putstate(state, lightID):
     print(p.content)
 
 
-def putbri(bri):
+def putbri(bri, id):
     print(bri)
     data = '{"bri":' + bri + '}'
-    p = requests.put('http://192.168.178.49/api/546117A96A/lights/2/state', data=data)
+    url = 'http://192.168.178.49/api/546117A96A/lights/' + id + '/state'
+    p = requests.put(url, data=data)
     print(p.status_code)
     print(p.content)
 
 
-def puthue(hue, sat):
+def puthue(hue, sat, id):
     print(hue)
     print(sat)
+    print(id)
     data = '{"hue":' + hue + ', "sat":' + sat + '}'
-    p = requests.put('http://192.168.178.49/api/546117A96A/lights/2/state', data=data)
+    url = 'http://192.168.178.49/api/546117A96A/lights/' + id + '/state'
+    p = requests.put(url, data=data)
     print(p.status_code)
     print(p.content)
 
