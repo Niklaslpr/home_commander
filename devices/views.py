@@ -1,4 +1,5 @@
 import requests
+import socket
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -11,8 +12,11 @@ from devices.apiCalls import putstate
 from devices.apiCalls import putstate1
 from devices.apiCalls import startscan
 
-DECONZ_URL = "http://192.168.178.49"
-API_KEY = "546117A96A"
+# RASPI_IP = socket.gethostbyname(socket.gethostname())
+# DECONZ_URL = "http://" + RASPI_IP
+
+DECONZ_URL = "http://172.20.10.4"
+API_KEY = "973FC5C763"
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
 TEST = False  # @Niklas set it to False
@@ -37,20 +41,6 @@ def turnonoff(request):
     return render(request, "devices.html", {})
 
 
-# @login_required
-# def setbri(request):
-#     if request.method == 'POST':
-#         putbri(request.POST['bri'])
-#     return render(request, "devices.html", {})
-#
-#
-# @login_required
-# def sethue(request):
-#     if request.method == 'POST':
-#         puthue(request.POST['hue'], request.POST['sat'])
-#     return render(request, "devices.html", {})
-
-
 @login_required
 def startsearch(request):
     if request.method == 'POST':
@@ -59,9 +49,6 @@ def startsearch(request):
             return HttpResponse('none')
         else:
             return JsonResponse(newdict)
-    # data = {'1':{'manufacturername': 'Philips', 'name': 'Light'}, '2':{'manufacturername': 'Philips2', 'name': 'Light2'}}
-
-    # return render(request, "devices.html", {'test': 'test'}) #nur Änderung zurückgeben
 
 
 def setbri(response):

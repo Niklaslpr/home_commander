@@ -17,7 +17,7 @@ function loadDevices() {
             let devicesJson = {};
             for (let entry of data.devices.reverse()) {
                 // ID = 1 ==> Configuration-Tool überspringen
-                if (entry['id'] == '1'){
+                if (entry['id'] == ''){
                     console.log(entry['id'] + ' übersprungen');
                 } else {
                     devicesJson[entry['id']] = entry;
