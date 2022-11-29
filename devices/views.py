@@ -12,10 +12,10 @@ from devices.apiCalls import putstate
 from devices.apiCalls import putstate1
 from devices.apiCalls import startscan
 
-# RASPI_IP = socket.gethostbyname(socket.gethostname())
-# DECONZ_URL = "http://" + RASPI_IP
+RASPI_IP = socket.gethostbyname(socket.gethostname())
+DECONZ_URL = "http://" + RASPI_IP + ':8080'
 
-DECONZ_URL = "http://172.20.10.4:8080"
+# DECONZ_URL = "http://172.20.10.4:8080"
 API_KEY = "973FC5C763"
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
