@@ -88,6 +88,9 @@
     <script type="text/javascript" src="{% static 'main/js/cookie-handler.js' %}"></script>
     <script type="text/javascript" src="{% static 'main/js/data-attribute-handler.js' %}"></script>
 
+
+
+
     {% block js %} {% endblock %}
 </head>
 <body class="font-family-base font-size-base line-height-base" style="font-family: system-ui;">
@@ -143,8 +146,19 @@
             <ul class="navbar-nav mx-auto d-flex flex-row" style="color: white">
                 <li class="nav-item me-lg-0">
                 <span class="d-none d-lg-inline-block ml-1">
-                Wetter morgen
-                <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" fill="currentColor" height="50" alt="">
+
+
+                  <img src="{% static "main/pictures/bootstrap_icons/sun-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="sun_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-sun_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/clouds-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="clouds_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-rain-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-rain_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-lightning-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-lightning_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/snow.svg" %}" hidden fill="currentColor"  height="50" alt="" id="snow_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-haze-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-haze_img">
+                  <span style="padding-left: 10px" id="temperature">temp</span>
+
+
                 </span>
                 </li>
                 <li class="nav-item me-lg-0 ms-5">
@@ -212,8 +226,10 @@
 <!--Test Color-Picker
 
 -->
+
 <script>
     const csrftoken = '{{ csrf_token }}';
 </script>
+<script type="text/javascript" src="{% static 'main/js/base.js' %}"></script>
 </body>
 </html>
