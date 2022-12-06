@@ -1,8 +1,163 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
+{% block css %}
+    /* The actual timeline (the vertical ruler) */
+    .timeline {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* The actual timeline (the vertical ruler) */
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: #343DF4;
+      top: 0;
+      bottom: 0;
+      left: 31px;
+      margin-left: -3px;
+
+    }
+
+    /* Container around content */
+    .containerbox {
+      padding: 10px 40px;
+      position: relative;
+      background-color: inherit;
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+
+    /* The circles on the timeline */
+    .containerbox::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      right: -17px;
+      background-color: #343DF4;
+      border: 4px solid #F5814C;
+      top: 18px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+
+
+    /* Place the container to the right */
+    .right {
+      left: 50%;
+    }
+
+
+
+    /* Add arrows to the right container (pointing left) */
+    .right::before {
+      content: " ";
+      height: 0;
+      position: absolute;
+      top: 22px;
+      width: 0;
+      z-index: 1;
+      left: 30px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent #F5814C transparent transparent;
+    }
+
+    /* Fix the circle for containers on the right side */
+    .right::after {
+      left: -16px;
+    }
+
+    /* The actual content */
+    .content {
+      padding: 10px 30px;
+      background-color: #F5814C;
+      position: relative;
+      border-radius: 6px;
+    }
+
+
+      /* Make sure that all arrows are pointing leftwards */
+      .containerbox::before {
+      left: 60px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent #F5814C transparent transparent;
+      }
+
+      /* Make sure all circles are at the same spot */
+      .left::after, .right::after {
+      left: 18px;
+      }
+
+      /* Make all right containers behave like the left ones */
+      .right {
+      left: 0%;
+      }
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
 {% block content %}
-    <h1>Home-Commander - Dashboard</h1>
+    <h1>Dashboard</h1>
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-xl-8">
+                <div class="container">
+                    <div class="row border">
+                        <div class="col"><p>Szenenfavoriten</p></div>
+
+                    </div>
+                    <div class="row border mt-4">
+                        <div class="col"><p>Gerätefavoriten</p></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="container">
+                    <div class="row border">
+                        <div class="col">
+                            <h2>Letzte Aktivitäten</h2>
+                            <div class="timeline">
+                              <div class="containerbox right">
+                                <div class="content">
+                                  <h2>03.12.2022</h2>
+                                  <p>Lampe 1 hinzugefügt</p>
+                                </div>
+                              </div>
+                              <div class="containerbox right">
+                                <div class="content">
+                                  <h2>02.12.2022</h2>
+                                <p>Lampe 1 hinzugefügt</p></div>
+                              </div>
+                              <div class="containerbox right">
+                                <div class="content">
+                                  <h2>01.12.2022</h2>
+                                <p>Lampe 1 hinzugefügt</p></div>
+                              </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row border  mt-4">
+                        <div class="col"><p>Räume</p></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
 {% endblock %}
