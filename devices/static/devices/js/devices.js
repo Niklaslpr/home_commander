@@ -195,7 +195,9 @@ function loadDeviceDataToModal(deviceId) {
         deviceControlModalBrightnessSlider.value = currentDevice['brightness'];
         deviceControlModalBrightnessDisplay.innerText = currentDevice['brightness'] + ' %';
         deviceControlModalLabel.innerText = currentDevice['name'];
-        deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 50%)';
+        if (currentDevice['has_color'] == true ){
+            deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 50%)';
+        } else { deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 100%)';}
         deviceControlModal.dataset['deviceId'] = currentDevice['id'];
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
