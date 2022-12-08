@@ -39,13 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
-    'settings.apps.SettingsConfig',
-    'devices.apps.DevicesConfig',
-    'rooms.apps.RoomsConfig',
-    'groups.apps.GroupsConfig',
-    'scenes.apps.ScenesConfig',
-    'rules.apps.RulesConfig',
-    'activities.apps.ActivitiesConfig',
     'authentication.apps.AuthenticationConfig',
     'crispy_forms'
 ]

@@ -22,11 +22,4 @@ urlpatterns = [
     path('', include("main.urls")),
     path('accounts/', include("django.contrib.auth.urls")),
     path('', include("authentication.urls")),
-    path('', include("devices.urls")),
-    path('', include("rooms.urls")),
-    path('', include("groups.urls")),
-    path('', include("scenes.urls")),
-    path('', include("rules.urls")),
-    path('', include("activities.urls")),
-    path('', include("settings.urls"))
 ]

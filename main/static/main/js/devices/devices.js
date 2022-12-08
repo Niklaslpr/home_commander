@@ -5,6 +5,9 @@ let deviceControlModalLabel;
 let deviceControlModalSwitch;
 let deviceControlModalBrightnessSlider;
 let deviceControlModalBrightnessDisplay;
+let deviceToFav
+let deviceToFavLabel
+let deviceToFavText
 
 $(document).ready(() => {
     colorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
@@ -172,7 +175,7 @@ function lightOnOff(state, deviceId) {
     formData.append('state', state);
     formData.append('csrfmiddlewaretoken', csrftoken);
 
-    // TODO: @Niklas warum zwei Requests?    --> zweite Request wurde entfernt
+
     const http = new XMLHttpRequest();
     http.open('POST', '/turnonoff/');
     http.send(formData);
