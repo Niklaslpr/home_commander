@@ -19,7 +19,7 @@ DECONZ_URL = "http://" + RASPI_IP + ':8080'
 API_KEY = "973FC5C763"
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
-TEST = False  # @Niklas set it to False
+TEST = True  # @Niklas set it to False
 
 
 def get_data_from_input(data_input):
@@ -124,6 +124,53 @@ def get_all_device_data(request):
                     "swversion": "020C.201000A0",
                     "type": "Dimmable light",
                     "uniqueid": "00:21:2E:FF:FF:00:73:9F-0B"
+                },
+                "3": {
+                    "config": {
+                        "alert": "none",
+                        "battery": 0,
+                        "delay": 0,
+                        "ledindication": False,
+                        "on": True,
+                        "reachable": True,
+                        "sensitivity": 0,
+                        "sensitivitymax": 2,
+                        "usertest": False
+                    },
+                    "etag": "18eaf99409636a25c2cdc7197087ba6d",
+                    "lastseen": "2022-12-08T11:36Z",
+                    "manufacturername": "Philips",
+                    "modelid": "SML001",
+                    "name": "Presence 11",
+                    "state": {
+                        "lastupdated": "2022-12-08T11:37:01.292",
+                        "presence": True
+                    },
+                    "swversion": "6.1.1.27575",
+                    "type": "ZHAPresence",
+                    "uniqueid": "00:17:88:01:08:65:17:d7-02-0406"
+                },
+                "4": {
+                    "config": {
+                        "battery": 99,
+                        "group": "20000",
+                        "on": True,
+                        "reachable": True
+                    },
+                    "etag": "dec924cd3ce57d285b1e46c6b733b1e4",
+                    "lastseen": "2022-12-08T11:41Z",
+                    "manufacturername": "Signify Netherlands B.V.",
+                    "mode": 1,
+                    "modelid": "RWL022",
+                    "name": "Switch 2",
+                    "state": {
+                        "buttonevent": 1002,
+                        "eventduration": 1,
+                        "lastupdated": "2022-12-08T11:42:08.422"
+                    },
+                    "swversion": "2.44.0_hBB3C188",
+                    "type": "ZHASwitch",
+                    "uniqueid": "00:17:88:01:0b:72:7b:0b-01-fc00"
                 }
             }
 

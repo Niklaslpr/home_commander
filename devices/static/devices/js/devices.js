@@ -16,21 +16,37 @@ $(document).ready(() => {
         ]
     });
 
-    deviceControlModal = document.getElementById('device-control-modal')
+    deviceControlModal = document.getElementById('device-control-modal');
     deviceControlModalHeader = document.getElementById('device-control-modal-header');
     deviceControlModalLabel = document.getElementById('device-control-modal-label');
     // deviceControlModalLabel.innerHTML = 'Lampe XXX';
 
+    deviceToFav = document.getElementById('deviceToFav');
+    deviceToFavLabel = document.getElementById('deviceToFavLabel');
+    deviceToFavText = document.getElementById('deviceToFavText');
+
+    deviceToFav.addEventListener('click', function(){
+        if (deviceToFav.checked == true){
+            deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
+            deviceToFavText.innerHTML = 'Von Favoriten entfernen';
+        } else {
+            deviceToFavLabel.style.backgroundColor = 'white';
+            deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
+        }
+    })
 
         colorPicker.on('color:change', function (color) {
             if (deviceControlModal.classList.contains('show') == true) {
                 console.log(deviceControlModal.classList.contains('show'));
-                console.log(color.hue);
-                console.log(color.saturation);
+                console.log('Textfarbe: ' + color.hue);
+                console.log('Saturation: ' + color.saturation);
 
                 deviceControlModalHeader.style.backgroundColor = color.hexString;
-                deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'] + ' ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
+                deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'];
 
+                if (color.saturation > 55 && color.hue > 212){
+                    deviceControlModalLabel.style.color = 'white';
+                } else {deviceControlModalLabel.style.color = 'black';}
 
                 let hue = Math.round(color.hue * 65535 / 360);
                 let sat = Math.round(color.saturation * 2.55);
@@ -178,7 +194,8 @@ function loadDeviceDataToModal(deviceId) {
         colorPicker.color.saturation = currentDevice['saturation'];
         deviceControlModalBrightnessSlider.value = currentDevice['brightness'];
         deviceControlModalBrightnessDisplay.innerText = currentDevice['brightness'] + ' %';
-        deviceControlModalLabel.innerText = currentDevice['name'] + ' ' + 'Hue: ' + currentDevice['hue'] + ' Sat: ' + currentDevice['saturation'];
+        deviceControlModalLabel.innerText = currentDevice['name'];
+        deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 50%)';
         deviceControlModal.dataset['deviceId'] = currentDevice['id'];
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 

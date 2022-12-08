@@ -3,7 +3,7 @@ import requests
 from django.http import HttpResponse
 from django.http import JsonResponse
 
-TEST = False
+TEST = True
 
 def home(response):
     return render(response, "main/home.html", {})

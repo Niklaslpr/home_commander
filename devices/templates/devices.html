@@ -169,6 +169,7 @@
                         <div class="modal-content">
                             <div class="modal-header text-center" id="device-control-modal-header">
                                 <h5 class="modal-title" id="device-control-modal-label">Lamp name unknown</h5>
+
                                 <div class="text-center">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
@@ -177,7 +178,11 @@
                                 </div>
                             </div>
                             <div class="modal-body text-center">
-                                <div style="display: flex; justify-content: center; align-items: center"
+                                <div>
+                                    <input type="checkbox" class="btn-check" id="deviceToFav" autocomplete="off">
+                                    <label class="btn" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img src="{% static "main/pictures/bootstrap_icons/star.svg" %}" height="25" alt=""><p id="deviceToFavText">Zu Favoriten hinzufügen</p></label>
+                                </div>
+                                <div style="display: flex; justify-content: center; align-items: center; padding-top: 25px"
                                      id="device-control-modal-colorpicker"></div>
                                 <br>
                                 <label for="device-control-modal-brightness" class="form-label">Helligkeit <p
