@@ -21,4 +21,8 @@ urlpatterns = [
     path('groups/', views.groups, name='groups'),
     path('grouponoff/', views.grouponoff, name='grouponoff'),
     path('creategroup/', views.creategroup, name='creategroup'),
+    path('createFavoriteGroup/', views.createFavoriteGroup, name='createFavoriteGroup'),
+    path('addDeviceToFavorites/', views.addDeviceToFavorites, name='addDeviceToFavorites'),
+    path('deleteDeviceFromFavorites/', views.deleteDeviceFromFavorites, name='deleteDeviceFromFavorites'),
+    path('isDeviceinFavorites/', views.isDeviceinFavorites, name='isDeviceinFavorites'),
 ]

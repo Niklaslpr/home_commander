@@ -2,8 +2,14 @@ import requests
 import time
 import socket
 
+onRasp = False # True, if Code is running on Raspberry Pi
+
 RASPI_IP = socket.gethostbyname(socket.gethostname())
-DECONZ_URL = "http://" + RASPI_IP + ':8080'
+
+if not onRasp:
+    DECONZ_URL = "http://" + '192.168.178.49' + ':8080'
+else:
+    DECONZ_URL = "http://" + RASPI_IP + ':8080'
 
 # DECONZ_URL = "http://172.20.10.4:8080"
 API_KEY = "973FC5C763"
@@ -47,39 +53,26 @@ def puthue(hue, sat, id):
     print(p.content)
 
 def startscan():
-
     # Aktuelle Liste der Geräte ausgeben
     url = DECONZ_DEVICE_LIGHTS_URL
     p = requests.get(url)
-    print(p.status_code)
     dict = p.json()
-    print(dict)
-
     for key in dict:
         if not key == '1':
             value = dict[key]
             print('ID: ' + key + ', Value: ' + value['manufacturername'] + ', ' + value['name'])
-
     # Suche starten
     url = DECONZ_DEVICE_SENSORS_URL        #findet Neue Lampe
     p = requests.post(url)
-    print(p.status_code)
-    print(p.content)
-
     # Nach 300 Sekunden neue Liste mit der alten vergleiche und neue Geräte ausgeben
     time.sleep(180)
     url = DECONZ_DEVICE_LIGHTS_URL
     p = requests.get(url)
-    print(p.status_code)
     dict2 = p.json()
-    print(dict)
-    print('Gefundene Geräte:')
     newdevicedict = {}
-
     for key in dict2:
         if not key in dict:         #print only new Lights
             value = dict2[key]
-            print('ID: ' + key + ', Value: ' + value['manufacturername']  + ', ' + value['name'])
             newdevicedict[key] = {'manufacturername': value['manufacturername'], 'name': value['name']}
 
     return newdevicedict
@@ -105,7 +98,7 @@ def putgroupstate(state, groupID):
 
 def createGroup(groupName):
     data = '{"name": "' + groupName + '" }'
-    url = 'http://192.168.178.49/api/546117A96A/groups'
+    url = 'http://192.168.178.49:8080/api/973FC5C763/groups'
     p = requests.post(url, data=data)
     print(p.status_code)
     print(p.content)

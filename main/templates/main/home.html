@@ -104,10 +104,11 @@
 {% endblock %}
 
 {% block js %}
-
+    <script type="text/javascript" src="{% static 'main/js/dashboard/dashboard.js' %}"></script>
 {% endblock %}
 
 {% block content %}
+
     <h1>Dashboard</h1>
     <div class="container">
         <div class="row d-flex">
@@ -119,7 +120,7 @@
                     </div>
                     <div class="row border mt-4">
                         <div class="col"><p>Gerätefavoriten</p></div>
-
+                        <p id="favoritedevices"></p>
                     </div>
                 </div>
             </div>

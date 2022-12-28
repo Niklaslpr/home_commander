@@ -28,15 +28,32 @@ $(document).ready(() => {
     deviceToFavLabel = document.getElementById('deviceToFavLabel');
     deviceToFavText = document.getElementById('deviceToFavText');
 
-    deviceToFav.addEventListener('click', function(){
-        if (deviceToFav.checked == true){
-            deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
-            deviceToFavText.innerHTML = 'Von Favoriten entfernen';
-        } else {
-            deviceToFavLabel.style.backgroundColor = 'white';
-            deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
-        }
-    })
+deviceToFav.addEventListener('click', function(){
+    if (deviceToFav.checked == true){
+        deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
+        deviceToFavText.innerHTML = 'Von Favoriten entfernen';
+
+        let formData = new FormData();
+        formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+        formData.append('csrfmiddlewaretoken', csrftoken);
+
+        let http = new XMLHttpRequest();
+        http.open('POST', '/addDeviceToFavorites/');
+        http.send(formData);
+
+    } else {
+        deviceToFavLabel.style.backgroundColor = 'white';
+        deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
+
+        let formData = new FormData();
+        formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+        formData.append('csrfmiddlewaretoken', csrftoken);
+
+        let http = new XMLHttpRequest();
+        http.open('POST', '/deleteDeviceFromFavorites/');
+        http.send(formData);
+    }
+})
 
         colorPicker.on('color:change', function (color) {
             if (deviceControlModal.classList.contains('show') == true) {
@@ -168,6 +185,8 @@ $(document).ready(() => {
 });
 
 
+
+
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
     let formData = new FormData();
@@ -203,6 +222,32 @@ function loadDeviceDataToModal(deviceId) {
         } else { deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 100%)';}
         deviceControlModal.dataset['deviceId'] = currentDevice['id'];
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
+
+
+        // Check, if Device is in Favorites
+        let formData = new FormData();
+        formData.append('deviceId', deviceId);
+        formData.append('csrfmiddlewaretoken', csrftoken);
+        let http = new XMLHttpRequest();
+
+         http.onreadystatechange = function (){
+             if (this.readyState === 4 && this.status === 200){
+                 if (this.response == "True"){
+                     deviceToFav.checked = true;
+                     deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
+                     deviceToFavText.innerHTML = 'Von Favoriten entfernen';
+                 } else{
+                     deviceToFav.checked = false;
+                     deviceToFavLabel.style.backgroundColor = 'white';
+                     deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
+                 }
+             }
+        }
+
+        http.open('POST', '/isDeviceinFavorites/');
+        http.send(formData);
+
+
 
         return 0;
     } else {
