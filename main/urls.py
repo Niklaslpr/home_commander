@@ -25,4 +25,5 @@ urlpatterns = [
     path('addDeviceToFavorites/', views.addDeviceToFavorites, name='addDeviceToFavorites'),
     path('deleteDeviceFromFavorites/', views.deleteDeviceFromFavorites, name='deleteDeviceFromFavorites'),
     path('isDeviceinFavorites/', views.isDeviceinFavorites, name='isDeviceinFavorites'),
+    path('deleteDevice/', views.deleteDevice, name='deleteDevice'),
 ]

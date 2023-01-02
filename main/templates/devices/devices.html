@@ -183,13 +183,14 @@
                                     <label class="btn" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img src="{% static "main/pictures/bootstrap_icons/star.svg" %}" height="25" alt=""><p id="deviceToFavText">Zu Favoriten hinzufügen</p></label>
                                 </div>
                                 <div style="display: flex; justify-content: center; align-items: center; padding-top: 25px"
-                                     id="device-control-modal-colorpicker"></div>
+                                     id="device-control-modal-colorpicker" hidden></div>
                                 <br>
                                 <label for="device-control-modal-brightness" class="form-label">Helligkeit <p
                                         id="device-control-modal-brightness-display"></p></label>
                                 <input type="range" class="form-range" min="0" max="100"
                                        id="device-control-modal-brightness"
                                        value="{{ disclaimer }}"/>
+                                <button type="button" class="btn btn-danger mt-5" id="deleteDevice" onclick="return confirm('Bist Du sicher?');">Löschen</button>
                             </div>
                         </div>
                     </div>

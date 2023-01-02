@@ -8,6 +8,7 @@ let deviceControlModalBrightnessDisplay;
 let deviceToFav
 let deviceToFavLabel
 let deviceToFavText
+let deleteDeviceButton
 
 $(document).ready(() => {
     colorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
@@ -88,6 +89,10 @@ deviceToFav.addEventListener('click', function(){
     deviceControlModalBrightnessSlider = document.getElementById("device-control-modal-brightness");
     deviceControlModalBrightnessDisplay = document.getElementById("device-control-modal-brightness-display");
     deviceControlModalBrightnessDisplay.innerText = deviceControlModalBrightnessSlider.value + ' %';
+    deleteDeviceButton = document.getElementById("deleteDevice");
+    deleteDeviceButton.addEventListener('click', function(){
+        deleteDevice(deviceControlModal.dataset['deviceId']);
+    })
 
     deviceControlModalSwitch.addEventListener('change', function(){
         lightOnOff(deviceControlModalSwitch.checked, deviceControlModal.dataset['deviceId']);
@@ -205,12 +210,34 @@ function lightOnOff(state, deviceId) {
     window.localStorage.setItem('devices', JSON.stringify(data));
 }
 
+function deleteDevice(deviceId){
+    let formData = new FormData();
+    formData.append('deviceId', deviceId);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    let http = new XMLHttpRequest();
+    http.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            if (this.response == "True") {
+                location.reload();
+            } else {
+                console.log('Beim Löschen ist ein Fehler aufgetreten.');
+            }
+        }
+    }
+    http.open('POST', '/deleteDevice/');
+    http.send(formData);
+}
+
 function loadDeviceDataToModal(deviceId) {
     let devices = JSON.parse(window.localStorage.getItem("devices"));
 
     if (devices.hasOwnProperty(deviceId)) {
         let currentDevice = devices[deviceId];
-
+        if (currentDevice['type'] == 'Extended color light'){
+            document.getElementById('device-control-modal-colorpicker').hidden = false;
+        } else{
+             document.getElementById('device-control-modal-colorpicker').hidden = true;
+        }
         deviceControlModalSwitch.checked = currentDevice['on'];
         colorPicker.color.hue = currentDevice['hue'];
         colorPicker.color.saturation = currentDevice['saturation'];

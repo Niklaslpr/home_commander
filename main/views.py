@@ -340,22 +340,18 @@ def createFavoriteGroup(request):
 def addDeviceToFavorites(request):
     if request.method == 'POST':
         deviceId = request.POST['deviceId']
-
         x = requests.get(DECONZ_GROUPS_URL)
         grouplist = x.json()
         for key in grouplist:
             tmp = grouplist[key]
-            groupname = tmp["name"]
-            if groupname == 'favorites_' + request.user.get_username():
+            if tmp["name"] == 'favorites_' + request.user.get_username():
                 favoritesGroupID = tmp["id"]
-
         x = requests.get(DECONZ_GROUPS_URL + "/" + favoritesGroupID)
         tmp = x.json()
         lightslist = tmp["lights"]
         lightslist.append(deviceId)
         data = '{ "lights": [ "' + '", "'.join(lightslist) + '" ] }'
         z = requests.put(DECONZ_GROUPS_URL + "/" + favoritesGroupID, data=data)
-        print(z.json())
     return HttpResponse(z.json())
 
 
@@ -409,3 +405,10 @@ def isDeviceinFavorites(request):
         else:
             tmp = False
     return HttpResponse(tmp)
+
+@login_required
+def deleteDevice(request):
+    if request.method == 'POST':
+        x = requests.delete(DECONZ_DEVICE_LIGHTS_URL + "/" + request.POST['deviceId'], data='{"reset": true}')
+        print(x.json())
+    return HttpResponse('True')

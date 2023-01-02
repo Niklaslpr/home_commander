@@ -105,6 +105,7 @@
 
 {% block js %}
     <script type="text/javascript" src="{% static 'main/js/dashboard/dashboard.js' %}"></script>
+    <script type="text/javascript" src="{% static 'main/js/dashboard/build.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -119,8 +120,47 @@
 
                     </div>
                     <div class="row border mt-4">
-                        <div class="col"><p>Gerätefavoriten</p></div>
+                        <div class="col"><h3>Gerätefavoriten</h3></div>
                         <p id="favoritedevices"></p>
+                        <div class="container px-4 px-lg-5 mt-5">
+                            <div id="device-list" class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-3 justify-content-center">
+                                <div class="modal fade" id="device-control-modal"
+                                 onblur="saveDeviceDataToLocalStorage(document.getElementById('device-control-modal').dataset['deviceId'])"
+                                 tabindex="-1"
+                                 aria-labelledby="device-control-modal-label" data-device-id="unknown" data-device-name="unknown"
+                                >
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center" id="device-control-modal-header">
+                                            <h5 class="modal-title" id="device-control-modal-label">Lamp name unknown</h5>
+
+                                            <div class="text-center">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
+                                                           id="device-control-modal-switch">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <div>
+                                                <input type="checkbox" class="btn-check" id="deviceToFav" autocomplete="off">
+                                                <label class="btn" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img src="{% static "main/pictures/bootstrap_icons/star.svg" %}" height="25" alt=""><p id="deviceToFavText">Zu Favoriten hinzufügen</p></label>
+                                            </div>
+                                            <div style="display: flex; justify-content: center; align-items: center; padding-top: 25px"
+                                                 id="device-control-modal-colorpicker"></div>
+                                            <br>
+                                            <label for="device-control-modal-brightness" class="form-label">Helligkeit <p
+                                                    id="device-control-modal-brightness-display"></p></label>
+                                            <input type="range" class="form-range" min="0" max="100"
+                                                   id="device-control-modal-brightness"
+                                                   value="{{ disclaimer }}"/>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
