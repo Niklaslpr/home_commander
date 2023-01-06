@@ -1,0 +1,30 @@
+<div class="modal fade" id="device-control-modal"
+     onblur="saveDeviceDataToLocalStorage(document.getElementById('device-control-modal').dataset['deviceId'])"
+     tabindex="-1"
+     aria-labelledby="device-control-modal-label" data-device-id="unknown" data-device-name="unknown"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center" id="device-control-modal-header">
+                <h5 class="modal-title" id="device-control-modal-label">Lamp name unknown</h5>
+                <div class="text-center">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
+                               id="device-control-modal-switch"
+                               onchange="lightOnOff(document.getElementById('device-control-modal-switch').checked, document.getElementById('device-control-modal').dataset['deviceId'])">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <div style="display: flex; justify-content: center; align-items: center"
+                     id="device-control-modal-colorpicker"></div>
+                <br>
+                <label for="device-control-modal-brightness" class="form-label">Helligkeit <p
+                        id="device-control-modal-brightness-display"></p></label>
+                <input type="range" class="form-range" min="0" max="100"
+                       id="device-control-modal-brightness"
+                       value="{{ disclaimer }}"/>
+            </div>
+        </div>
+    </div>
+</div>

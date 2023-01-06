@@ -1,4 +1,4 @@
-let colorPicker;
+let deviceControlColorPicker;
 let deviceControlModal;
 let deviceControlModalHeader;
 let deviceControlModalLabel;
@@ -7,7 +7,7 @@ let deviceControlModalBrightnessSlider;
 let deviceControlModalBrightnessDisplay;
 
 $(document).ready(() => {
-    colorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
+    deviceControlColorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
         borderWidth: 2,
         layout: [
             {
@@ -21,7 +21,7 @@ $(document).ready(() => {
     deviceControlModalLabel = document.getElementById('device-control-modal-label');
     // deviceControlModalLabel.innerHTML = 'Lampe XXX';
 
-    colorPicker.on('color:change', function (color) {
+    deviceControlColorPicker.on('color:change', function (color) {
         console.log(color.hue);
         console.log(color.saturation);
         deviceControlModalHeader.style.backgroundColor = color.hexString;
@@ -163,14 +163,15 @@ function loadDeviceDataToModal(deviceId) {
     if (devices.hasOwnProperty(deviceId)) {
         let currentDevice = devices[deviceId];
 
+        deviceControlModal.dataset['deviceId'] = currentDevice['id'];
+        deviceControlModal.dataset['deviceName'] = currentDevice['name'];
+
         deviceControlModalSwitch.checked = currentDevice['on'];
-        colorPicker.color.hue = currentDevice['hue'];
-        colorPicker.color.saturation = currentDevice['saturation'];
+        deviceControlColorPicker.color.hue = currentDevice['hue'];
+        deviceControlColorPicker.color.saturation = currentDevice['saturation'];
         deviceControlModalBrightnessSlider.value = currentDevice['brightness'];
         deviceControlModalBrightnessDisplay.innerText = currentDevice['brightness'] + ' %';
         deviceControlModalLabel.innerText = currentDevice['name'] + ' ' + 'Hue: ' + currentDevice['hue'] + ' Sat: ' + currentDevice['saturation'];
-        deviceControlModal.dataset['deviceId'] = currentDevice['id'];
-        deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
         return 0;
     } else {
@@ -183,8 +184,8 @@ function saveDeviceDataToLocalStorage(deviceId) {
 
     if (devices.hasOwnProperty(deviceId)) {
         devices[deviceId]['on'] = deviceControlModalSwitch.checked;
-        devices[deviceId]['hue'] = colorPicker.color.hue;
-        devices[deviceId]['saturation'] = colorPicker.color.saturation;
+        devices[deviceId]['hue'] = deviceControlColorPicker.color.hue;
+        devices[deviceId]['saturation'] = deviceControlColorPicker.color.saturation;
         devices[deviceId]['brightness'] = deviceControlModalBrightnessSlider.value;
 
         window.localStorage.setItem('devices', JSON.stringify(devices));

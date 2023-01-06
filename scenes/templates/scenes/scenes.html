@@ -11,7 +11,7 @@
     </h1>
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
+            <div id="scene-list" class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
                 <!--Szene 1-->
                 <div class="col mb-5">
                     <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
@@ -19,7 +19,7 @@
                             <div class="text-center">
                                 <img src="{% static "main/pictures/bootstrap_icons/film.svg" %}" height="50" alt="">
                                 <h5 class="fw-bolder mb-3 mt-2">Kinoabend</h5>
-                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#ModalScene1"></a>
+                                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#scene-control-modal"></a>
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -69,6 +69,43 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Scene Control Modal -->
+                <div class="modal fade" id="scene-control-modal"
+                     onblur="saveSceneDataToLocalStorage(document.getElementById('scene-control-modal').dataset['sceneId'])"
+                     tabindex="-1" aria-labelledby="scene-control-modal-label" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header text-center" id="scene-control-modal-header">
+                                <h5 class="modal-title" id="scene-control-modal-label">Scene name unknown</h5>
+                                <div class="text-center">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
+                                               id="scene-control-modal-switch">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body text-center">
+                                <h6>Geräte:</h6>
+                                <ul class="list-group" id="scene-control-device-list">
+                                </ul>
+                                <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px"
+                                     id="scene-control-modal-colorpicker"></div>
+                                <br>
+                                <label for="scene-control-modal-brightness" class="form-label">Helligkeit <p
+                                        id="scene-control-modal-brightness-display"></p></label>
+                                <input type="range" class="form-range" min="0" max="100"
+                                       id="scene-control-modal-brightness" value="{{ disclaimer }}"/>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device-Control-Modal -->
+                {% include "devices/device-control-modal.html" %}
+
             </div>
         </div>
     </section>

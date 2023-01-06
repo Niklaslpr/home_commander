@@ -1,6 +1,6 @@
-function loadRules() {
+function loadScenes() {
     $.ajax({
-        url: './rule_info/all',
+        url: './scene_info/all',
         type: 'get',
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -14,17 +14,17 @@ function loadRules() {
         success: function (data) {
             console.info(data);
 
-            let rulesJson = {};
-            for (let entry of data.rules.reverse()) {
-                rulesJson[entry['id']] = entry;
+            let scenesJson = {};
+            for (let entry of data.scenes.reverse()) {
+                scenesJson[entry['id']] = entry;
 
                 $.ajax({
-                    url: './kit/rule-tile',
+                    url: './kit/scene-tile',
                     type: 'get',
                     data: {
                         "csrfmiddlewaretoken": getCookie('csrftoken'),
-                        "rule-id": entry['id'].toString(),
-                        "rule-name": entry['name'].toString(),
+                        "scene-id": entry['id'].toString(),
+                        "scene-name": entry['name'].toString(),
                     },
                     headers: {
                         'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -34,17 +34,20 @@ function loadRules() {
                     mode: 'same-origin'
                 }).always((data) => {
                     if (data.readyState === 4 && data.status === 200) {
-                        document.getElementById('rule-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                        // document.getElementById('switchLight-' + entry['id'].toString()).checked = entry['on'];
+                        document.getElementById('scene-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
                     }
                 });
             }
 
-            window.localStorage.setItem('rules', JSON.stringify(rulesJson));
+            window.localStorage.setItem('scenes', JSON.stringify(scenesJson));
         }
     });
 }
 
 $(document).ready(() => {
-    loadRules();
+    loadScenes();
 });
+
+function test() {
+    console.log("yes sir i am working")
+}

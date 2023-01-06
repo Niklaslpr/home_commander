@@ -1,6 +1,8 @@
 import requests
 import time
 
+# TODO: URL
+
 
 def putstate1(state):
     data = '{"on":' + state + '}'
@@ -70,4 +72,11 @@ def startscan():
             newdevicedict[key] = {'manufacturername': value['manufacturername'], 'name': value['name']}
 
     return newdevicedict
+
+
+def get_all_lights():
+    response = requests.get(url=DECONZ_DEVICE_LIGHTS_URL)
+    response = response.json()
+
+    return  response
 

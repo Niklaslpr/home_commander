@@ -5,14 +5,16 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
-from devices.apiCalls import putbri
-from devices.apiCalls import puthue
-from devices.apiCalls import putstate
-from devices.apiCalls import putstate1
-from devices.apiCalls import startscan
+from devices.api_calls_deconz import putbri
+from devices.api_calls_deconz import puthue
+from devices.api_calls_deconz import putstate
+from devices.api_calls_deconz import putstate1
+from devices.api_calls_deconz import startscan
 
 from main.views import get_data_from_input
 from main.views import DECONZ_URL, API_KEY, TEST
+
+import devices.helper as helper
 
 
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
@@ -23,28 +25,28 @@ DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
 def devices(request):
     if request.method == 'POST':
         putstate1(request.POST['state'])
-    return render(request, "devices.html", {})
+    return render(request, "devices/devices.html", {})
 
 
 @login_required
 def turnonoff(request):
     if request.method == 'POST':
         putstate(request.POST['state'], request.POST['lightID'])
-    return render(request, "devices.html", {})
+    return render(request, "devices/devices.html", {})
 
 
 @login_required
 def setbri(request):
     if request.method == 'POST':
         putbri(request.POST['bri'])
-    return render(request, "devices.html", {})
+    return render(request, "devices/devices.html", {})
 
 
 @login_required
 def sethue(request):
     if request.method == 'POST':
         puthue(request.POST['hue'], request.POST['sat'])
-    return render(request, "devices.html", {})
+    return render(request, "devices/devices.html", {})
 
 
 @login_required
@@ -60,22 +62,10 @@ def startsearch(request):
     # return render(request, "devices.html", {'test': 'test'}) #nur Änderung zurückgeben
 
 
-def setbri(response):
-    if response.method == 'POST':
-        putbri(response.POST['bri'])
-    return render(response, "devices.html", {})
-
-
-def sethue(response):
-    if response.method == 'POST':
-        puthue(response.POST['hue'], response.POST['sat'])
-    return render(response, "devices.html", {})
-
-
 def kits(request, kit_name):
     data = get_data_from_input(request)
 
-    return render(request, kit_name + ".html",
+    return render(request, "devices/" + kit_name + ".html",
                   {
                       "id": request.GET["device-id"].__str__(),
                       "name": request.GET["device-name"].__str__(),
@@ -87,73 +77,7 @@ def get_all_device_data(request):
     if request.method == "GET":
         data = get_data_from_input(request)
 
-        if not TEST:
-            response_tmp = requests.get(url=DECONZ_DEVICE_LIGHTS_URL)
-            response_tmp = response_tmp.json()
-        else:
-            response_tmp = {
-                "1": {
-                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
-                    "hascolor": True,
-                    "manufacturer": "dresden elektronik",
-                    "modelid": "FLS-PP3",
-                    "name": "Light 1",
-                    "pointsymbol": {},
-                    "state": {
-                        "alert": "none",
-                        "bri": 111,
-                        "colormode": "ct",
-                        "ct": 307,
-                        "effect": "none",
-                        "hue": 7998,
-                        "on": True,
-                        "reachable": True,
-                        "sat": 172,
-                        "xy": [0.421253, 0.39921]
-                    },
-                    "swversion": "020C.201000A0",
-                    "type": "Extended color light",
-                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
-                },
-
-                "2": {
-                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
-                    "hascolor": False,
-                    "manufacturer": "dresden elektronik",
-                    "modelid": "FLS-PP3 White",
-                    "name": "Light 2",
-                    "pointsymbol": {},
-                    "state": {
-                        "alert": "none",
-                        "bri": 1,
-                        "effect": "none",
-                        "on": False,
-                        "reachable": True
-                    },
-                    "swversion": "020C.201000A0",
-                    "type": "Dimmable light",
-                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0B"
-                }
-            }
-
-        response = []
-        for key, value in response_tmp.items():
-            response += [{"id": key,
-                          "has_color": value["hascolor"] if "hascolor" in value.keys() else False,
-                          "name": value["name"] if "name" in value.keys() else "unknown device name",
-                          "type": value["type"] if "type" in value.keys() else "unknown device type",
-                          "reachable": value["state"]["reachable"] if "state" in value.keys() and "reachable" in value[
-                              "state"].keys() else False,
-                          "on": value["state"]["on"] if "state" in value.keys() and "on" in value[
-                              "state"].keys() else False,
-                          "brightness": int(value["state"]["bri"] / 255 * 100) if "state" in value.keys() and "bri" in
-                                                                                  value["state"].keys() else 0,
-                          "hue": int(value["state"]["hue"] / 65535 * 360) if "state" in value.keys() and "hue" in value[
-                              "state"].keys() else 0,
-                          "saturation": int(value["state"]["sat"] / 255 * 100) if "state" in value.keys() and "sat" in
-                                                                                  value["state"].keys() else 0
-                          }]
-
+        response = helper.get_device_data_from_deconz(-1, request.user.get_username())
         response = {"devices": response}
 
         return JsonResponse(response)

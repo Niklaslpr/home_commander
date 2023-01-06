@@ -1,6 +1,6 @@
 function loadDevices() {
     $.ajax({
-        url: '/device_info/all',
+        url: './device_info/all',
         type: 'get',
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -19,7 +19,7 @@ function loadDevices() {
                 devicesJson[entry['id']] = entry;
 
                 $.ajax({
-                    url: '/kit/device-tile',
+                    url: './kit/device-tile',
                     type: 'get',
                     data: {
                         "csrfmiddlewaretoken": getCookie('csrftoken'),
@@ -50,5 +50,5 @@ $(document).ready(() => {
 });
 
 function test() {
-    console.log("yes sir i am working")
+    console.log("yes sir i am working");
 }
