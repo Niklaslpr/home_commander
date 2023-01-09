@@ -11,4 +11,8 @@ urlpatterns = [
     path('device_change/', views.modify_device, name='modify_device'),
     path('kit/<str:kit_name>', views.kits, name='kits'),
     path('startsearch/', views.startsearch, name='startsearch'),
+    path('addDeviceToFavorites/', views.addDeviceToFavorites, name='addDeviceToFavorites'),
+    path('deleteDeviceFromFavorites/', views.deleteDeviceFromFavorites, name='deleteDeviceFromFavorites'),
+    path('isDeviceinFavorites/', views.isDeviceinFavorites, name='isDeviceinFavorites'),
+    path('deleteDevice/', views.deleteDevice, name='deleteDevice'),
 ]

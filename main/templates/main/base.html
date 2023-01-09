@@ -88,6 +88,9 @@
     <script type="text/javascript" src="{% static 'main/js/cookie-handler.js' %}"></script>
     <script type="text/javascript" src="{% static 'main/js/data-attribute-handler.js' %}"></script>
 
+
+
+
     {% block js %} {% endblock %}
 </head>
 <body class="font-family-base font-size-base line-height-base" style="font-family: system-ui;">
@@ -97,25 +100,25 @@
     <!-- Sidebar -->
     <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse" style="background-color: var(--main-color)">
         <div class="position-sticky">
-            <div class="list-group list-group-flush mx-3 mt-4" style="background-color: var(--main-color-dark)">
-                <a href="/" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+            <div class="list-group  mx-3 mt-4" style="background-color: var(--main-color-dark)">
+                <a href="/" class="list-group-item list-group-item-action py-2 ripple" aria-current="true" style="background-color: var(--main-color-dark); color: white">
                     <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
                 </a>
-                <a href="/devices/" class="list-group-item list-group-item-action py-2 ripple">
+                <a href="/devices/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white">
                     <i class="fas fa-chart-area fa-fw me-3"></i><span>Geräte</span>
                 </a>
-                <a href="/rooms/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/rooms/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-lock fa-fw me-3"></i><span>Räume</span></a>
-                <a href="/groups/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/groups/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-chart-line fa-fw me-3"></i><span>Gruppen</span></a>
-                <a href="/scenes/" class="list-group-item list-group-item-action py-2 ripple">
+                <a href="/scenes/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white">
                     <i class="fas fa-chart-pie fa-fw me-3"></i><span>Szenen</span>
                 </a>
-                <a href="/rules/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/rules/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-chart-bar fa-fw me-3"></i><span>Regeln</span></a>
-                <a href="/activities/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/activities/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-globe fa-fw me-3"></i><span>Aktivitäten</span></a>
-                <a href="/settings/" class="list-group-item list-group-item-action py-2 ripple"><i
+                <a href="/options/" class="list-group-item list-group-item-action py-2 ripple" style="background-color: var(--main-color-dark); color: white"><i
                         class="fas fa-building fa-fw me-3"></i><span>Einstellungen</span></a>
             </div>
         </div>
@@ -140,11 +143,22 @@
             </a>
 
             <!-- Center links -->
-            <ul class="navbar-nav mx-auto d-flex flex-row">
+            <ul class="navbar-nav mx-auto d-flex flex-row" style="color: white">
                 <li class="nav-item me-lg-0">
                 <span class="d-none d-lg-inline-block ml-1">
-                Wetter morgen
-                <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" height="50" alt="">
+
+
+                  <img src="{% static "main/pictures/bootstrap_icons/sun-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="sun_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-sun-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-sun_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/clouds-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="clouds_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-rain-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-rain_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-lightning-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-lightning_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/snow.svg" %}" hidden fill="currentColor"  height="50" alt="" id="snow_img">
+                  <img src="{% static "main/pictures/bootstrap_icons/cloud-haze-fill.svg" %}" hidden fill="currentColor"  height="50" alt="" id="cloud-haze_img">
+                  <span style="padding-left: 10px" id="temperature">temp</span>
+
+
                 </span>
                 </li>
                 <li class="nav-item me-lg-0 ms-5">
@@ -160,12 +174,12 @@
 
                 <!-- Notification dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link me-3 me-lg-0 " href="/settings">
+                    <a class="nav-link me-3 me-lg-0 " href="/options">
                         <img src="{% static "main/pictures/bootstrap_icons/gear-fill.svg" %}" height="50" alt="">
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link me-3 me-lg-0 " href="#">
+                    <a class="nav-link me-3 me-lg-0 " href="/activities">
                         <img src="{% static "main/pictures/bootstrap_icons/bell-fill.svg" %}" height="50" alt="">
                     </a>
                 </li>
@@ -180,7 +194,8 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                         {% if user.is_authenticated %}
-                            <li><a class="dropdown-item" href="/accounts/password_change">Kennwort ändern</a></li>
+                            <li><a class="dropdown-item" href="/options">Dein Profil</a></li>
+                            <li><a class="dropdown-item" href="/change_password">Passwort ändern</a></li>
                             <li><a class="dropdown-item" href="/accounts/logout">Logout</a></li>
                         {% else %}
                             <li><a class="dropdown-item" href="/accounts/login">Login</a></li>
@@ -212,8 +227,10 @@
 <!--Test Color-Picker
 
 -->
+
 <script>
     const csrftoken = '{{ csrf_token }}';
 </script>
+<script type="text/javascript" src="{% static 'main/js/base.js' %}"></script>
 </body>
 </html>

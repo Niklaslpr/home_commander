@@ -1,3 +1,5 @@
+import requests
+import socket
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -20,6 +22,7 @@ def devices(request):
     return render(request, "devices/devices.html", {})
 
 
+
 @login_required
 def turnonoff(request):
     if request.method == 'POST':
@@ -28,17 +31,17 @@ def turnonoff(request):
 
 
 @login_required
-def setbri(request):
-    if request.method == 'POST':
-        putbri(request.POST['bri'])
-    return render(request, "devices/devices.html", {})
+def setbri(response):
+    if response.method == 'POST':
+        putbri(response.POST['bri'], response.POST['deviceId'])
+    return render(response, "devices.html", {})
 
 
 @login_required
-def sethue(request):
-    if request.method == 'POST':
-        puthue(request.POST['hue'], request.POST['sat'])
-    return render(request, "devices/devices.html", {})
+def sethue(response):
+    if response.method == 'POST':
+        puthue(response.POST['hue'], response.POST['sat'], response.POST['deviceId'])
+    return render(response, "devices.html", {})
 
 
 @login_required
@@ -49,9 +52,6 @@ def startsearch(request):
             return HttpResponse('none')
         else:
             return JsonResponse(newdict)
-    # data = {'1':{'manufacturername': 'Philips', 'name': 'Light'}, '2':{'manufacturername': 'Philips2', 'name': 'Light2'}}
-
-    # return render(request, "devices.html", {'test': 'test'}) #nur Änderung zurückgeben
 
 
 def kits(request, kit_name):
@@ -140,3 +140,78 @@ def modify_device(request):
             pass
         else:
             return JsonResponse({"error": "unknown action"})
+
+@login_required
+def addDeviceToFavorites(request):
+    if request.method == 'POST':
+        deviceId = request.POST['deviceId']
+        x = requests.get(DECONZ_GROUPS_URL)
+        grouplist = x.json()
+        for key in grouplist:
+            tmp = grouplist[key]
+            if tmp["name"] == 'favorites_' + request.user.get_username():
+                favoritesGroupID = tmp["id"]
+        x = requests.get(DECONZ_GROUPS_URL + "/" + favoritesGroupID)
+        tmp = x.json()
+        lightslist = tmp["lights"]
+        lightslist.append(deviceId)
+        data = '{ "lights": [ "' + '", "'.join(lightslist) + '" ] }'
+        z = requests.put(DECONZ_GROUPS_URL + "/" + favoritesGroupID, data=data)
+    return HttpResponse(z.json())
+
+@login_required
+def deleteDeviceFromFavorites(request):
+    if request.method == 'POST':
+        deviceId = request.POST['deviceId']
+
+        x = requests.get(DECONZ_GROUPS_URL)
+        grouplist = x.json()
+        for key in grouplist:
+            tmp = grouplist[key]
+            groupname = tmp["name"]
+            if groupname == 'favorites_' + request.user.get_username():
+                favoritesGroupID = tmp["id"]
+
+        x = requests.get(DECONZ_GROUPS_URL + "/" + favoritesGroupID)
+        tmp = x.json()
+        lightslist = tmp["lights"]
+        lightslist.remove(deviceId)
+        if not lightslist:
+            z = requests.delete(DECONZ_GROUPS_URL + "/" + favoritesGroupID)
+            groupname = "favorites_" + request.user.get_username()
+            data = '{"name": "' + groupname + '"}'
+            z = requests.post(DECONZ_GROUPS_URL, data=data)
+        else:
+            data = '{ "lights": [ "' + '", "'.join(lightslist) + '" ] }'
+            z = requests.put(DECONZ_GROUPS_URL + "/" + favoritesGroupID, data=data)
+        print(z.json())
+    return HttpResponse(z.json())
+
+@login_required
+def isDeviceinFavorites(request):
+    if request.method == 'POST':
+        deviceId = request.POST['deviceId']
+
+        x = requests.get(DECONZ_GROUPS_URL)
+        grouplist = x.json()
+        for key in grouplist:
+            tmp = grouplist[key]
+            groupname = tmp["name"]
+            if groupname == 'favorites_' + request.user.get_username():
+                favoritesGroupID = tmp["id"]
+
+        x = requests.get(DECONZ_GROUPS_URL + "/" + favoritesGroupID)
+        tmp = x.json()
+        lightslist = tmp["lights"]
+        if deviceId in lightslist:
+            tmp = True
+        else:
+            tmp = False
+    return HttpResponse(tmp)
+
+@login_required
+def deleteDevice(request):
+    if request.method == 'POST':
+        x = requests.delete(DECONZ_DEVICE_LIGHTS_URL + "/" + request.POST['deviceId'], data='{"reset": true}')
+        print(x.json())
+    return HttpResponse('True')

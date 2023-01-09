@@ -1,4 +1,5 @@
-let deviceControlColorPicker;
+let favoritedevices;
+let colorPicker;
 let deviceControlModal;
 let deviceControlModalHeader;
 let deviceControlModalLabel;
@@ -8,16 +9,16 @@ let deviceControlModalBrightnessDisplay;
 let deviceToFav
 let deviceToFavLabel
 let deviceToFavText
-let deleteDeviceButton
 
 $(document).ready(() => {
-    deviceControlColorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
-        borderWidth: 2,
-        layout: [
-            {
-                component: iro.ui.Wheel,
-            },
-        ]
+    createFavoriteGroup();
+    colorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
+    borderWidth: 2,
+    layout: [
+        {
+            component: iro.ui.Wheel,
+        },
+    ]
     });
 
     deviceControlModal = document.getElementById('device-control-modal');
@@ -25,16 +26,11 @@ $(document).ready(() => {
     deviceControlModalLabel = document.getElementById('device-control-modal-label');
     // deviceControlModalLabel.innerHTML = 'Lampe XXX';
 
-    deviceControlColorPicker.on('color:change', function (color) {
-        console.log(color.hue);
-        console.log(color.saturation);
-        deviceControlModalHeader.style.backgroundColor = color.hexString;
-        deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'] + ' ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
     deviceToFav = document.getElementById('deviceToFav');
     deviceToFavLabel = document.getElementById('deviceToFavLabel');
     deviceToFavText = document.getElementById('deviceToFavText');
 
-deviceToFav.addEventListener('click', function(){
+    deviceToFav.addEventListener('click', function(){
     if (deviceToFav.checked == true){
         deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
         deviceToFavText.innerHTML = 'Von Favoriten entfernen';
@@ -94,10 +90,6 @@ deviceToFav.addEventListener('click', function(){
     deviceControlModalBrightnessSlider = document.getElementById("device-control-modal-brightness");
     deviceControlModalBrightnessDisplay = document.getElementById("device-control-modal-brightness-display");
     deviceControlModalBrightnessDisplay.innerText = deviceControlModalBrightnessSlider.value + ' %';
-    deleteDeviceButton = document.getElementById("deleteDevice");
-    deleteDeviceButton.addEventListener('click', function(){
-        deleteDevice(deviceControlModal.dataset['deviceId']);
-    })
 
     deviceControlModalSwitch.addEventListener('change', function(){
         lightOnOff(deviceControlModalSwitch.checked, deviceControlModal.dataset['deviceId']);
@@ -126,117 +118,39 @@ deviceToFav.addEventListener('click', function(){
     // Suche Geräte
     let startDeviceSearch = document.getElementById('startDeviceSearch');
     let searchProgress = document.getElementById('searchProgress');
-    startDeviceSearch.addEventListener('click', () => {
-        let buttonClass = startDeviceSearch.className;
-        startDeviceSearch.className += " collapse";
-        searchProgress.className = "collapse show";
+})
 
-        // API-Start-Search
-        let formData = new FormData();
+function createFavoriteGroup(){
+    let formData = new FormData();
         formData.append('csrfmiddlewaretoken', csrftoken);
 
-        const http = new XMLHttpRequest();
+        let http = new XMLHttpRequest();
 
-        http.onreadystatechange = function () {
-            let tag;
-            let text;
-            let element;
-            if (this.readyState === 4 && this.status === 200) {
-                if (this.response === 'none') {
-                    document.getElementById('nodevicesfound').innerHTML = "Keine Geräte gefunden.";
-                } else {
+        http.onreadystatechange = function (){
+             if (this.readyState === 4 && this.status === 200){
+                 favoritedevices = this.response;
+                 if (favoritedevices == ""){
+                     document.getElementById("favoritedevices").innerHTML = "Es wurde noch kein Gerät als Favorit gesetzt.";
+                 }
+                 else{
 
-                    const data = JSON.parse(this.response);
-
-                    tag = document.createElement("p");
-                    text = document.createTextNode("Gefundene Geräte: ");
-                    tag.appendChild(text);
-                    element = document.getElementById("foundDevices");
-                    element.appendChild(tag);
-
-                    for (var prop in data) {
-
-                        tag = document.createElement("p");
-
-                        text = document.createTextNode(data[prop].manufacturername + ", " + data[prop].name);
-                        tag.appendChild(text);
-                        const node = document.getElementById("plusimg");
-                        node.setAttribute("style", "height:25px; float: right");
-                        const clone = node.cloneNode(true);
-                        tag.appendChild(clone);
-                        element = document.getElementById("foundDevices");
-                        element.appendChild(tag);
-
-                    }
-                }
-            }
+                 }
+             }
         }
 
-        http.open('POST', '/startsearch/');
+        http.open('POST', '/createFavoriteGroup/');
         http.send(formData);
 
-        // Progress-Bar
-        let i = 0;
-        document.getElementById('searchText').innerHTML = 'Suche läuft';
-
-        const searchCounter = setInterval(function () {
-            i++;
-            if (i < 101) {
-                document.getElementById('searchProgressBar').style.width = i + '%';
-                const progressTime = Math.ceil((180 - (i * 1.8)) / 60);
-                document.getElementById('searchText').innerHTML = 'Suche läuft noch ' + progressTime + " Minuten";
-            } else {
-                clearInterval(searchCounter);
-                startDeviceSearch.className = buttonClass;
-                document.getElementById('searchText').innerHTML = 'Suche beendet';
-            }
-        }, 1800);
-    });
-});
-
-
-
+}
 
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
-    // let formData = new FormData();
-    // formData.append('lightID', deviceId);
-    // formData.append('state', state);
-    // formData.append('csrfmiddlewaretoken', csrftoken);
-    //
-    //
-    // // TODO: @Niklas warum zwei Requests?
-    // const http = new XMLHttpRequest();
-    // http.open('POST', '/turnonoff/');
-    // http.send(formData);
-    // const http2 = new XMLHttpRequest();
-    // http2.open('POST', '/turnonoff/');
-    // http2.send(formData);
+    let formData = new FormData();
+    formData.append('lightID', deviceId);
+    formData.append('state', state);
+    formData.append('csrfmiddlewaretoken', csrftoken);
 
-    $.ajax({
-        url: './device_change/',
-        type: 'POST',
-        data: {
-            csrfmiddlewaretoken: getCookie('csrftoken'),
-            action: 'update',
-            device_id: deviceId,
-            type: "light", // TODO: dynamisch
-            state: {'on': state}
-        },
-        headers: {
-            'Content-type': 'application/json', 'Accept': 'text/plain',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        dataType: 'json',
-        mode: 'same-origin',
-        success: function (data) {
-            console.info(data);
 
-            let devices = JSON.parse(window.localStorage.getItem('devices'))
-            devices[deviceId]['on'] = state;
-            window.localStorage.setItem('devices', JSON.stringify(devices));
-        }
-    });
     const http = new XMLHttpRequest();
     http.open('POST', '/turnonoff/');
     http.send(formData);
@@ -247,41 +161,15 @@ function lightOnOff(state, deviceId) {
     window.localStorage.setItem('devices', JSON.stringify(data));
 }
 
-function deleteDevice(deviceId){
-    let formData = new FormData();
-    formData.append('deviceId', deviceId);
-    formData.append('csrfmiddlewaretoken', csrftoken);
-    let http = new XMLHttpRequest();
-    http.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            if (this.response == "True") {
-                location.reload();
-            } else {
-                console.log('Beim Löschen ist ein Fehler aufgetreten.');
-            }
-        }
-    }
-    http.open('POST', '/deleteDevice/');
-    http.send(formData);
-}
-
 function loadDeviceDataToModal(deviceId) {
     let devices = JSON.parse(window.localStorage.getItem("devices"));
 
     if (devices.hasOwnProperty(deviceId)) {
         let currentDevice = devices[deviceId];
 
-        deviceControlModal.dataset['deviceId'] = currentDevice['id'];
-        deviceControlModal.dataset['deviceName'] = currentDevice['name'];
-
-        if (currentDevice['type'] == 'Extended color light'){
-            document.getElementById('device-control-modal-colorpicker').hidden = false;
-        } else{
-             document.getElementById('device-control-modal-colorpicker').hidden = true;
-        }
         deviceControlModalSwitch.checked = currentDevice['on'];
-        deviceControlColorPicker.color.hue = currentDevice['hue'];
-        deviceControlColorPicker.color.saturation = currentDevice['saturation'];
+        colorPicker.color.hue = currentDevice['hue'];
+        colorPicker.color.saturation = currentDevice['saturation'];
         deviceControlModalBrightnessSlider.value = currentDevice['brightness'];
         deviceControlModalBrightnessDisplay.innerText = currentDevice['brightness'] + ' %';
         deviceControlModalLabel.innerText = currentDevice['name'];
@@ -328,8 +216,8 @@ function saveDeviceDataToLocalStorage(deviceId) {
 
     if (devices.hasOwnProperty(deviceId)) {
         devices[deviceId]['on'] = deviceControlModalSwitch.checked;
-        devices[deviceId]['hue'] = deviceControlColorPicker.color.hue;
-        devices[deviceId]['saturation'] = deviceControlColorPicker.color.saturation;
+        devices[deviceId]['hue'] = colorPicker.color.hue;
+        devices[deviceId]['saturation'] = colorPicker.color.saturation;
         devices[deviceId]['brightness'] = deviceControlModalBrightnessSlider.value;
 
         window.localStorage.setItem('devices', JSON.stringify(devices));
@@ -341,3 +229,5 @@ function saveDeviceDataToLocalStorage(deviceId) {
         return null;
     }
 }
+
+
