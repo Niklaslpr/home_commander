@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Profil bearbeiten</h1>
+
+    <section class="">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-2r">
+                <div class="col-xl-8 mb-5">
+                    <form method="POST" class="">
+                        {% csrf_token %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success" role="alert">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {{ form|crispy }}
+                        <p>Das Passwort kann <a href="/change_password">hier</a> geändert werden.</p>
+
+                        <button type="submit" class="btn" style="background-color: var(--tertiary-color)">Speichern</button>
+                        <a href="/options/"><button type="button" class="btn btn-outline-secondary">Zurück</button></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

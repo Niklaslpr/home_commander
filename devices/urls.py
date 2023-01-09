@@ -10,4 +10,8 @@ urlpatterns = [
     path('device_info/<str:id>', views.get_device_data, name='get_device_data'),
     path('kit/<str:kit_name>', views.kits, name='kits'),
     path('startsearch/', views.startsearch, name='startsearch'),
+    path('addDeviceToFavorites/', views.addDeviceToFavorites, name='addDeviceToFavorites'),
+    path('deleteDeviceFromFavorites/', views.deleteDeviceFromFavorites, name='deleteDeviceFromFavorites'),
+    path('isDeviceinFavorites/', views.isDeviceinFavorites, name='isDeviceinFavorites'),
+    path('deleteDevice/', views.deleteDevice, name='deleteDevice'),
 ]

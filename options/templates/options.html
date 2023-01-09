@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'options/js/options.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Einstellungen</h1>
+    <section class="">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-2 justify-content-center">
+                <div class="col mb-5">
+                    <h3>Dein Profil</h3>
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" value="{{ username }}" readonly>
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email" value="{{ email }}" readonly>
+                    <label for="password">Password</label>
+                    <input type="text" class="form-control" id="password" value="*********" readonly>
+                    <br>
+                    <a href="/edit_profile"><button type="button" class="btn" style="background-color: var(--tertiary-color)">Profil bearbeiten</button></a>
+                </div>
+                <div class="col mb-5">
+                    <h3>Alle Profile</h3>
+                    <table class="table table-hover" id="user_table2">
+                        <thead>
+                            <tr>
+                                <th scope="col">Username</th>
+                                <th scope="col">Letzter Login</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user_table">
+                        </tbody>
+                    </table>
+                    <a href="/register"><button type="button" class="btn" style="background-color: var(--tertiary-color)">Account anlegen</button></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
