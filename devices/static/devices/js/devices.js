@@ -138,23 +138,44 @@ $(document).ready(() => {
 
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
-    let formData = new FormData();
-    formData.append('lightID', deviceId);
-    formData.append('state', state);
-    formData.append('csrfmiddlewaretoken', csrftoken);
+    // let formData = new FormData();
+    // formData.append('lightID', deviceId);
+    // formData.append('state', state);
+    // formData.append('csrfmiddlewaretoken', csrftoken);
+    //
+    //
+    // // TODO: @Niklas warum zwei Requests?
+    // const http = new XMLHttpRequest();
+    // http.open('POST', '/turnonoff/');
+    // http.send(formData);
+    // const http2 = new XMLHttpRequest();
+    // http2.open('POST', '/turnonoff/');
+    // http2.send(formData);
 
+    $.ajax({
+        url: './device_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'update',
+            device_id: deviceId,
+            type: "light", // TODO: dynamisch
+            state: {'on': state}
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
 
-    // TODO: @Niklas warum zwei Requests?
-    const http = new XMLHttpRequest();
-    http.open('POST', '/turnonoff/');
-    http.send(formData);
-    const http2 = new XMLHttpRequest();
-    http2.open('POST', '/turnonoff/');
-    http2.send(formData);
-
-    let data = JSON.parse(window.localStorage.getItem('devices'))
-    data[deviceId]['on'] = state;
-    window.localStorage.setItem('devices', JSON.stringify(data));
+            let devices = JSON.parse(window.localStorage.getItem('devices'))
+            devices[deviceId]['on'] = state;
+            window.localStorage.setItem('devices', JSON.stringify(devices));
+        }
+    });
 }
 
 function loadDeviceDataToModal(deviceId) {

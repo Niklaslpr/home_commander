@@ -95,10 +95,10 @@ def get_all_scene_data(request):
 
         response = []
         for key, value in response_tmp.items():
-            response += [{"id": key,
+            response += [{"id": key, # TODO
                           "has_color": value["hascolor"] if "hascolor" in value.keys() else False,
-                          "name": value["name"] if "name" in value.keys() else "unknown device name",
-                          "type": value["type"] if "type" in value.keys() else "unknown device type",
+                          "name": value["name"] if "name" in value.keys() else "unknown scene name",
+                          "type": value["type"] if "type" in value.keys() else "unknown scene type",
                           "reachable": value["state"]["reachable"] if "state" in value.keys() and "reachable" in value[
                               "state"].keys() else False,
                           "on": value["state"]["on"] if "state" in value.keys() and "on" in value[

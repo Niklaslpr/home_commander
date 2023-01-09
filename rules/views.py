@@ -8,7 +8,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from main.views import DECONZ_URL, API_KEY, TEST
 from main.views import get_data_from_input
-from rules.apiCalls import createSchedule
+from rules.api_calls_deconz import createSchedule
 
 DECONZ_SCHEDULE_URL = DECONZ_URL + "/api/" + API_KEY + "/schedules"
 
@@ -22,7 +22,8 @@ UTC_ISO_RANDOMIZED_TIME = 5
 
 def convert_weekday_bitmap(weekday_bitmap):
     weekday_bitmap = str(weekday_bitmap)
-    possibleWeekdays = {1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 5: 'Friday', 6: 'Saturday', 7: 'Sunday'}
+    possibleWeekdays = {1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 5: 'Friday', 6: 'Saturday',
+                        7: 'Sunday'}
     return [possibleWeekdays.get(i) for i, c in enumerate(weekday_bitmap)]
 
 
@@ -49,14 +50,14 @@ def get_info_from_utc_iso_8601_2004_string(utc_iso_8601_2004_string, info):
 
 @login_required
 def rules(response):
-    return render(response, "rules.html", {})
+    return render(response, "rules/rules.html", {})
 
 
 @login_required
 def createschedule(response):
     if response.method == 'POST':
         createSchedule(response.POST['time'], response.POST['groupID'])
-    return render(response, "rules.html", {})
+    return render(response, "rules/rules.html", {})
 
 
 def kits(request, kit_name):
@@ -113,12 +114,18 @@ def get_all_rule_data(request):
                           "name": value["name"] if "name" in value.keys() else "unknown rule name",
                           "description": value["description"] if "description" in value.keys() else "",
                           "active": True if "status" in value.keys() and value["status"] == "enabled" else False,
-                          "date": get_info_from_utc_iso_8601_2004_string(value["time"], UTC_ISO_DATE) if "time" in value.keys() else None,
-                          "time": get_info_from_utc_iso_8601_2004_string(value["time"], UTC_ISO_TIME) if "time" in value.keys() else None,
-                          "weekdays": get_info_from_utc_iso_8601_2004_string(value["time"], UTC_ISO_WEEKDAYS) if "time" in value.keys() else None,
-                          "timer": get_info_from_utc_iso_8601_2004_string(value["time"], UTC_ISO_TIMER) if "time" in value.keys() else None,
-                          "recurrent_timer": get_info_from_utc_iso_8601_2004_string(value["time"], UTC_ISO_RECURRING_TIMER) if "time" in value.keys() else None,
-                          "randomized_time": get_info_from_utc_iso_8601_2004_string(value["time"], UTC_ISO_RANDOMIZED_TIME) if "time" in value.keys() else None,
+                          "date": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                         UTC_ISO_DATE) if "time" in value.keys() else None,
+                          "time": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                         UTC_ISO_TIME) if "time" in value.keys() else None,
+                          "weekdays": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                             UTC_ISO_WEEKDAYS) if "time" in value.keys() else None,
+                          "timer": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                          UTC_ISO_TIMER) if "time" in value.keys() else None,
+                          "recurrent_timer": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                                    UTC_ISO_RECURRING_TIMER) if "time" in value.keys() else None,
+                          "randomized_time": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                                    UTC_ISO_RANDOMIZED_TIME) if "time" in value.keys() else None,
                           # "has_color": value["hascolor"] if "hascolor" in value.keys() else False,
                           # "name": value["name"] if "name" in value.keys() else "unknown device name",
                           # "type": value["type"] if "type" in value.keys() else "unknown device type",

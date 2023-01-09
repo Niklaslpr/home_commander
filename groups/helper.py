@@ -123,4 +123,7 @@ def get_group_data_from_deconz(id, username):
 
         return response
     else:
-        return None
+        response = deconz_api.get_group_attributes(id)
+        response = response.json()
+
+        return response

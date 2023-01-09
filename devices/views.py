@@ -1,24 +1,16 @@
-import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
+import devices.helper as helper
 from devices.api_calls_deconz import putbri
 from devices.api_calls_deconz import puthue
 from devices.api_calls_deconz import putstate
 from devices.api_calls_deconz import putstate1
 from devices.api_calls_deconz import startscan
-
 from main.views import get_data_from_input
-from main.views import DECONZ_URL, API_KEY, TEST
-
-import devices.helper as helper
-
-
-DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
-DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
 
 
 @login_required
@@ -89,8 +81,7 @@ def get_device_data(request, id):
     if request.method == "GET":
         data = get_data_from_input(request)
 
-        response = request.get(url=DECONZ_DEVICE_LIGHTS_URL + "/" + id)
-        response = response.json()
+        response = helper.get_device_data_from_deconz(id, request.user.get_username())
 
         print(data)
 
@@ -100,11 +91,51 @@ def get_device_data(request, id):
 def modify_device(request):
     if request.method == "POST":
         data = get_data_from_input(request)
+        # data = {}
+        # print("wasn das", request.body.decode("utf-8"))
+        print("here it comes", data)
+        print("here it goes", request.POST.get("action", ""))
 
         if data["action"] == "create":
             pass
         elif data["action"] == "update":
-            pass
+            print("is it working?", data)
+
+            if "type" in data.keys() and data["type"] == "light":
+                if "state" in data.keys():
+                    request_data = {
+                        "alert": data["state"]["alert"] if "alert" in data["state"].keys() else None,
+                        "brightness": data["state"]["brightness"] if "brightness" in data[
+                            "state"].keys() else None,
+                        "color_loop_speed": data["state"]["color_loop_speed"] if "color_loop_speed" in data[
+                            "state"].keys() else None,
+                        "ct": data["state"]["ct"] if "ct" in data["state"].keys() else None,
+                        "effect": data["state"]["effect"] if "effect" in data["state"].keys() else None,
+                        "hue": data["state"]["hue"] if "hue" in data["state"].keys() else None,
+                        "on": data["state"]["on"] if "on" in data["state"].keys() else None,
+                        "saturation": data["state"]["saturation"] if "saturation" in data[
+                            "state"].keys() else None,
+                        "transition_time": data["state"]["transition_time"] if "transition_time" in data[
+                            "state"].keys() else None,
+                        "x": data["state"]["xy"][0] if "xy" in data["state"].keys() and isinstance(
+                            data["state"]["xy"], list) else None,
+                        "y": data["state"]["xy"][1] if "xy" in data["state"].keys() and isinstance(
+                            data["state"]["xy"], list) else None
+                    }
+
+                    if "device_id" in data.keys() and (isinstance(data["device_id"], int) or isinstance(data["device_id"], str) and data["device_id"].isnumeric()):
+                        print("Affenarsch", request_data)
+                        response = helper.update_light_state_deconz(int(data["device_id"]), **request_data)
+                        return JsonResponse(response)
+                    else:
+                        return JsonResponse({"error": "no device id specified or wrong data type"})
+                else:
+                    return JsonResponse({"error": "no state specified"})
+            elif "type" in data.keys() and data["type"] == "sensor":
+                pass
+            else:
+                # error
+                return JsonResponse({"error": "no type specified or unknown type"})
         elif data["action"] == "delete":
             pass
         else:

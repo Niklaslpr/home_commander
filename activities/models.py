@@ -9,4 +9,4 @@ class LogEntry(models.Model):
 
     type = models.CharField(max_length=3, choices=LogType.choices)
     timestamp = models.DateTimeField(auto_now_add=True)
-    message = models.CharField(max_length=256)
+    message = models.CharField(max_length=255)

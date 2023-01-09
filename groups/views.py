@@ -8,7 +8,6 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from groups.api_calls_deconz import createGroup
 from groups.api_calls_deconz import putState
 from main.views import get_data_from_input, DECONZ_URL, API_KEY, TEST
-from devices.views import DECONZ_DEVICE_LIGHTS_URL, DECONZ_DEVICE_SENSORS_URL
 
 import groups.helper as helper
 
@@ -64,8 +63,7 @@ def get_group_data(request, id):
     if request.method == "GET":
         data = get_data_from_input(request)
 
-        response = request.get(url=DECONZ_GROUPS_URL + "/" + id)
-        response = response.json()
+        response = helper.get_group_data_from_deconz(id, request.user.username)
 
         print(data)
 
