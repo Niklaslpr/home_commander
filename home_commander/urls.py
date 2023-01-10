@@ -28,5 +28,5 @@ urlpatterns = [
     path('scenes/', include("scenes.urls")),
     path('rules/', include("rules.urls")),
     path('activities/', include("activities.urls")),
-    path('settings/', include("settings.urls"))
+    path('options/', include("options.urls"))
 ]

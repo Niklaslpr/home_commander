@@ -1,3 +1,4 @@
+{% load static %}
 <div class="modal fade" id="device-control-modal"
      onblur="saveDeviceDataToLocalStorage(document.getElementById('device-control-modal').dataset['deviceId'])"
      tabindex="-1"
@@ -16,6 +17,12 @@
                 </div>
             </div>
             <div class="modal-body text-center">
+                <div>
+                    <input type="checkbox" class="btn-check" id="deviceToFav" autocomplete="off">
+                    <label class="btn" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img
+                            src="{% static "main/pictures/bootstrap_icons/star.svg" %}" height="25" alt="">
+                        <p id="deviceToFavText">Zu Favoriten hinzufügen</p></label>
+                </div>
                 <div style="display: flex; justify-content: center; align-items: center"
                      id="device-control-modal-colorpicker"></div>
                 <br>
@@ -24,6 +31,7 @@
                 <input type="range" class="form-range" min="0" max="100"
                        id="device-control-modal-brightness"
                        value="{{ disclaimer }}"/>
+                <button type="button" class="btn btn-danger mt-5" id="deleteDevice" onclick="return confirm('Bist Du sicher?');">Löschen</button>
             </div>
         </div>
     </div>

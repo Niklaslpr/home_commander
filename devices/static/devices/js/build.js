@@ -22,7 +22,7 @@ function loadDevices() {
                 } else if (entry['reachable'] == false){
                     devicesJson[entry['id']] = entry;
                     $.ajax({
-                        url: '/kit/device-tile-not-reachable',
+                        url: './kit/device-tile-not-reachable',
                         type: 'get',
                         data: {
                             "csrfmiddlewaretoken": getCookie('csrftoken'),
@@ -43,7 +43,7 @@ function loadDevices() {
                 } else {
                     devicesJson[entry['id']] = entry;
                     $.ajax({
-                        url: '/kit/device-tile',
+                        url: './kit/device-tile',
                         type: 'get',
                         data: {
                             "csrfmiddlewaretoken": getCookie('csrftoken'),

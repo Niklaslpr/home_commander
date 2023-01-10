@@ -40,7 +40,7 @@ $(document).ready(() => {
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
-        http.open('POST', '/addDeviceToFavorites/');
+        http.open('POST', './addDeviceToFavorites/');
         http.send(formData);
 
     } else {

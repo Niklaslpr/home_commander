@@ -1,6 +1,6 @@
 function loadDevices() {
     $.ajax({
-        url: '/device_info/all',
+        url: '/devices/device_info/all',
         type: 'get',
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
@@ -34,7 +34,7 @@ function loadDevices() {
                         } else if (entry['reachable'] == false){
                             devicesJson[entry['id']] = entry;
                             $.ajax({
-                                url: '/kit/device-tile-not-reachable',
+                                url: './kit/device-tile-not-reachable',
                                 type: 'get',
                                 data: {
                                     "csrfmiddlewaretoken": getCookie('csrftoken'),
@@ -56,7 +56,7 @@ function loadDevices() {
                             devicesJson[entry['id']] = entry;
 
                             $.ajax({
-                                url: '/kit/device-tile',
+                                url: './kit/device-tile',
                                 type: 'get',
                                 data: {
                                     "csrfmiddlewaretoken": getCookie('csrftoken'),

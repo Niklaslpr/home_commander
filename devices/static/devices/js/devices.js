@@ -25,11 +25,11 @@ $(document).ready(() => {
     deviceControlModalLabel = document.getElementById('device-control-modal-label');
     // deviceControlModalLabel.innerHTML = 'Lampe XXX';
 
-    deviceControlColorPicker.on('color:change', function (color) {
-        console.log(color.hue);
-        console.log(color.saturation);
-        deviceControlModalHeader.style.backgroundColor = color.hexString;
-        deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'] + ' ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
+    // deviceControlColorPicker.on('color:change', function (color) {
+    //     console.log(color.hue);
+    //     console.log(color.saturation);
+    //     deviceControlModalHeader.style.backgroundColor = color.hexString;
+    //     deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'] + ' ' + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
     deviceToFav = document.getElementById('deviceToFav');
     deviceToFavLabel = document.getElementById('deviceToFavLabel');
     deviceToFavText = document.getElementById('deviceToFavText');
@@ -44,7 +44,7 @@ deviceToFav.addEventListener('click', function(){
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
-        http.open('POST', '/addDeviceToFavorites/');
+        http.open('POST', './addDeviceToFavorites/');
         http.send(formData);
 
     } else {
@@ -61,8 +61,8 @@ deviceToFav.addEventListener('click', function(){
     }
 })
 
-        colorPicker.on('color:change', function (color) {
-            if (deviceControlModal.classList.contains('show') == true) {
+        deviceControlColorPicker.on('color:change', function (color) {
+            if (deviceControlModal.classList.contains('show') === true) {
                 console.log(deviceControlModal.classList.contains('show'));
                 console.log('Textfarbe: ' + color.hue);
                 console.log('Saturation: ' + color.saturation);
