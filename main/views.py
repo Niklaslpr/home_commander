@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
-TEST = False # @Niklas set it to False
+TEST = True # @Niklas set it to False
 onRasp = False # True, if Code is running on Raspberry Pi
 
 RASPI_IP = socket.gethostbyname(socket.gethostname())
