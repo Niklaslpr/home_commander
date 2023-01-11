@@ -130,7 +130,7 @@ function saveGroupDataToLocalStorage(groupId) {
     let groups = JSON.parse(window.localStorage.getItem('groups'));
 
     if (groups.hasOwnProperty(groupId)) {
-        console.log("i hasse Dennis");
+        console.log("Ja");
 
         groups[groupId]['on'] = groupControlModalSwitch.checked;
         groups[groupId]['hue'] = groupControlColorPicker.color.hue;
