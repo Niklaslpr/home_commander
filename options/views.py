@@ -31,7 +31,7 @@ def get_all_users(request):
 def delete_user(request):
     if request.method == 'POST':
         username = request.POST['user']
-        User.objects.get(username=username).delete()
+
 
         print(username + " wurde gelöscht")
     return HttpResponse('erfolgreich')
