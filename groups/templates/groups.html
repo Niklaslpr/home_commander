@@ -150,11 +150,28 @@
                                 <label for="inputGroupName" class="form-label">Name</label>
                                 <input style="" type="text" id="inputGroupName" class="form-control"
                                        aria-describedby="inputGroupName">
-                                <select class="form-select" aria-label="Select Group Icon">
-                                    <option selected>Bitte Icon der Gruppe auswählen</option>
 
-                                </select>
-                                <button type="button" style="margin-top: 25px" class="btn btn-primary" id="createGroup">
+                                <table class="table table-borderless" style="border-collapse: separate; border-spacing: 0 20px">
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="image" id="tmp_collection.svg" src="{% static "main/pictures/bootstrap_icons/collection.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                            <td><input type="image" id="tmp_house.svg" src="{% static "main/pictures/bootstrap_icons/house.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                            <td><input type="image" id="tmp_controller.svg" src="{% static "main/pictures/bootstrap_icons/controller.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="image" id="tmp_archive.svg" src="{% static "main/pictures/bootstrap_icons/archive.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                            <td><input type="image" id="tmp_book.svg" src="{% static "main/pictures/bootstrap_icons/book.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                            <td><input type="image" id="tmp_wrench.svg" src="{% static "main/pictures/bootstrap_icons/wrench.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="image" id="tmp_brezel.png" src="{% static "main/pictures/bootstrap_icons/brezel.png" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                            <td><input type="image" id="tmp_plugin.svg" src="{% static "main/pictures/bootstrap_icons/plugin.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                            <td><input type="image" id="tmp_robot.svg" src="{% static "main/pictures/bootstrap_icons/robot.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="setIcon(this.id)"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <button type="button" style="margin-top: 25px; background-color: var(--tertiary-color)" class="btn" id="createGroup" onclick="createGroup()">
                                     Erstellen
                                 </button>
                             </div>
