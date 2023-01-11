@@ -15,8 +15,33 @@
                                onchange="lightOnOff(document.getElementById('device-control-modal-switch').checked, document.getElementById('device-control-modal').dataset['deviceId'])">
                     </div>
                 </div>
+                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true" height="35" alt="">
             </div>
-            <div class="modal-body text-center">
+
+            <div class="modal-body text-center" id="modal-body-edit" hidden>
+                <table class="table table-borderless" style="border-collapse: separate; border-spacing: 0 20px">
+                    <tbody>
+                        <tr>
+                            <td><input type="image" id="lamp-fill.svg" src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                            <td><input type="image" id="lamp.svg" src="{% static "main/pictures/bootstrap_icons/lamp.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                            <td><input type="image" id="lightbulb.svg" src="{% static "main/pictures/bootstrap_icons/lightbulb.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="image" id="lightbulb-fill.svg" src="{% static "main/pictures/bootstrap_icons/lightbulb-fill.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                            <td><input type="image" id="plug.svg" src="{% static "main/pictures/bootstrap_icons/plug.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                            <td><input type="image" id="plug-fill.svg" src="{% static "main/pictures/bootstrap_icons/plug-fill.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="image" id="brezel.png" src="{% static "main/pictures/bootstrap_icons/brezel.png" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                            <td><input type="image" id="plugin.svg" src="{% static "main/pictures/bootstrap_icons/plugin.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                            <td><input type="image" id="robot.svg" src="{% static "main/pictures/bootstrap_icons/robot.svg" %}" height="75" alt="" style="border-style: solid; padding: 5px" onclick="getIconId(this.id)"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="btn mt-5" id="saveIcon" style="background-color: var(--tertiary-color)" onclick="saveIcon()">Speichern</button>
+            </div>
+
+            <div class="modal-body text-center" id="modal-body-normal">
                 <div>
                     <input type="checkbox" class="btn-check" id="deviceToFav" autocomplete="off">
                     <label class="btn" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img
