@@ -148,7 +148,7 @@ function saveGroupDataToLocalStorage(groupId) {
 }
 
 function getIconId(IconId){
-    icons = ["lamp-fill.svg", "lamp.svg", "lightbulb.svg", "lightbulb-fill.svg", "plug.svg", "plug-fill.svg", "brezel.png", "plugin.svg", "robot.svg"];
+    icons = ["collection.svg", "house.svg", "controller.svg", "archive.svg", "book.svg", "wrench.svg", "brezel.png", "plugin.svg", "robot.svg"];
     for (const tmp in icons){
         document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
     }
