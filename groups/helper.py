@@ -79,7 +79,7 @@ def get_group_data_from_deconz(id, username):
                         "state": 0
                     }
 
-            print("EY JO 2", zwErg["name"].split("_"))
+            print("EY JO 2", zwErg["name"].split("_")[0])
             print("xxx", username)
 
             devices = []
@@ -98,13 +98,20 @@ def get_group_data_from_deconz(id, username):
                         devices += [{"type": "light", "id": entry, "name": nameZwErg}]
 
             # devices = [["light", request.get().json(), entry] for entry in zwErg["lights"]] if "lights" in zwErg.keys() else []
-
+            
             # TODO: Loop over Sensors to find all Sensors related to that Group!
 
-            if (zwErg["name"].split("_")[2] if "name" in zwErg.keys() else "") == "group" and (
-                    zwErg["name"].split("_")[3] if "name" in zwErg.keys() else "") in ["all", username]:
+            # if (zwErg["name"].split("_")[2] if "name" in zwErg.keys() else "") == "group" and (
+                    # zwErg["name"].split("_")[3] if "name" in zwErg.keys() else "") in ["all", username]:
+            
+            
+            # Pass the favorite-groups
+            if zwErg["name"].split("_")[0] == "favorites":
+                pass
+            else:
+            
                 response += [{"id": key,
-                              "name": zwErg["name"].split("_")[4] if "name" in zwErg.keys() else "unknown group name",
+                              "name": zwErg["name"] if "name" in zwErg.keys() else "unknown group name",
                               "devices": devices,
                               "on": zwErg["action"]["on"] if "action" in zwErg.keys() and "on" in zwErg[
                                   "action"].keys() else False,
@@ -117,10 +124,11 @@ def get_group_data_from_deconz(id, username):
                                   zwErg["action"]["sat"] / 255 * 100) if "action" in zwErg.keys() and "sat" in zwErg[
                                   "action"].keys() else 0
                               }]
-            else:
-                # nothing so far
-                pass
-
+                
+            # else:
+                # # nothing so far
+                # pass
+        
         return response
     else:
         response = deconz_api.get_group_attributes(id)
