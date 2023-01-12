@@ -9,6 +9,7 @@
 
 {% block content %}
     <h1>Einstellungen</h1>
+    <p id="my_username" hidden>{{ username }}</p>
     <section class="">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-2 justify-content-center">
@@ -36,7 +37,9 @@
                         <tbody id="user_table">
                         </tbody>
                     </table>
+                    {% if username == "admin" %}
                     <a href="/register"><button type="button" class="btn" style="background-color: var(--tertiary-color)">Account anlegen</button></a>
+                    {% endif %}
                 </div>
             </div>
         </div>

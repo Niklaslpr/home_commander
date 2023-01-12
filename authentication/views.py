@@ -3,16 +3,17 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import RegisterForm, UpdateUserForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def register(response):
     if response.method == "POST":
         form = RegisterForm(response.POST)
 
         if form.is_valid():
             form.save()
-            return redirect("/")
+            return redirect("/options")
     else:
         form = RegisterForm()
 

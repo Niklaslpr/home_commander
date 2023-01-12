@@ -31,7 +31,10 @@ def get_all_users(request):
 def delete_user(request):
     if request.method == 'POST':
         username = request.POST['user']
-
-
-        print(username + " wurde gelöscht")
+        if username == 'admin':
+            print(username + ' kann nicht gelöscht werden')
+        else:
+            u = User.objects.get(username = username)
+            u.delete()
+            print(username + " wurde gelöscht")
     return HttpResponse('erfolgreich')
