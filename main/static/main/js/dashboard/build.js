@@ -82,7 +82,7 @@ function loadDevices() {
                  }
             }
 
-            http.open('POST', '/createFavoriteGroup/');
+            http.open('POST', './createFavoriteGroup/');
             http.send(formData);
 
 

@@ -13,6 +13,7 @@ from devices.api_calls_deconz import putstate
 from devices.api_calls_deconz import putstate1
 from devices.api_calls_deconz import startscan
 from main.views import get_data_from_input
+from main.views import DECONZ_GROUPS_URL, DECONZ_DEVICE_LIGHTS_URL, DECONZ_DEVICE_SENSORS_URL
 
 
 @login_required
@@ -126,6 +127,8 @@ def modify_device(request):
                     if "device_id" in data.keys() and (isinstance(data["device_id"], int) or isinstance(data["device_id"], str) and data["device_id"].isnumeric()):
                         print("Affenarsch", request_data)
                         response = helper.update_light_state_deconz(int(data["device_id"]), **request_data)
+                        print('Hier bin ich type:')
+                        print(type(response))
                         return JsonResponse(response)
                     else:
                         return JsonResponse({"error": "no device id specified or wrong data type"})

@@ -58,7 +58,7 @@ deviceToFav.addEventListener('click', function(){
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
-        http.open('POST', '/deleteDeviceFromFavorites/');
+        http.open('POST', './deleteDeviceFromFavorites/');
         http.send(formData);
     }
 })
@@ -86,7 +86,7 @@ deviceToFav.addEventListener('click', function(){
                 formData.append('csrfmiddlewaretoken', csrftoken);
 
                 const http = new XMLHttpRequest();
-                http.open('POST', '/sethue/');
+                http.open('POST', './sethue/');
                 http.send(formData);
             }
         })
@@ -117,7 +117,7 @@ deviceToFav.addEventListener('click', function(){
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
-        http.open('POST', '/setbri/');
+        http.open('POST', './setbri/');
         http.send(formData);
 
         // http = new XMLHttpRequest();
@@ -174,7 +174,7 @@ deviceToFav.addEventListener('click', function(){
             }
         }
 
-        http.open('POST', '/startsearch/');
+        http.open('POST', './startsearch/');
         http.send(formData);
 
         // Progress-Bar
@@ -201,10 +201,19 @@ deviceToFav.addEventListener('click', function(){
 
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
-    // let formData = new FormData();
-    // formData.append('lightID', deviceId);
-    // formData.append('state', state);
-    // formData.append('csrfmiddlewaretoken', csrftoken);
+    let formData = new FormData();
+    formData.append('lightID', deviceId);
+    formData.append('state', state);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    
+    const http = new XMLHttpRequest();
+    http.open('POST', './turnonoff/');
+    http.send(formData);
+
+
+    let data = JSON.parse(window.localStorage.getItem('devices'))
+    data[deviceId]['on'] = state;
+    window.localStorage.setItem('devices', JSON.stringify(data));
     //
     //
     // // TODO: @Niklas warum zwei Requests?
@@ -232,6 +241,7 @@ function lightOnOff(state, deviceId) {
         dataType: 'json',
         mode: 'same-origin',
         success: function (data) {
+            console.log('Hier bin cih erfolgreich');
             console.info(data);
 
             let devices = JSON.parse(window.localStorage.getItem('devices'))
@@ -239,14 +249,7 @@ function lightOnOff(state, deviceId) {
             window.localStorage.setItem('devices', JSON.stringify(devices));
         }
     });
-    const http = new XMLHttpRequest();
-    http.open('POST', '/turnonoff/');
-    http.send(formData);
-
-
-    let data = JSON.parse(window.localStorage.getItem('devices'))
-    data[deviceId]['on'] = state;
-    window.localStorage.setItem('devices', JSON.stringify(data));
+    
 }
 
 function deleteDevice(deviceId){
@@ -263,7 +266,7 @@ function deleteDevice(deviceId){
             }
         }
     }
-    http.open('POST', '/deleteDevice/');
+    http.open('POST', './deleteDevice/');
     http.send(formData);
 }
 
@@ -314,7 +317,7 @@ function loadDeviceDataToModal(deviceId) {
              }
         }
 
-        http.open('POST', '/isDeviceinFavorites/');
+        http.open('POST', './isDeviceinFavorites/');
         http.send(formData);
 
 

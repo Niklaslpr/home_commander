@@ -52,7 +52,7 @@ $(document).ready(() => {
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
-        http.open('POST', '/deleteDeviceFromFavorites/');
+        http.open('POST', './deleteDeviceFromFavorites/');
         http.send(formData);
     }
 })
@@ -80,7 +80,7 @@ $(document).ready(() => {
                 formData.append('csrfmiddlewaretoken', csrftoken);
 
                 const http = new XMLHttpRequest();
-                http.open('POST', '/sethue/');
+                http.open('POST', './sethue/');
                 http.send(formData);
             }
         })
@@ -107,7 +107,7 @@ $(document).ready(() => {
         formData.append('csrfmiddlewaretoken', csrftoken);
 
         let http = new XMLHttpRequest();
-        http.open('POST', '/setbri/');
+        http.open('POST', './setbri/');
         http.send(formData);
 
         // http = new XMLHttpRequest();
@@ -129,6 +129,7 @@ function createFavoriteGroup(){
         http.onreadystatechange = function (){
              if (this.readyState === 4 && this.status === 200){
                  favoritedevices = this.response;
+                 console.log(favoritedevices);
                  if (favoritedevices == ""){
                      document.getElementById("favoritedevices").innerHTML = "Es wurde noch kein Gerät als Favorit gesetzt.";
                  }
@@ -138,7 +139,7 @@ function createFavoriteGroup(){
              }
         }
 
-        http.open('POST', '/createFavoriteGroup/');
+        http.open('POST', './createFavoriteGroup/');
         http.send(formData);
 
 }
@@ -152,7 +153,7 @@ function lightOnOff(state, deviceId) {
 
 
     const http = new XMLHttpRequest();
-    http.open('POST', '/turnonoff/');
+    http.open('POST', './turnonoff/');
     http.send(formData);
 
 
@@ -200,7 +201,7 @@ function loadDeviceDataToModal(deviceId) {
              }
         }
 
-        http.open('POST', '/isDeviceinFavorites/');
+        http.open('POST', './isDeviceinFavorites/');
         http.send(formData);
 
 
