@@ -128,7 +128,7 @@ def modify_device(request):
                         print("Affenarsch", request_data)
                         response = helper.update_light_state_deconz(int(data["device_id"]), **request_data)
                         print('Hier bin ich type:')
-                        print(type(response))
+                        print(response)
                         return JsonResponse(response)
                     else:
                         return JsonResponse({"error": "no device id specified or wrong data type"})

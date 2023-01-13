@@ -64,7 +64,14 @@ def format_light_attributes_for_deconz(alert=None, brightness=None, color_loop_s
     print("on the air", on)
     if on is not None and (
             isinstance(on, bool) or isinstance(on, str) and on in ["true", "True", "false", "False"]):
-        request_data["on"] = bool(on)
+        # request_data["on"] = str(on)
+        print(isinstance(on, str))
+        if isinstance(on, str) and on in ["False", "false"]:
+            print('Ja kommst du')
+            request_data["on"]=bool(0)
+        else:
+            print('Nein kommst du nicht')
+            request_data["on"]=bool(on) 
     elif on is not None:
         errors += ["on"]
 

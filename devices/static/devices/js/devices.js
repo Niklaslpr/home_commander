@@ -201,19 +201,19 @@ deviceToFav.addEventListener('click', function(){
 
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
-    let formData = new FormData();
-    formData.append('lightID', deviceId);
-    formData.append('state', state);
-    formData.append('csrfmiddlewaretoken', csrftoken);
+    //let formData = new FormData();
+    //formData.append('lightID', deviceId);
+    //formData.append('state', state);
+    //formData.append('csrfmiddlewaretoken', csrftoken);
     
-    const http = new XMLHttpRequest();
-    http.open('POST', './turnonoff/');
-    http.send(formData);
+    //const http = new XMLHttpRequest();
+    //http.open('POST', './turnonoff/');
+    //http.send(formData);
 
 
-    let data = JSON.parse(window.localStorage.getItem('devices'))
-    data[deviceId]['on'] = state;
-    window.localStorage.setItem('devices', JSON.stringify(data));
+    //let data = JSON.parse(window.localStorage.getItem('devices'))
+    //data[deviceId]['on'] = state;
+    //window.localStorage.setItem('devices', JSON.stringify(data));
     //
     //
     // // TODO: @Niklas warum zwei Requests?
