@@ -37,4 +37,7 @@ def delete_user(request):
             u = User.objects.get(username = username)
             u.delete()
             print(username + " wurde gelöscht")
+            
+            # TODO: delete Favorite-Group in deCONZ
+            
     return HttpResponse('erfolgreich')
