@@ -10,6 +10,20 @@ def putState(state, groupID):
     p = requests.put(url, data=data)
     print(p.status_code)
     print(p.content)
+    
+def putHue(hue, sat, groupId):
+    data = '{"hue":' + hue + ', "sat":' + sat + '}'
+    url = DECONZ_GROUPS_URL + '/' + groupId + '/action'
+    p = requests.put(url, data=data)
+    print(p.status_code)
+    print(p.content)
+
+def putBri(bri, groupId):
+    data = '{"bri":' + bri + '}'
+    url = DECONZ_GROUPS_URL + '/' + groupId + '/action'
+    p = requests.put(url, data=data)
+    print(p.status_code)
+    print(p.content)
 
 
 def createGroup(groupName, selectedDevices):

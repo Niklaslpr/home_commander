@@ -7,6 +7,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from groups.api_calls_deconz import createGroup
 from groups.api_calls_deconz import putState
+from groups.api_calls_deconz import putHue, putBri
 from groups.api_calls_deconz import deleteGroup
 from main.views import get_data_from_input, DECONZ_URL, API_KEY, TEST
 
@@ -23,7 +24,19 @@ def grouponoff(response):
     if response.method == 'POST':
         putState(response.POST['state'], response.POST['groupID'])
     return render(response, "groups.html", {})
+    
+@login_required
+def groupsethue(response):
+    if response.method == 'POST':
+        putHue(response.POST["hue"], response.POST["sat"], response.POST["groupId"])
+    return HttpResponse("true")
 
+
+@login_required
+def groupsetbri(response):
+    if response.method == 'POST':
+        putBri(response.POST["bri"], response.POST["groupId"])
+    return HttpResponse("true")
 
 @login_required
 def creategroup(response):

@@ -30,18 +30,48 @@ $(document).ready(() => {
 // groupControlModalLabel.innerHTML = 'Gruppe XXX';
 
     groupControlColorPicker.on('color:change', function (color) {
-        console.log(color.hue);
-        console.log(color.saturation);
-        groupControlModalHeader.style.backgroundColor = color.hexString;
-        groupControlModalLabel.innerHTML = groupControlModal.dataset['groupName'] + 'Hue: ' + color.hue + ' Sat: ' + color.saturation;
+        if (groupControlModal.classList.contains('show') === true) {
+            console.log(color.hue);
+            console.log(color.saturation);
+            groupControlModalHeader.style.backgroundColor = color.hexString;
+            if (color.saturation > 55 && color.hue > 212){
+                        groupControlModalLabel.style.color = 'white';
+            } else {groupControlModalLabel.style.color = 'black';}
+            let hue = Math.round(color.hue * 65535 / 360);
+            let sat = Math.round(color.saturation * 2.55);
+            
+            let formData = new FormData();
+            formData.append('hue', hue);
+            formData.append('sat', sat);
+            formData.append('groupId', groupControlModal.dataset['groupId']);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+
+            const http = new XMLHttpRequest();
+            http.open('POST', './groupsethue/');
+            http.send(formData);
+        }
     });
+    
     groupControlModalBrightnessSlider = document.getElementById("group-control-modal-brightness");
     groupControlModalBrightnessDisplay = document.getElementById("group-control-modal-brightness-display");
     groupControlModalBrightnessDisplay.innerHTML = groupControlModalBrightnessSlider.value + '%';
 
 // Update the current slider value (each time you drag the slider handle)
     groupControlModalBrightnessSlider.oninput = function () {
-        groupControlModalBrightnessDisplay.innerHTML = this.value + '%';
+        let bri = this.value;
+        groupControlModalBrightnessDisplay.innerHTML = bri + '%';
+        bri = Math.round(bri * 2.55);
+        
+        // sending Brightness
+        let formData = new FormData();
+        formData.append('bri', bri);
+        formData.append('groupId', groupControlModal.dataset['groupId']);
+        formData.append('csrfmiddlewaretoken', csrftoken);
+
+        let http = new XMLHttpRequest();
+        http.open('POST', './groupsetbri/');
+        http.send(formData);
+        
     }
 
 // let switchGroup1 = document.getElementById('switchGroup1');
@@ -115,7 +145,8 @@ function loadGroupDataToModal(groupId) {
         groupControlColorPicker.color.saturation = currentGroup['saturation'];
         groupControlModalBrightnessSlider.value = currentGroup['brightness'];
         groupControlModalBrightnessDisplay.innerText = currentGroup['brightness'] + ' %';
-        groupControlModalLabel.innerText = currentGroup['name'] + ' ' + 'Hue: ' + currentGroup['hue'] + ' Sat: ' + currentGroup['saturation'];
+        groupControlModalLabel.innerText = currentGroup['name'];
+        groupControlModalHeader.style.backgroundColor = 'hsl(' + currentGroup['hue'] + ', 100%, 50%)';
 
         return 0;
     } else {
