@@ -32,16 +32,24 @@
 
                             <div class="modal-header text-center" id="group-control-modal-header">
                                 <h5 class="modal-title" id="group-control-modal-label">Group name unknown</h5>
+                                
+                                <input style="width: 50%" type="text" id="updateGroupName" class="form-control" value="Group name unknown" hidden
+                                       aria-describedby="inputGroupName">
+                                
                                 <div class="text-center">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
                                                id="group-control-modal-switch" onchange="groupOnOff(document.getElementById('group-control-modal-switch').checked, document.getElementById('group-control-modal').dataset['groupId'])">
                                     </div>
                                 </div>
-                                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true" height="35" alt="">
+                                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="document.getElementById('group-control-modal-switch').hidden = true; document.getElementById('group-control-modal-label').hidden = true; document.getElementById('updateGroupName').hidden = false; document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true" height="35" alt="">
                             </div>
 
                             <div class="modal-body text-center" id="modal-body-edit" hidden>
+                                
+                                <h6>Geräte auswählen:</h6>
+                                <ul class="list-group" id="edit-group-device-list">
+                                </ul>
                                 <table class="table table-borderless" style="border-collapse: separate; border-spacing: 0 20px">
                                     <tbody>
                                         <tr>
