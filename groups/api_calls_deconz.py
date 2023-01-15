@@ -9,18 +9,42 @@ DECONZ_GROUPS_URL = DECONZ_URL + "/api/" + API_KEY + "/groups"
 
 def putState(state, groupID):
     data = '{"on":' + state + '}'
-    url = 'http://192.168.178.49/api/546117A96A/groups/' + groupID + '/action'
+    url = DECONZ_GROUPS_URL + '/' + groupID + '/action'
+    p = requests.put(url, data=data)
+    print(p.status_code)
+    print(p.content)
+
+def putHue(hue, sat, groupId):
+    data = '{"hue":' + hue + ', "sat":' + sat + '}'
+    url = DECONZ_GROUPS_URL + '/' + groupId + '/action'
+    p = requests.put(url, data=data)
+    print(p.status_code)
+    print(p.content)
+
+def putBri(bri, groupId):
+    data = '{"bri":' + bri + '}'
+    url = DECONZ_GROUPS_URL + '/' + groupId + '/action'
     p = requests.put(url, data=data)
     print(p.status_code)
     print(p.content)
 
 
-def createGroup(groupName):
+def createGroup(groupName, selectedDevices):
     data = '{"name": "' + groupName + '" }'
-    url = 'http://192.168.178.49/api/546117A96A/groups'
-    p = requests.post(url, data=data)
+    p = requests.post(DECONZ_GROUPS_URL, data=data)
     print(p.status_code)
-    print(p.content)
+    response = p.json()
+    groupId = response[0]["success"]["id"]
+    selectedDevices = selectedDevices.split(",")
+    tmp = '['
+    for x in selectedDevices:
+        tmp = tmp + '"' + x + '", '
+    tmp = tmp + ']'
+    data = '{"lights": ' + tmp + '}"'
+    url = DECONZ_GROUPS_URL + '/' + groupId
+    r = requests.put(url, data=data)
+    print(r.status_code)
+    print(r.content)
     return p.status_code
 
 
@@ -45,6 +69,18 @@ def get_group_attributes(group_id):
     response = response.json()
 
     return response
+
+def deleteGroup(groupId):
+    data = '{"on": true}'
+    url = DECONZ_GROUPS_URL + '/' + groupId + '/action'
+    p = requests.put(url, data=data)
+    print(p.status_code)
+    print(p.content)
+    url = DECONZ_GROUPS_URL + '/' + groupId
+    p = requests.delete(url)
+    print('Löschen:')
+    print(p.status_code)
+    print(p.content)
 
 
 def update_group_attributes(group_id, request_data):

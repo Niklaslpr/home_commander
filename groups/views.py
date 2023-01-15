@@ -9,6 +9,11 @@ from groups.api_calls_deconz import createGroup
 from groups.api_calls_deconz import putState
 from main.views import get_data_from_input
 from .models import Group
+from groups.api_calls_deconz import putHue, putBri
+from groups.api_calls_deconz import deleteGroup
+from main.views import get_data_from_input, DECONZ_URL, API_KEY, TEST
+
+import groups.helper as helper
 
 
 @login_required
@@ -22,13 +27,32 @@ def grouponoff(response):
         putState(response.POST['state'], response.POST['groupID'])
     return render(response, "groups.html", {})
 
+@login_required
+def groupsethue(response):
+    if response.method == 'POST':
+        putHue(response.POST["hue"], response.POST["sat"], response.POST["groupId"])
+    return HttpResponse("true")
+
+
+@login_required
+def groupsetbri(response):
+    if response.method == 'POST':
+        putBri(response.POST["bri"], response.POST["groupId"])
+    return HttpResponse("true")
 
 @login_required
 def creategroup(response):
     if response.method == 'POST':
-        newgroup = createGroup(response.POST['groupName'])
+        newgroup = createGroup(response.POST['groupName'], response.POST['selectedDevices'])
     return HttpResponse(newgroup)
 
+
+
+@login_required
+def deletegroup(response):
+    if response.method == 'POST':
+        deleteGroup(response.POST['groupId'])
+    return HttpResponse("True")
 
 def kits(request, kit_name):
     data = get_data_from_input(request)
