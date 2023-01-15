@@ -37,9 +37,11 @@ $(document).ready(() => {
             console.log(color.hue);
             console.log(color.saturation);
             groupControlModalHeader.style.backgroundColor = color.hexString;
-            if (color.saturation > 55 && color.hue > 212){
-                        groupControlModalLabel.style.color = 'white';
-            } else {groupControlModalLabel.style.color = 'black';}
+            if (color.saturation > 55 && color.hue > 212) {
+                groupControlModalLabel.style.color = 'white';
+            } else {
+                groupControlModalLabel.style.color = 'black';
+            }
             let hue = Math.round(color.hue * 65535 / 360);
             let sat = Math.round(color.saturation * 2.55);
 
@@ -126,7 +128,7 @@ $(document).ready(() => {
         });
     })
     deleteGroupButton = document.getElementById("deleteGroup");
-    deleteGroupButton.addEventListener('click', function(){
+    deleteGroupButton.addEventListener('click', function () {
 
         if (confirm('Bist Du sicher?')) {
             deleteGroup(groupControlModal.dataset['groupId']);
@@ -223,9 +225,9 @@ function saveGroupDataToLocalStorage(groupId) {
 }
 
 // setIcon for createGroup()
-function setIcon(IconId){
+function setIcon(IconId) {
     icons = ["tmp_collection.svg", "tmp_house.svg", "tmp_controller.svg", "tmp_archive.svg", "tmp_book.svg", "tmp_wrench.svg", "tmp_brezel.png", "tmp_plugin.svg", "tmp_robot.svg"];
-    for (const tmp in icons){
+    for (const tmp in icons) {
         document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
     }
     document.getElementById(IconId).style.backgroundColor = "var(--tertiary-color)";
@@ -233,68 +235,67 @@ function setIcon(IconId){
     selectedIcon = tmp_array[1];
 }
 
-function createGroup(){
-        selectedDevices = [];
-        newGroupName = document.getElementById('inputGroupName');
-        console.log(newGroupName.value);
-        console.log(selectedIcon);
-        console.log(deviceList);
+function createGroup() {
+    selectedDevices = [];
+    newGroupName = document.getElementById('inputGroupName');
+    console.log(newGroupName.value);
+    console.log(selectedIcon);
+    console.log(deviceList);
 
-        for (let entry of deviceList){
-            if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
-                selectedDevices.push(entry);
-            }
+    for (let entry of deviceList) {
+        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)') {
+            selectedDevices.push(entry);
         }
-        console.log("Selected Devices: " + selectedDevices);
+    }
+    console.log("Selected Devices: " + selectedDevices);
 
-        let formData = new FormData();
-        formData.append('groupName', newGroupName.value);
-        formData.append('selectedDevices', selectedDevices);
-        formData.append('csrfmiddlewaretoken', csrftoken);
-        const http = new XMLHttpRequest();
+    let formData = new FormData();
+    formData.append('groupName', newGroupName.value);
+    formData.append('selectedDevices', selectedDevices);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    const http = new XMLHttpRequest();
 
-        http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                location.reload();
-            } else {
-                console.log("Fehler beim Erstellen der Gruppe");
-            }
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+        } else {
+            console.log("Fehler beim Erstellen der Gruppe");
         }
-        http.open('POST', './creategroup/');
-        http.send(formData);
+    }
+    http.open('POST', './creategroup/');
+    http.send(formData);
 
 }
 
 
 // getIconId for saveIcon()
-function getIconId(IconId){
+function getIconId(IconId) {
     icons = ["collection.svg", "house.svg", "controller.svg", "archive.svg", "book.svg", "wrench.svg", "brezel.png", "plugin.svg", "robot.svg"];
-    for (const tmp in icons){
+    for (const tmp in icons) {
         document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
     }
     selectedIcon = IconId;
     document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
 }
 
-function saveIcon(){
+function saveIcon() {
     document.getElementById('modal-body-edit').hidden = true;
     document.getElementById('modal-body-normal').hidden = false;
     selectedDevices = [];
 
-    
-        
-    for (let entry of deviceList){
-        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
+
+    for (let entry of deviceList) {
+        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)') {
             selectedDevices.push(entry);
         }
     }
     groupName = updateGroupName.value;
-    
+
     console.log("Selected Devices: " + selectedDevices);
     console.log(groupControlModal.dataset['groupId']);
     console.log(selectedIcon);
     console.log(groupName);
-    
+
     //let formData = new FormData();
     //formData.append('groupId', groupControlModal.dataset['groupId']);
     //formData.append('groupName', updateGroupName.value);
@@ -303,11 +304,11 @@ function saveIcon(){
     //const http = new XMLHttpRequest();
 
     //http.onreadystatechange = function () {
-        //if (this.readyState == 4 && this.status == 200) {
-            //location.reload();
-        //} else {
-            //console.log("Fehler beim Erstellen der Gruppe");
-        //}
+    //if (this.readyState == 4 && this.status == 200) {
+    //location.reload();
+    //} else {
+    //console.log("Fehler beim Erstellen der Gruppe");
+    //}
     //}
     //http.open('POST', './creategroup/');
     //http.send(formData);
@@ -321,8 +322,9 @@ function toggleEdit(isActive) {
         document.getElementById('modal-body-edit').hidden = false;
         document.getElementById('modal-body-normal').hidden = true;
     }
+}
 
-function deleteGroup(groupId){
+function deleteGroup(groupId) {
     let formData = new FormData();
     formData.append('groupId', groupId);
     formData.append('csrfmiddlewaretoken', csrftoken);
@@ -336,7 +338,7 @@ function deleteGroup(groupId){
     http.send(formData);
 }
 
-function get_all_devices(){
+function get_all_devices() {
     deviceList = [];
     document.getElementById('new-group-device-list').innerHTML = '';
     $.ajax({
@@ -356,55 +358,55 @@ function get_all_devices(){
                 deviceList.push(entry["id"].toString());
 
 
-            $.ajax({
-                url: './kit/device-item2',
-                type: 'get',
-                data: {
-                    "csrfmiddlewaretoken": getCookie('csrftoken'),
-                    "device-id": entry['id'].toString(),
-                    "device-name": entry['name'].toString(),
-                    "device-type": entry['type'].toString(),
-                },
-                headers: {
-                    'Content-type': 'application/json', 'Accept': 'text/plain',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                dataType: 'json',
-                mode: 'same-origin'
-            }).always((data) => {
-                if (data.readyState === 4 && data.status === 200) {
-                    document.getElementById('new-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                }
-            });
-            $.ajax({
-                url: './kit/device-item3',
-                type: 'get',
-                data: {
-                    "csrfmiddlewaretoken": getCookie('csrftoken'),
-                    "device-id2": entry['id'].toString(),
-                    "device-name2": entry['name'].toString(),
-                    "device-type2": entry['type'].toString(),
-                },
-                headers: {
-                    'Content-type': 'application/json', 'Accept': 'text/plain',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                dataType: 'json',
-                mode: 'same-origin'
-            }).always((data) => {
-                if (data.readyState === 4 && data.status === 200) {
-                    document.getElementById('edit-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                }
-            });
-        }
+                $.ajax({
+                    url: './kit/device-item2',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "device-id": entry['id'].toString(),
+                        "device-name": entry['name'].toString(),
+                        "device-type": entry['type'].toString(),
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('new-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+                });
+                $.ajax({
+                    url: './kit/device-item3',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "device-id2": entry['id'].toString(),
+                        "device-name2": entry['name'].toString(),
+                        "device-type2": entry['type'].toString(),
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('edit-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+                });
+            }
         }
     });
 }
 
-function set_background_color(id){
-    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)'){
+function set_background_color(id) {
+    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)') {
         document.getElementById(id).style.backgroundColor = "transparent";
-    } else{
+    } else {
         document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
     }
 }
