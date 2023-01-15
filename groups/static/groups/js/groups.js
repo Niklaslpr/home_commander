@@ -42,22 +42,47 @@ $(document).ready(() => {
     let newGroupName = document.getElementById('inputGroupName');
 
     document.getElementById('createGroup').addEventListener('click', function () {
-        let formData = new FormData();
-        formData.append('groupName', newGroupName.value);
-        formData.append('csrfmiddlewaretoken', csrftoken);
+        // let formData = new FormData();
+        // formData.append('groupName', newGroupName.value);
+        // formData.append('csrfmiddlewaretoken', csrftoken);
+        //
+        // const http = new XMLHttpRequest();
+        //
+        // http.onreadystatechange = function () {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         location.reload();
+        //     }
+        // }
+        //
+        // http.open('POST', '/creategroup/');
+        // http.send(formData);
 
-        const http = new XMLHttpRequest();
+        $.ajax({
+            url: './group_change/',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: getCookie('csrftoken'),
+                action: 'create',
+                state: {'name': newGroupName.value}
+            },
+            headers: {
+                'Content-type': 'application/json', 'Accept': 'text/plain',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            dataType: 'json',
+            mode: 'same-origin',
+            success: function (data) {
+                console.info(data);
 
-        http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
+                // let groups = JSON.parse(window.localStorage.getItem('groups'))
+                // groups[data.group_id]['name'] = data.name;
+                // window.localStorage.setItem('groups', JSON.stringify(groups));
+            }
+        }).always((data) => {
+            if (data.readyState === 4 && data.status === 200) {
                 location.reload();
             }
-        }
-
-        http.open('POST', '/creategroup/');
-        http.send(formData);
-
-
+        });
     })
 });
 

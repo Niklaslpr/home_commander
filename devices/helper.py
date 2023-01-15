@@ -64,7 +64,10 @@ def format_light_attributes_for_deconz(alert=None, brightness=None, color_loop_s
     print("on the air", on)
     if on is not None and (
             isinstance(on, bool) or isinstance(on, str) and on in ["true", "True", "false", "False"]):
-        request_data["on"] = bool(on)
+        if isinstance(on, str) and on in ["False", "false"]:
+            request_data["on"] = bool(0)
+        else:
+            request_data["on"] = bool(on)
     elif on is not None:
         errors += ["on"]
 
@@ -91,7 +94,7 @@ def format_light_attributes_for_deconz(alert=None, brightness=None, color_loop_s
     return {"error": errors, "request_data": request_data}
 
 
-def get_device_data_from_deconz(device_id, username):
+def get_device_data_from_deconz(device_id, username=None):
     if device_id == -1:
         if not TEST:
             response_tmp = deconz_api.get_all_lights()

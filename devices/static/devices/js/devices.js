@@ -34,60 +34,62 @@ $(document).ready(() => {
     deviceToFavLabel = document.getElementById('deviceToFavLabel');
     deviceToFavText = document.getElementById('deviceToFavText');
 
-deviceToFav.addEventListener('click', function(){
-    if (deviceToFav.checked == true){
-        deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
-        deviceToFavText.innerHTML = 'Von Favoriten entfernen';
+    deviceToFav.addEventListener('click', function () {
+        if (deviceToFav.checked == true) {
+            deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
+            deviceToFavText.innerHTML = 'Von Favoriten entfernen';
 
-        let formData = new FormData();
-        formData.append('deviceId', deviceControlModal.dataset['deviceId']);
-        formData.append('csrfmiddlewaretoken', csrftoken);
+            let formData = new FormData();
+            formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+            formData.append('csrfmiddlewaretoken', csrftoken);
 
-        let http = new XMLHttpRequest();
-        http.open('POST', './addDeviceToFavorites/');
-        http.send(formData);
+            let http = new XMLHttpRequest();
+            http.open('POST', './addDeviceToFavorites/');
+            http.send(formData);
 
-    } else {
-        deviceToFavLabel.style.backgroundColor = 'white';
-        deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
+        } else {
+            deviceToFavLabel.style.backgroundColor = 'white';
+            deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
 
-        let formData = new FormData();
-        formData.append('deviceId', deviceControlModal.dataset['deviceId']);
-        formData.append('csrfmiddlewaretoken', csrftoken);
+            let formData = new FormData();
+            formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+            formData.append('csrfmiddlewaretoken', csrftoken);
 
-        let http = new XMLHttpRequest();
-        http.open('POST', '/deleteDeviceFromFavorites/');
-        http.send(formData);
-    }
-})
+            let http = new XMLHttpRequest();
+            http.open('POST', '/deleteDeviceFromFavorites/');
+            http.send(formData);
+        }
+    })
 
-        deviceControlColorPicker.on('color:change', function (color) {
-            if (deviceControlModal.classList.contains('show') === true) {
-                console.log(deviceControlModal.classList.contains('show'));
-                console.log('Textfarbe: ' + color.hue);
-                console.log('Saturation: ' + color.saturation);
+    deviceControlColorPicker.on('color:change', function (color) {
+        if (deviceControlModal.classList.contains('show') === true) {
+            console.log(deviceControlModal.classList.contains('show'));
+            console.log('Textfarbe: ' + color.hue);
+            console.log('Saturation: ' + color.saturation);
 
-                deviceControlModalHeader.style.backgroundColor = color.hexString;
-                deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'];
+            deviceControlModalHeader.style.backgroundColor = color.hexString;
+            deviceControlModalLabel.innerText = deviceControlModal.dataset['deviceName'];
 
-                if (color.saturation > 55 && color.hue > 212){
-                    deviceControlModalLabel.style.color = 'white';
-                } else {deviceControlModalLabel.style.color = 'black';}
-
-                let hue = Math.round(color.hue * 65535 / 360);
-                let sat = Math.round(color.saturation * 2.55);
-
-                let formData = new FormData();
-                formData.append('hue', hue);
-                formData.append('sat', sat);
-                formData.append('deviceId', deviceControlModal.dataset['deviceId']);
-                formData.append('csrfmiddlewaretoken', csrftoken);
-
-                const http = new XMLHttpRequest();
-                http.open('POST', '/sethue/');
-                http.send(formData);
+            if (color.saturation > 55 && color.hue > 212) {
+                deviceControlModalLabel.style.color = 'white';
+            } else {
+                deviceControlModalLabel.style.color = 'black';
             }
-        })
+
+            let hue = Math.round(color.hue * 65535 / 360);
+            let sat = Math.round(color.saturation * 2.55);
+
+            let formData = new FormData();
+            formData.append('hue', hue);
+            formData.append('sat', sat);
+            formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+
+            const http = new XMLHttpRequest();
+            http.open('POST', '/sethue/');
+            http.send(formData);
+        }
+    })
 
 
     deviceControlModalSwitch = document.getElementById('device-control-modal-switch');
@@ -95,11 +97,11 @@ deviceToFav.addEventListener('click', function(){
     deviceControlModalBrightnessDisplay = document.getElementById("device-control-modal-brightness-display");
     deviceControlModalBrightnessDisplay.innerText = deviceControlModalBrightnessSlider.value + ' %';
     deleteDeviceButton = document.getElementById("deleteDevice");
-    deleteDeviceButton.addEventListener('click', function(){
+    deleteDeviceButton.addEventListener('click', function () {
         deleteDevice(deviceControlModal.dataset['deviceId']);
     })
 
-    deviceControlModalSwitch.addEventListener('change', function(){
+    deviceControlModalSwitch.addEventListener('change', function () {
         lightOnOff(deviceControlModalSwitch.checked, deviceControlModal.dataset['deviceId']);
     })
 
@@ -195,8 +197,6 @@ deviceToFav.addEventListener('click', function(){
 });
 
 
-
-
 function lightOnOff(state, deviceId) {
     console.log("aha thats it", state);
     // let formData = new FormData();
@@ -237,17 +237,17 @@ function lightOnOff(state, deviceId) {
             window.localStorage.setItem('devices', JSON.stringify(devices));
         }
     });
-    const http = new XMLHttpRequest();
-    http.open('POST', '/turnonoff/');
-    http.send(formData);
-
-
-    let data = JSON.parse(window.localStorage.getItem('devices'))
-    data[deviceId]['on'] = state;
-    window.localStorage.setItem('devices', JSON.stringify(data));
+    // const http = new XMLHttpRequest();
+    // http.open('POST', '/turnonoff/');
+    // http.send(formData);
+    //
+    //
+    // let data = JSON.parse(window.localStorage.getItem('devices'))
+    // data[deviceId]['on'] = state;
+    // window.localStorage.setItem('devices', JSON.stringify(data));
 }
 
-function deleteDevice(deviceId){
+function deleteDevice(deviceId) {
     let formData = new FormData();
     formData.append('deviceId', deviceId);
     formData.append('csrfmiddlewaretoken', csrftoken);
@@ -274,10 +274,10 @@ function loadDeviceDataToModal(deviceId) {
         deviceControlModal.dataset['deviceId'] = currentDevice['id'];
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
-        if (currentDevice['type'] == 'Extended color light'){
+        if (currentDevice['type'] == 'Extended color light') {
             document.getElementById('device-control-modal-colorpicker').hidden = false;
-        } else{
-             document.getElementById('device-control-modal-colorpicker').hidden = true;
+        } else {
+            document.getElementById('device-control-modal-colorpicker').hidden = true;
         }
         deviceControlModalSwitch.checked = currentDevice['on'];
         deviceControlColorPicker.color.hue = currentDevice['hue'];
@@ -285,9 +285,11 @@ function loadDeviceDataToModal(deviceId) {
         deviceControlModalBrightnessSlider.value = currentDevice['brightness'];
         deviceControlModalBrightnessDisplay.innerText = currentDevice['brightness'] + ' %';
         deviceControlModalLabel.innerText = currentDevice['name'];
-        if (currentDevice['has_color'] == true ){
+        if (currentDevice['has_color'] == true) {
             deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 50%)';
-        } else { deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 100%)';}
+        } else {
+            deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 100%)';
+        }
         deviceControlModal.dataset['deviceId'] = currentDevice['id'];
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
@@ -298,23 +300,22 @@ function loadDeviceDataToModal(deviceId) {
         formData.append('csrfmiddlewaretoken', csrftoken);
         let http = new XMLHttpRequest();
 
-         http.onreadystatechange = function (){
-             if (this.readyState === 4 && this.status === 200){
-                 if (this.response == "True"){
-                     deviceToFav.checked = true;
-                     deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
-                     deviceToFavText.innerHTML = 'Von Favoriten entfernen';
-                 } else{
-                     deviceToFav.checked = false;
-                     deviceToFavLabel.style.backgroundColor = 'white';
-                     deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
-                 }
-             }
+        http.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                if (this.response == "True") {
+                    deviceToFav.checked = true;
+                    deviceToFavLabel.style.backgroundColor = 'var(--tertiary-color)';
+                    deviceToFavText.innerHTML = 'Von Favoriten entfernen';
+                } else {
+                    deviceToFav.checked = false;
+                    deviceToFavLabel.style.backgroundColor = 'white';
+                    deviceToFavText.innerHTML = 'Zu Favoriten hinzufügen';
+                }
+            }
         }
 
         http.open('POST', '/isDeviceinFavorites/');
         http.send(formData);
-
 
 
         return 0;

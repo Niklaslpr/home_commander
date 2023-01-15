@@ -2,27 +2,21 @@ import scenes.api_calls_deconz as deconz_api
 from main.views import TEST
 from devices.helper import format_light_attributes_for_deconz
 from groups.api_calls_deconz import get_all_groups
+from devices.helper import get_device_data_from_deconz
 
 
 def format_scene_data_from_deconz(scene_id, data):
-    return None
-    # return {"id": device_id,
-    #         "has_color": data["hascolor"] if "hascolor" in data.keys() else False,
-    #         "name": data["name"] if "name" in data.keys() else "unknown device name",
-    #         "type": data["type"] if "type" in data.keys() else "unknown device type",
-    #         "reachable": data["state"]["reachable"] if "state" in data.keys() and "reachable" in
-    #                                                    data[
-    #                                                        "state"].keys() else False,
-    #         "on": data["state"]["on"] if "state" in data.keys() and "on" in data[
-    #             "state"].keys() else False,
-    #         "brightness": int(data["state"]["bri"] / 255 * 100) if "state" in data.keys() and "bri" in
-    #                                                                data["state"].keys() else 0,
-    #         "hue": int(data["state"]["hue"] / 65535 * 360) if "state" in data.keys() and "hue" in
-    #                                                           data[
-    #                                                               "state"].keys() else 0,
-    #         "saturation": int(data["state"]["sat"] / 255 * 100) if "state" in data.keys() and "sat" in
-    #                                                                data["state"].keys() else 0
-    #         }
+    response = {"id": scene_id,
+                "name": data["name"] if "name" in data.keys() else "unknown scene name",
+                "lights": []
+                }
+
+    if "lights" in data.keys() and data["lights"] != []:
+        for entry in data["lights"]:
+            if "id" in entry.keys():
+                response["lights"] += get_device_data_from_deconz(entry["id"])
+
+    return response
 
 
 def get_scene_data_from_deconz(group_id, username, scene_id=None):

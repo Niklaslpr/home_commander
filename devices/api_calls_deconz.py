@@ -92,6 +92,7 @@ def get_light_state(light_id):
 def update_light_state(light_id, request_data):
     if isinstance(request_data, dict) and request_data != {}:
         response = requests.put(DECONZ_DEVICE_LIGHTS_URL + "/" + light_id + "/state", data=json.dumps(request_data))
+        response = response.json() # TODO
 
         print("Update Light Status", response.status_code)
         print("Update Light Content", response.content)
