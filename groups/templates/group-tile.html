@@ -10,10 +10,21 @@
         </div>
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div class="text-center">
-                <div class="form-check form-switch d-flex justify-content-center">
-                    <input class="form-check-input" type="checkbox" id="switchGroup-{{ group_id }}"
+                        
+                {% if group_state == 'true' %}
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="switchGroup-{{ group_id }}" checked
                            onchange="groupOnOff(document.getElementById('switchGroup-{{ group_id }}').checked, {{ group_id }})">
-                </div>
+                    </div>
+                {% endif %}
+                {% if group_state == 'false' %}
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="switchGroup-{{ group_id }}"
+                           onchange="groupOnOff(document.getElementById('switchGroup-{{ group_id }}').checked, {{ group_id }})">
+                    </div>
+                {% endif %}
+                    
+                
             </div>
         </div>
     </div>

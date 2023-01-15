@@ -5,12 +5,12 @@ let deviceControlModalLabel;
 let deviceControlModalSwitch;
 let deviceControlModalBrightnessSlider;
 let deviceControlModalBrightnessDisplay;
-let deviceToFav
-let deviceToFavLabel
-let deviceToFavText
-let deleteDeviceButton
-let selectedIcon
-let icons
+let deviceToFav;
+let deviceToFavLabel;
+let deviceToFavText;
+let deleteDeviceButton;
+let selectedIcon;
+let icons;
 
 $(document).ready(() => {
     deviceControlColorPicker = new iro.ColorPicker('#device-control-modal-colorpicker', {
@@ -98,7 +98,11 @@ deviceToFav.addEventListener('click', function(){
     deviceControlModalBrightnessDisplay.innerText = deviceControlModalBrightnessSlider.value + ' %';
     deleteDeviceButton = document.getElementById("deleteDevice");
     deleteDeviceButton.addEventListener('click', function(){
-        deleteDevice(deviceControlModal.dataset['deviceId']);
+        if (confirm('Bist Du sicher?')) {
+            console.log(deviceControlModal.dataset['deviceId']);
+            deleteDevice(deviceControlModal.dataset['deviceId']);
+        }
+        
     })
 
     deviceControlModalSwitch.addEventListener('change', function(){

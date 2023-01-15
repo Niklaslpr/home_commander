@@ -7,6 +7,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from groups.api_calls_deconz import createGroup
 from groups.api_calls_deconz import putState
+from groups.api_calls_deconz import deleteGroup
 from main.views import get_data_from_input, DECONZ_URL, API_KEY, TEST
 
 import groups.helper as helper
@@ -27,9 +28,16 @@ def grouponoff(response):
 @login_required
 def creategroup(response):
     if response.method == 'POST':
-        newgroup = createGroup(response.POST['groupName'])
+        newgroup = createGroup(response.POST['groupName'], response.POST['selectedDevices'])
     return HttpResponse(newgroup)
+    
 
+
+@login_required
+def deletegroup(response):
+    if response.method == 'POST':
+        deleteGroup(response.POST['groupId'])
+    return HttpResponse("True")
 
 def kits(request, kit_name):
     data = get_data_from_input(request)

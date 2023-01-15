@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block css %}
+    
 {% endblock %}
 
 {% block js %}
@@ -11,7 +12,7 @@
 
 {% block content %}
     <h1>Gruppen
-        <a href="" data-bs-toggle="modal" data-bs-target="#modalNewGroup">
+        <a href="" data-bs-toggle="modal" data-bs-target="#modalNewGroup" onclick="get_all_devices()">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}"
                  height="50" alt="">
         </a>
@@ -34,7 +35,7 @@
                                 <div class="text-center">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
-                                               id="group-control-modal-switch">
+                                               id="group-control-modal-switch" onchange="groupOnOff(document.getElementById('group-control-modal-switch').checked, document.getElementById('group-control-modal').dataset['groupId'])">
                                     </div>
                                 </div>
                                 <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true" height="35" alt="">
@@ -131,6 +132,7 @@
                                         id="group-control-modal-brightness-display"></p></label>
                                 <input type="range" class="form-range" min="0" max="100"
                                        id="group-control-modal-brightness" value="{{ disclaimer }}"/>
+                                <button type="button" class="btn btn-danger mt-5" id="deleteGroup" onclick="">Löschen</button>
 
                             </div>
                         </div>
@@ -150,7 +152,10 @@
                                 <label for="inputGroupName" class="form-label">Name</label>
                                 <input style="" type="text" id="inputGroupName" class="form-control"
                                        aria-describedby="inputGroupName">
-
+                                <h6>Geräte auswählen:</h6>
+                                <ul class="list-group" id="new-group-device-list">
+                                </ul>
+                                <h6>Icon auswählen:</h6>
                                 <table class="table table-borderless" style="border-collapse: separate; border-spacing: 0 20px">
                                     <tbody>
                                         <tr>

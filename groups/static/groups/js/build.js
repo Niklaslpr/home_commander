@@ -25,6 +25,7 @@ function loadGroups() {
                         "csrfmiddlewaretoken": getCookie('csrftoken'),
                         "group-id": entry['id'].toString(),
                         "group-name": entry['name'].toString(),
+                        "group-state": entry['on'].toString(),
                     },
                     headers: {
                         'Content-type': 'application/json', 'Accept': 'text/plain',
