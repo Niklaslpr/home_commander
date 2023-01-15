@@ -11,6 +11,8 @@ let icons;
 let deleteGroupButton;
 let deviceList;
 let selectedDevices;
+let updateGroupName;
+
 
 $(document).ready(() => {
     get_all_devices();
@@ -27,6 +29,7 @@ $(document).ready(() => {
     groupControlModal = document.getElementById("group-control-modal")
     groupControlModalHeader = document.getElementById("group-control-modal-header");
     groupControlModalLabel = document.getElementById("group-control-modal-label");
+    updateGroupName = document.getElementById("updateGroupName");
 // groupControlModalLabel.innerHTML = 'Gruppe XXX';
 
     groupControlColorPicker.on('color:change', function (color) {
@@ -191,6 +194,7 @@ function loadGroupDataToModal(groupId) {
         groupControlModalBrightnessSlider.value = currentGroup['brightness'];
         groupControlModalBrightnessDisplay.innerText = currentGroup['brightness'] + ' %';
         groupControlModalLabel.innerText = currentGroup['name'];
+        updateGroupName.value = currentGroup['name'];
         groupControlModalHeader.style.backgroundColor = 'hsl(' + currentGroup['hue'] + ', 100%, 50%)';
 
         return 0;
@@ -275,7 +279,38 @@ function getIconId(IconId){
 function saveIcon(){
     document.getElementById('modal-body-edit').hidden = true;
     document.getElementById('modal-body-normal').hidden = false;
+    selectedDevices = [];
+
+    
+        
+    for (let entry of deviceList){
+        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
+            selectedDevices.push(entry);
+        }
+    }
+    groupName = updateGroupName.value;
+    
+    console.log("Selected Devices: " + selectedDevices);
+    console.log(groupControlModal.dataset['groupId']);
     console.log(selectedIcon);
+    console.log(groupName);
+    
+    //let formData = new FormData();
+    //formData.append('groupId', groupControlModal.dataset['groupId']);
+    //formData.append('groupName', updateGroupName.value);
+    //formData.append('selectedDevices', selectedDevices);
+    //formData.append('csrfmiddlewaretoken', csrftoken);
+    //const http = new XMLHttpRequest();
+
+    //http.onreadystatechange = function () {
+        //if (this.readyState == 4 && this.status == 200) {
+            //location.reload();
+        //} else {
+            //console.log("Fehler beim Erstellen der Gruppe");
+        //}
+    //}
+    //http.open('POST', './creategroup/');
+    //http.send(formData);
 }
 
 function toggleEdit(isActive) {
@@ -339,6 +374,26 @@ function get_all_devices(){
             }).always((data) => {
                 if (data.readyState === 4 && data.status === 200) {
                     document.getElementById('new-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                }
+            });
+            $.ajax({
+                url: './kit/device-item3',
+                type: 'get',
+                data: {
+                    "csrfmiddlewaretoken": getCookie('csrftoken'),
+                    "device-id2": entry['id'].toString(),
+                    "device-name2": entry['name'].toString(),
+                    "device-type2": entry['type'].toString(),
+                },
+                headers: {
+                    'Content-type': 'application/json', 'Accept': 'text/plain',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                dataType: 'json',
+                mode: 'same-origin'
+            }).always((data) => {
+                if (data.readyState === 4 && data.status === 200) {
+                    document.getElementById('edit-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
                 }
             });
         }
