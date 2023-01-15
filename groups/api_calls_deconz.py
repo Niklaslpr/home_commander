@@ -43,7 +43,21 @@ def createGroup(groupName, selectedDevices):
     print(r.status_code)
     print(r.content)
     return p.status_code
-
+    
+def updateGroup(groupName, selectedDevices, groupId):
+    selectedDevices = selectedDevices.split(",")
+    tmp = '['
+    for x in selectedDevices:
+        tmp = tmp + '"' + x + '", '
+    tmp = tmp + ']'    
+    data = '{"name": "' + groupName + '","lights": ' + tmp + '}"'
+    print(data)
+    url = DECONZ_GROUPS_URL + '/' + groupId
+    r = requests.put(url, data=data)
+    print("Ach du scheiße")
+    print(r.status_code)
+    print(r.content)
+    return r.status_code
 
 def get_all_groups():
     response = requests.get(url=DECONZ_GROUPS_URL)

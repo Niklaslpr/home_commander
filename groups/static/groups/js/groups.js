@@ -250,22 +250,22 @@ function saveIcon(){
     console.log(selectedIcon);
     console.log(groupName);
     
-    //let formData = new FormData();
-    //formData.append('groupId', groupControlModal.dataset['groupId']);
-    //formData.append('groupName', updateGroupName.value);
-    //formData.append('selectedDevices', selectedDevices);
-    //formData.append('csrfmiddlewaretoken', csrftoken);
-    //const http = new XMLHttpRequest();
+    let formData = new FormData();
+    formData.append('groupId', groupControlModal.dataset['groupId']);
+    formData.append('groupName', updateGroupName.value);
+    formData.append('selectedDevices', selectedDevices);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    const http = new XMLHttpRequest();
 
-    //http.onreadystatechange = function () {
-        //if (this.readyState == 4 && this.status == 200) {
-            //location.reload();
-        //} else {
-            //console.log("Fehler beim Erstellen der Gruppe");
-        //}
-    //}
-    //http.open('POST', './creategroup/');
-    //http.send(formData);
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+        } else {
+            console.log("Fehler beim Erstellen der Gruppe");
+        }
+    }
+    http.open('POST', './updategroup/');
+    http.send(formData);
 }
 
 

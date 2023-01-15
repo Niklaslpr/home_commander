@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.groups, name='groups'),
     path('grouponoff/', views.grouponoff, name='grouponoff'),
     path('creategroup/', views.creategroup, name='creategroup'),
+    path('updategroup/', views.updategroup, name='updategroup'),
     path('deletegroup/', views.deletegroup, name='deletegroup'),
     path('groupsethue/', views.groupsethue, name='groupsethue'),
     path('groupsetbri/', views.groupsetbri, name='groupsetbri'),

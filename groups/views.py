@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
-from groups.api_calls_deconz import createGroup
+from groups.api_calls_deconz import createGroup, updateGroup
 from groups.api_calls_deconz import putState
 from groups.api_calls_deconz import putHue, putBri
 from groups.api_calls_deconz import deleteGroup
@@ -43,8 +43,12 @@ def creategroup(response):
     if response.method == 'POST':
         newgroup = createGroup(response.POST['groupName'], response.POST['selectedDevices'])
     return HttpResponse(newgroup)
-    
 
+@login_required    
+def updategroup(response):
+    if response.method == 'POST':
+        updategroup = updateGroup(response.POST['groupName'], response.POST['selectedDevices'], response.POST['groupId'])
+    return HttpResponse(updategroup)
 
 @login_required
 def deletegroup(response):
