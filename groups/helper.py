@@ -139,7 +139,7 @@ def get_group_data_from_deconz(id, username=None):
                         "state": 0
                     }
 
-            print("EY JO 2", zwErg["name"].split("_"))
+            print("EY JO 2", zwErg["name"].split("_")[0])
             print("xxx", username)
 
             devices = []

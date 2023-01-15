@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.http import HttpResponse
 from datetime import datetime
 import pytz
 
@@ -26,3 +27,17 @@ def get_all_users(request):
             tmpdict[tmp] = tmpstr
             tmp += 1
     return JsonResponse(tmpdict)
+
+def delete_user(request):
+    if request.method == 'POST':
+        username = request.POST['user']
+        if username == 'admin':
+            print(username + ' kann nicht gelöscht werden')
+        else:
+            u = User.objects.get(username = username)
+            u.delete()
+            print(username + " wurde gelöscht")
+            
+            # TODO: delete Favorite-Group in deCONZ
+            
+    return HttpResponse('erfolgreich')

@@ -5,6 +5,9 @@ let groupControlModalLabel;
 let groupControlModalSwitch;
 let groupControlModalBrightnessSlider;
 let groupControlModalBrightnessDisplay;
+let newGroupName;
+let selectedIcon;
+let icons;
 
 $(document).ready(() => {
     groupControlColorPicker = new iro.ColorPicker('#group-control-modal-colorpicker', {
@@ -97,7 +100,7 @@ function groupOnOff(state, groupID) {
     formData.append('csrfmiddlewaretoken', csrftoken);
 
     const http = new XMLHttpRequest();
-    http.open('POST', '/grouponoff/');
+    http.open('POST', './grouponoff/');
     http.send(formData);
 }
 
@@ -155,7 +158,7 @@ function saveGroupDataToLocalStorage(groupId) {
     let groups = JSON.parse(window.localStorage.getItem('groups'));
 
     if (groups.hasOwnProperty(groupId)) {
-        console.log("i hasse Dennis");
+        console.log("Ja");
 
         groups[groupId]['on'] = groupControlModalSwitch.checked;
         groups[groupId]['hue'] = groupControlColorPicker.color.hue;
@@ -168,4 +171,52 @@ function saveGroupDataToLocalStorage(groupId) {
     } else {
         return null;
     }
+}
+
+// setIcon for createGroup()
+function setIcon(IconId){
+    icons = ["tmp_collection.svg", "tmp_house.svg", "tmp_controller.svg", "tmp_archive.svg", "tmp_book.svg", "tmp_wrench.svg", "tmp_brezel.png", "tmp_plugin.svg", "tmp_robot.svg"];
+    for (const tmp in icons){
+        document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
+    }
+    document.getElementById(IconId).style.backgroundColor = "var(--tertiary-color)";
+    const tmp_array = IconId.split("_");
+    selectedIcon = tmp_array[1];
+}
+
+function createGroup(){
+        newGroupName = document.getElementById('inputGroupName');
+        console.log(newGroupName.value);
+        console.log(selectedIcon);
+        let formData = new FormData();
+        formData.append('groupName', newGroupName.value);
+        formData.append('csrfmiddlewaretoken', csrftoken);
+        const http = new XMLHttpRequest();
+
+        http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                location.reload();
+            } else {
+                console.log("Fehler beim Erstellen der Gruppe");
+            }
+        }
+        http.open('POST', './creategroup/');
+        http.send(formData);
+}
+
+
+// getIconId for saveIcon()
+function getIconId(IconId){
+    icons = ["collection.svg", "house.svg", "controller.svg", "archive.svg", "book.svg", "wrench.svg", "brezel.png", "plugin.svg", "robot.svg"];
+    for (const tmp in icons){
+        document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
+    }
+    selectedIcon = IconId;
+    document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
+}
+
+function saveIcon(){
+    document.getElementById('modal-body-edit').hidden = true;
+    document.getElementById('modal-body-normal').hidden = false;
+    console.log(selectedIcon);
 }
