@@ -105,7 +105,6 @@ def modify_group(request):
                 if "group_id" in data.keys() and (
                         isinstance(data["group_id"], int) or isinstance(data["group_id"], str) and data[
                     "group_id"].isnumeric()):
-                    print("Affenarsch", request_data)
                     response = helper.update_group_deconz(int(data["device_id"]), **request_data)
                     return JsonResponse(response)
                 else:

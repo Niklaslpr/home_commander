@@ -12,6 +12,7 @@ function getIconId(IconId){
     }
     selectedIcon = IconId;
     document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
+    console.log("hier oder was?")
 }
 
 function saveIcon(){

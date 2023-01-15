@@ -8,7 +8,12 @@ from scenes.models import Scene
 
 class Favourite(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
-    devices = models.ManyToManyField(to=Device)
-    groups = models.ManyToManyField(to=Group)
-    rooms = models.ManyToManyField(to=Room)
-    scenes = models.ManyToManyField(to=Scene)
+    devices = models.ManyToManyField(to=Device, blank=True)
+    groups = models.ManyToManyField(to=Group, blank=True)
+    rooms = models.ManyToManyField(to=Room, blank=True)
+    scenes = models.ManyToManyField(to=Scene, blank=True)
+
+
+class API(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=64)

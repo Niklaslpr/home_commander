@@ -141,6 +141,75 @@ def get_device_data_from_deconz(device_id, username=None):
                     "swversion": "020C.201000A0",
                     "type": "Dimmable light",
                     "uniqueid": "00:21:2E:FF:FF:00:73:9F-0B"
+                },
+                "3": {
+                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
+                    "hascolor": True,
+                    "manufacturer": "dresden elektronik",
+                    "modelid": "FLS-PP3",
+                    "name": "Light 3",
+                    "pointsymbol": {},
+                    "state": {
+                        "alert": "none",
+                        "bri": 111,
+                        "colormode": "ct",
+                        "ct": 307,
+                        "effect": "none",
+                        "hue": 7998,
+                        "on": True,
+                        "reachable": True,
+                        "sat": 172,
+                        "xy": [0.421253, 0.39921]
+                    },
+                    "swversion": "020C.201000A0",
+                    "type": "Extended color light",
+                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
+                },
+                "4": {
+                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
+                    "hascolor": True,
+                    "manufacturer": "dresden elektronik",
+                    "modelid": "FLS-PP3",
+                    "name": "Light 4",
+                    "pointsymbol": {},
+                    "state": {
+                        "alert": "none",
+                        "bri": 111,
+                        "colormode": "ct",
+                        "ct": 307,
+                        "effect": "none",
+                        "hue": 7998,
+                        "on": True,
+                        "reachable": True,
+                        "sat": 172,
+                        "xy": [0.421253, 0.39921]
+                    },
+                    "swversion": "020C.201000A0",
+                    "type": "Extended color light",
+                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
+                },
+                "5": {
+                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
+                    "hascolor": True,
+                    "manufacturer": "dresden elektronik",
+                    "modelid": "FLS-PP3",
+                    "name": "Light 5",
+                    "pointsymbol": {},
+                    "state": {
+                        "alert": "none",
+                        "bri": 111,
+                        "colormode": "ct",
+                        "ct": 307,
+                        "effect": "none",
+                        "hue": 7998,
+                        "on": True,
+                        "reachable": True,
+                        "sat": 172,
+                        "xy": [0.421253, 0.39921]
+                    },
+                    "swversion": "020C.201000A0",
+                    "type": "Extended color light",
+                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
                 }
             }
 
@@ -150,8 +219,82 @@ def get_device_data_from_deconz(device_id, username=None):
 
         return response
     else:
-        response = deconz_api.get_light_state(device_id)
-        response = format_device_data_from_deconz(device_id, response)
+        if not TEST:
+            response = deconz_api.get_light_state(device_id)
+            response = format_device_data_from_deconz(device_id, response)
+        else:
+            if device_id == "3":
+                response = {
+                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
+                    "hascolor": True,
+                    "manufacturer": "dresden elektronik",
+                    "modelid": "FLS-PP3",
+                    "name": "Light 3",
+                    "pointsymbol": {},
+                    "state": {
+                        "alert": "none",
+                        "bri": 111,
+                        "colormode": "ct",
+                        "ct": 307,
+                        "effect": "none",
+                        "hue": 7998,
+                        "on": True,
+                        "reachable": True,
+                        "sat": 172,
+                        "xy": [0.421253, 0.39921]
+                    },
+                    "swversion": "020C.201000A0",
+                    "type": "Extended color light",
+                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
+                }
+            elif device_id == "4":
+                response = {
+                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
+                    "hascolor": True,
+                    "manufacturer": "dresden elektronik",
+                    "modelid": "FLS-PP3",
+                    "name": "Light 4",
+                    "pointsymbol": {},
+                    "state": {
+                        "alert": "none",
+                        "bri": 111,
+                        "colormode": "ct",
+                        "ct": 307,
+                        "effect": "none",
+                        "hue": 7998,
+                        "on": True,
+                        "reachable": True,
+                        "sat": 172,
+                        "xy": [0.421253, 0.39921]
+                    },
+                    "swversion": "020C.201000A0",
+                    "type": "Extended color light",
+                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
+                }
+            else:
+                response = {
+                    "etag": "026bcfe544ad76c7534e5ca8ed39047c",
+                    "hascolor": True,
+                    "manufacturer": "dresden elektronik",
+                    "modelid": "FLS-PP3",
+                    "name": "Light 5",
+                    "pointsymbol": {},
+                    "state": {
+                        "alert": "none",
+                        "bri": 111,
+                        "colormode": "ct",
+                        "ct": 307,
+                        "effect": "none",
+                        "hue": 7998,
+                        "on": True,
+                        "reachable": True,
+                        "sat": 172,
+                        "xy": [0.421253, 0.39921]
+                    },
+                    "swversion": "020C.201000A0",
+                    "type": "Extended color light",
+                    "uniqueid": "00:21:2E:FF:FF:00:73:9F-0A"
+                }
 
         return response
 

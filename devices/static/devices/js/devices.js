@@ -276,27 +276,24 @@ function loadDeviceDataToModal(deviceId) {
     if (devices.hasOwnProperty(deviceId)) {
         let currentDevice = devices[deviceId];
 
+        console.log("wasn das", deviceControlModal);
+
         deviceControlModal.dataset['deviceId'] = currentDevice['id'];
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
-        if (currentDevice['type'] == 'Extended color light') {
-            document.getElementById('device-control-modal-colorpicker').hidden = false;
-        } else {
-            document.getElementById('device-control-modal-colorpicker').hidden = true;
-        }
+        document.getElementById('device-control-modal-colorpicker').hidden = currentDevice['type'] !== 'Extended color light';
+
         deviceControlModalSwitch.checked = currentDevice['on'];
         deviceControlColorPicker.color.hue = currentDevice['hue'];
         deviceControlColorPicker.color.saturation = currentDevice['saturation'];
         deviceControlModalBrightnessSlider.value = currentDevice['brightness'];
         deviceControlModalBrightnessDisplay.innerText = currentDevice['brightness'] + ' %';
         deviceControlModalLabel.innerText = currentDevice['name'];
-        if (currentDevice['has_color'] == true) {
+        if (currentDevice['has_color'] === true) {
             deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 50%)';
         } else {
             deviceControlModalHeader.style.backgroundColor = 'hsl(' + currentDevice['hue'] + ', 100%, 100%)';
         }
-        deviceControlModal.dataset['deviceId'] = currentDevice['id'];
-        deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
 
         // Check, if Device is in Favorites
@@ -348,17 +345,39 @@ function saveDeviceDataToLocalStorage(deviceId) {
     }
 }
 
-function getIconId(IconId){
+function getIconId(IconId) {
     icons = ["lamp-fill.svg", "lamp.svg", "lightbulb.svg", "lightbulb-fill.svg", "plug.svg", "plug-fill.svg", "brezel.png", "plugin.svg", "robot.svg"];
-    for (const tmp in icons){
+    for (const tmp in icons) {
         document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
     }
     selectedIcon = IconId;
     document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
 }
 
-function saveIcon(){
+function saveIcon() {
     document.getElementById('modal-body-edit').hidden = true;
     document.getElementById('modal-body-normal').hidden = false;
     console.log(selectedIcon);
+}
+
+function toggleEdit(isActive) {
+    if (isActive) {
+        document.getElementById('modal-body-edit').hidden = true;
+        document.getElementById('modal-body-normal').hidden = false;
+        deviceControlModalLabel.contentEditable = false;
+        deviceControlModalLabel.classList.remove("border");
+        deviceControlModalLabel.classList.remove("border-dark");
+        deviceControlModalLabel.classList.remove("rounded-2");
+        deviceControlModalLabel.classList.remove("border-3");
+        deviceControlModalLabel.classList.remove("p-2");
+    } else {
+        document.getElementById('modal-body-edit').hidden = false;
+        document.getElementById('modal-body-normal').hidden = true;
+        deviceControlModalLabel.contentEditable = true;
+        deviceControlModalLabel.classList.add("border");
+        deviceControlModalLabel.classList.add("border-dark");
+        deviceControlModalLabel.classList.add("rounded-2");
+        deviceControlModalLabel.classList.add("border-3");
+        deviceControlModalLabel.classList.add("p-2");
+    }
 }

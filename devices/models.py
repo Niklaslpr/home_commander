@@ -13,4 +13,5 @@ class Device(models.Model):
     icon = models.CharField(max_length=255)
     device_type = models.CharField(max_length=1, choices=DeviceType.choices)
     # type = models.CharField(max_length=32)
-    users = models.ManyToManyField(to=User)
+    users = models.ManyToManyField(to=User, blank=True)
+    # api = models.ForeignKey(to="main.API", on_delete=models.RESTRICT)

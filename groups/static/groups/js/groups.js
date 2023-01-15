@@ -220,3 +220,13 @@ function saveIcon(){
     document.getElementById('modal-body-normal').hidden = false;
     console.log(selectedIcon);
 }
+
+function toggleEdit(isActive) {
+    if (isActive) {
+        document.getElementById('modal-body-edit').hidden = true;
+        document.getElementById('modal-body-normal').hidden = false;
+    } else {
+        document.getElementById('modal-body-edit').hidden = false;
+        document.getElementById('modal-body-normal').hidden = true;
+    }
+}
