@@ -19,13 +19,14 @@ function loadGroups() {
                 groupsJson[entry['id']] = entry;
                 if (entry['name'].startsWith("room_") == true){
                     console.log(entry['name']);
+                    
                     $.ajax({
                         url: './kit/group-tile',
                         type: 'get',
                         data: {
                             "csrfmiddlewaretoken": getCookie('csrftoken'),
                             "group-id": entry['id'].toString(),
-                            "group-name": entry['name'].toString(),
+                            "group-name": entry['name'].toString().replace('room_',''),
                             "group-state": entry['on'].toString(),
                         },
                         headers: {

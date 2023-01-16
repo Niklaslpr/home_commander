@@ -184,8 +184,8 @@ function loadGroupDataToModal(groupId) {
         groupControlColorPicker.color.saturation = currentGroup['saturation'];
         groupControlModalBrightnessSlider.value = currentGroup['brightness'];
         groupControlModalBrightnessDisplay.innerText = currentGroup['brightness'] + ' %';
-        groupControlModalLabel.innerText = currentGroup['name'];
-        updateGroupName.value = currentGroup['name'];
+        groupControlModalLabel.innerText = currentGroup['name'].replace('room_','');
+        updateGroupName.value = currentGroup['name'].replace('room_','');
         groupControlModalHeader.style.backgroundColor = 'hsl(' + currentGroup['hue'] + ', 100%, 50%)';
 
         return 0;
@@ -280,7 +280,7 @@ function saveIcon(){
             selectedDevices.push(entry);
         }
     }
-    groupName = updateGroupName.value;
+    groupName = "room_" + updateGroupName.value;
     
     console.log("Selected Devices: " + selectedDevices);
     console.log(groupControlModal.dataset['groupId']);
@@ -289,7 +289,7 @@ function saveIcon(){
     
     let formData = new FormData();
     formData.append('groupId', groupControlModal.dataset['groupId']);
-    formData.append('groupName', updateGroupName.value);
+    formData.append('groupName', groupName);
     formData.append('selectedDevices', selectedDevices);
     formData.append('csrfmiddlewaretoken', csrftoken);
     const http = new XMLHttpRequest();
