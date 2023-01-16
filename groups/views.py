@@ -61,7 +61,7 @@ def kits(request, kit_name):
 
     print("thats my data:", data)
     print("and thats my get", request.GET)
-
+    print("TOLLLLLLLLLLLLLLLLL")
     request_get_data = {}
     for entry in request.GET:
         print("ah thats bullshit", entry)

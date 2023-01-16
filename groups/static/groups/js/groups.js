@@ -35,7 +35,7 @@ $(document).ready(() => {
 
     groupControlModal.addEventListener('hide.bs.modal', function(){
             for (let x of deviceList){
-                document.getElementById("checkInGroup-" + x).style.backgroundColor = "transparent";
+                document.getElementById("checkInEditGroup-" + x).style.backgroundColor = "transparent";
             }
             document.getElementById('group-control-modal-switch').hidden = false; 
             document.getElementById('group-control-modal-label').hidden = false; 
@@ -156,7 +156,8 @@ function loadGroupDataToModal(groupId) {
                 }
             });
             
-            set_background_color('checkInGroup-' + entry['id']);
+            set_background_color('checkInEditGroup-' + entry['id']);
+            set_background_color('checkInNewGroup-' + entry['id']);
             $.ajax({
                 url: '../devices/device_info/' + entry['id'],
                 type: 'GET',
@@ -231,7 +232,7 @@ function createGroup(){
         console.log(deviceList);
         
         for (let entry of deviceList){
-            if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
+            if (document.getElementById("checkInNewGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
                 selectedDevices.push(entry);
             }
         }
@@ -274,7 +275,7 @@ function saveIcon(){
     
         
     for (let entry of deviceList){
-        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
+        if (document.getElementById("checkInEditGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
             selectedDevices.push(entry);
         }
     }
@@ -321,6 +322,7 @@ function deleteGroup(groupId){
 function get_all_devices(){
     deviceList = [];
     document.getElementById('new-group-device-list').innerHTML = '';
+    document.getElementById('edit-group-device-list').innerHTML = '';
     $.ajax({
         url: '../devices/device_info/all',
         type: 'get',
