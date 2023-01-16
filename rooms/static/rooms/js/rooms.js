@@ -226,7 +226,8 @@ function setIcon(IconId){
 
 function createGroup(){
         selectedDevices = [];
-        newGroupName = "room_" + document.getElementById('inputGroupName').value;
+        newGroupName = document.getElementById('inputGroupName').value;
+        newGroupName = "room_" + newGroupName;
         console.log("AHHHH");
         console.log(newGroupName);
         console.log(selectedIcon);
@@ -248,6 +249,7 @@ function createGroup(){
         http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 location.reload();
+                
             } else {
                 console.log("Fehler beim Erstellen der Gruppe");
             }

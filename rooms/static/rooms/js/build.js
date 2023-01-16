@@ -17,6 +17,7 @@ function loadGroups() {
             let groupsJson = {};
             for (let entry of data.groupsCollection.reverse()) {
                 groupsJson[entry['id']] = entry;
+                
                 if (entry['name'].startsWith("room_") == true){
                     console.log(entry['name']);
                     
