@@ -16,8 +16,8 @@ function loadRules() {
 
             let rulesJson = {};
             for (let entry of data.rules.reverse()) {
+                
                 rulesJson[entry['id']] = entry;
-
                 $.ajax({
                     url: './kit/rule-tile',
                     type: 'get',
@@ -25,6 +25,8 @@ function loadRules() {
                         "csrfmiddlewaretoken": getCookie('csrftoken'),
                         "rule-id": entry['id'].toString(),
                         "rule-name": entry['name'].toString(),
+                        "rule-status": entry['active'].toString(),
+                        "rule-time": entry['localtime'].toString(),
                     },
                     headers: {
                         'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -35,7 +37,7 @@ function loadRules() {
                 }).always((data) => {
                     if (data.readyState === 4 && data.status === 200) {
                         document.getElementById('rule-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                        // document.getElementById('switchLight-' + entry['id'].toString()).checked = entry['on'];
+                        
                     }
                 });
             }

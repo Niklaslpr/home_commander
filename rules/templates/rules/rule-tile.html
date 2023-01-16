@@ -1,18 +1,64 @@
 {% load static %}
-<div class="col mb-5">
+
+<div id="rule-{{ rule_id }}" onclick="" class="col mb-5" data-name="{{ rule_name }}">
     <div class="card h-100" style="background-color: var(--tertiary-color); box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-        <div class="card-body p-4 text-center" style="transform: rotate(0);">
-            <h5 class="fw-bolder mb-3 mt-2">{{ name }}</h5>
-            <span id="savedTimeRule1"></span>
-            <p id="savedDays1"></p>
-            <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#ruleModal1"></a>
+        <div class="card-body p-4" style="transform: rotate(0);">
+            <div class="text-center">
+                <img src="{% static "main/pictures/bootstrap_icons/clock.svg" %}" height="50" alt="">
+                <h5 class="fw-bolder mb-3 mt-2">{{ rule_name }}</h5>
+                <p id="ruleTime-{{ rule_id }}">{{ rule_time }} Uhr</p>
+                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#rule-control-modal"></a>
+            </div>
         </div>
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div class="text-center">
-                <div class="form-check form-switch d-flex justify-content-center">
-                    <input class="form-check-input" type="checkbox" id="switch1">
-                </div>
+                        
+                {% if rule_status == 'true' %}
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="switchRule-{{ rule_id }}" checked
+                           onchange="">
+                    </div>
+                {% endif %}
+                {% if rule_status == 'false' %}
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="switchRule-{{ rule_id }}"
+                           onchange="">
+                    </div>
+                {% endif %}
+                    
+                
             </div>
         </div>
     </div>
 </div>
+<!--
+<div id="group-{{ group_id }}" onclick="loadGroupDataToModal({{ group_id }})" class="col mb-5" data-name="{{ group_name }}">
+    <div class="card h-100" style="background-color: var(--tertiary-color); box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
+        <div class="card-body p-4" style="transform: rotate(0);">
+            <div class="text-center">
+                <img src="{% static "main/pictures/bootstrap_icons/collection-fill.svg" %}" height="50" alt="">
+                <h5 class="fw-bolder mb-3 mt-2">{{ group_name }}</h5>
+                <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#group-control-modal"></a>
+            </div>
+        </div>
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+                        
+                {% if group_state == 'true' %}
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="switchGroup-{{ group_id }}" checked
+                           onchange="groupOnOff(document.getElementById('switchGroup-{{ group_id }}').checked, {{ group_id }})">
+                    </div>
+                {% endif %}
+                {% if group_state == 'false' %}
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" id="switchGroup-{{ group_id }}"
+                           onchange="groupOnOff(document.getElementById('switchGroup-{{ group_id }}').checked, {{ group_id }})">
+                    </div>
+                {% endif %}
+                    
+                
+            </div>
+        </div>
+    </div>
+</div>-->

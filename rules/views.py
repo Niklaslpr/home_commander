@@ -60,15 +60,22 @@ def createschedule(response):
     return render(response, "rules/rules.html", {})
 
 
+
+                  
 def kits(request, kit_name):
     data = get_data_from_input(request)
 
-    return render(request, kit_name + ".html",
-                  {
-                      "id": request.GET["device-id"].__str__(),
-                      "name": request.GET["device-name"].__str__(),
-                      "has_color": True.__str__()
-                  })
+    print("thats my data:", data)
+    print("and thats my get", request.GET)
+    print("TOLLLLLLLLLLLLLLLLL")
+    request_get_data = {}
+    for entry in request.GET:
+        print("ah thats bullshit", entry)
+        request_get_data[entry.replace("-", "_")] = request.GET[entry]
+
+    print("krraaaakkeke", request_get_data)
+
+    return render(request, "rules/" +  kit_name + ".html", request_get_data)
 
 
 def get_all_rule_data(request):
@@ -78,6 +85,8 @@ def get_all_rule_data(request):
         if not TEST:
             response_tmp = requests.get(url=DECONZ_SCHEDULE_URL)
             response_tmp = response_tmp.json()
+            print("UFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+            print(response_tmp)
         else:
             response_tmp = {
                 "1": {
@@ -113,6 +122,7 @@ def get_all_rule_data(request):
             response += [{"id": key,
                           "name": value["name"] if "name" in value.keys() else "unknown rule name",
                           "description": value["description"] if "description" in value.keys() else "",
+                          "localtime": value["localtime"][-8:-3],
                           "active": True if "status" in value.keys() and value["status"] == "enabled" else False,
                           "date": get_info_from_utc_iso_8601_2004_string(value["time"],
                                                                          UTC_ISO_DATE) if "time" in value.keys() else None,
