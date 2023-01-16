@@ -15,6 +15,7 @@ let updateGroupName;
 
 
 $(document).ready(() => {
+    
     get_all_devices();
     
     groupControlColorPicker = new iro.ColorPicker('#group-control-modal-colorpicker', {
@@ -31,6 +32,18 @@ $(document).ready(() => {
     groupControlModalLabel = document.getElementById("group-control-modal-label");
     updateGroupName = document.getElementById("updateGroupName");
 // groupControlModalLabel.innerHTML = 'Gruppe XXX';
+
+    groupControlModal.addEventListener('hide.bs.modal', function(){
+            for (let x of deviceList){
+                document.getElementById("checkInGroup-" + x).style.backgroundColor = "transparent";
+            }
+            document.getElementById('group-control-modal-switch').hidden = false; 
+            document.getElementById('group-control-modal-label').hidden = false; 
+            document.getElementById('updateGroupName').hidden = true; 
+            document.getElementById('modal-body-edit').hidden = true; 
+            document.getElementById('modal-body-normal').hidden = false;
+        })
+    
 
     groupControlColorPicker.on('color:change', function (color) {
         if (groupControlModal.classList.contains('show') === true) {
@@ -117,6 +130,7 @@ function loadGroupDataToModal(groupId) {
 
         groupControlModal.dataset['groupId'] = currentGroup['id'];
         groupControlModal.dataset['groupName'] = currentGroup['name'];
+        
 
         let deviceType = null;
         for (let entry of currentGroup["devices"]) {
@@ -137,9 +151,30 @@ function loadGroupDataToModal(groupId) {
                 mode: 'same-origin'
             }).always((data) => {
                 if (data.readyState === 4 && data.status === 200) {
+                    
                     document.getElementById('group-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
                 }
             });
+            
+            set_background_color('checkInGroup-' + entry['id']);
+            $.ajax({
+                url: '../devices/device_info/' + entry['id'],
+                type: 'GET',
+                data: {
+                    csrfmiddlewaretoken: getCookie('csrftoken'),
+                    device_id: entry['id'],
+                },
+                headers: {
+                    'Content-type': 'application/json', 'Accept': 'text/plain',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                dataType: 'json',
+                mode: 'same-origin',
+                success: function (data) {
+                    document.getElementById("switchInGroup-" + data["id"]).checked = data["on"];
+                }
+            });  
+            
         }
 
         console.log('currentGroup', currentGroup);
@@ -341,6 +376,7 @@ function get_all_devices(){
             }).always((data) => {
                 if (data.readyState === 4 && data.status === 200) {
                     document.getElementById('edit-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    
                 }
             });
         }
@@ -355,3 +391,29 @@ function set_background_color(id){
         document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
     }  
 }
+
+function deviceOnOff(state, deviceId){
+    $.ajax({
+        url: '../devices/device_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'update',
+            device_id: deviceId,
+            type: "light", // TODO: dynamisch
+            state: {'on': state}
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.log('Hier bin cih erfolgreich');
+            console.info(data);
+        }
+    });
+      
+}
+

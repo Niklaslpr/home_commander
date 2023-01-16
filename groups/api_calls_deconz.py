@@ -46,10 +46,14 @@ def createGroup(groupName, selectedDevices):
     
 def updateGroup(groupName, selectedDevices, groupId):
     selectedDevices = selectedDevices.split(",")
-    tmp = '['
-    for x in selectedDevices:
-        tmp = tmp + '"' + x + '", '
-    tmp = tmp + ']'    
+    
+    if selectedDevices == ['']:
+        tmp = '[]'
+    else:    
+        tmp = '['
+        for x in selectedDevices:
+            tmp = tmp + '"' + x + '", '
+        tmp = tmp + ']'    
     data = '{"name": "' + groupName + '","lights": ' + tmp + '}"'
     print(data)
     url = DECONZ_GROUPS_URL + '/' + groupId
