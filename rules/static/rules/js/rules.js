@@ -5,6 +5,10 @@ let dict_weekdays;
 let savedTimeNewRule;
 let selectedDaysNewRule;
 let checkboxRepeatNewRule;
+let createNewRuleButton;
+let newRuleName;
+let selectedDeviceNewRule;
+let timePickerNewRule;
 
 $(document).ready(() => {
     
@@ -14,7 +18,8 @@ $(document).ready(() => {
     inputTimeNewRule = document.getElementById('inputTimeNewRule');
     checkboxRepeatNewRule = document.getElementById('checkboxRepeatNewRule');
     inputTimeNewRule.value = time;
-    var timePicker = new Picker(inputTimeNewRule, {
+    
+    timePickerNewRule = new Picker(inputTimeNewRule, {
         date: new Date(),
         container: '#picker-container',
         format: 'HH:mm',
@@ -47,6 +52,7 @@ $(document).ready(() => {
                 }
             }
     })
+    
 })
 
 function get_all_devices(){
@@ -211,4 +217,71 @@ function set_background_color(id){
         document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
         
     }  
+}
+
+function createNewRule(){
+    selectedDeviceNewRule = "";
+    newRuleName = "";
+    savedTimeNewRule = "";
+    selectedDaysNewRule = "";
+    
+    newRuleName = document.getElementById('inputRuleName').value;
+    for (let element in deviceList){
+        try{
+            if (document.getElementById('deviceCheckInNewRule-' + deviceList[element]).style.backgroundColor == 'var(--tertiary-color)'){
+                selectedDeviceNewRule = "device_" + deviceList[element];
+            }
+        } catch{}
+    }
+    for (let element in groupList){
+        try{
+            if (document.getElementById('groupCheckInNewRule-' + groupList[element]).style.backgroundColor == 'var(--tertiary-color)'){
+                selectedDeviceNewRule = "group_" + groupList[element];
+            }
+        } catch{}
+    }
+    
+    savedTimeNewRule = timePickerNewRule.getDate(true);
+    
+    for (const [key, value] of Object.entries(dict_weekdays)){
+        if (value.style.backgroundColor == 'var(--tertiary-color)'){
+            selectedDaysNewRule += '1';
+        } else if (value.style.backgroundColor == '' || value.style.backgroundColor == 'transparent'){
+            selectedDaysNewRule += '0';
+        }
+    }
+    
+    
+    
+    console.log(newRuleName);
+    console.log(selectedDeviceNewRule);
+    console.log(savedTimeNewRule);
+    console.log(selectedDaysNewRule);
+    
+    
+    $.ajax({
+        url: './create_rule',
+        type: 'get',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            'rule-name': newRuleName,
+            'rule-device': selectedDeviceNewRule,
+            'rule-time': savedTimeNewRule,
+            'rule-days': selectedDaysNewRule,
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.log(data);
+        }
+        
+    });
+    
+    
+    
+    
 }

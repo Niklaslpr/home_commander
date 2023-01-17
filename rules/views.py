@@ -2,13 +2,13 @@ import re
 
 import requests
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from main.views import DECONZ_URL, API_KEY, TEST
 from main.views import get_data_from_input
-from rules.api_calls_deconz import createSchedule
+from rules.api_calls_deconz import createSchedule, createRule
 
 DECONZ_SCHEDULE_URL = DECONZ_URL + "/api/" + API_KEY + "/schedules"
 
@@ -18,6 +18,8 @@ UTC_ISO_WEEKDAYS = 2
 UTC_ISO_TIMER = 3
 UTC_ISO_RECURRING_TIMER = 4
 UTC_ISO_RANDOMIZED_TIME = 5
+
+
 
 
 def convert_weekday_bitmap(weekday_bitmap):
@@ -66,6 +68,10 @@ def createschedule(response):
     return render(response, "rules/rules.html", {})
 
 
+def create_rule(request):
+    if request.method == 'GET':
+        response = createRule(request.GET['rule-name'], request.GET['rule-device'], request.GET['rule-time'], request.GET['rule-days'])
+    return HttpResponse(response)
 
                   
 def kits(request, kit_name):

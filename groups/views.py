@@ -58,7 +58,7 @@ def deletegroup(response):
 
 def kits(request, kit_name):
     data = get_data_from_input(request)
-
+    print("was kommt hier", request)
     print("thats my data:", data)
     print("and thats my get", request.GET)
     print("TOLLLLLLLLLLLLLLLLL")
