@@ -18,6 +18,7 @@ function loadRules() {
             for (let entry of data.rules.reverse()) {
                 
                 rulesJson[entry['id']] = entry;
+                
                 $.ajax({
                     url: './kit/rule-tile',
                     type: 'get',
@@ -27,6 +28,7 @@ function loadRules() {
                         "rule-name": entry['name'].toString(),
                         "rule-status": entry['active'].toString(),
                         "rule-time": entry['localtime'].toString(),
+                        "rule-weekdays": entry['weekdays'].toString(),
                     },
                     headers: {
                         'Content-type': 'application/json', 'Accept': 'text/plain',

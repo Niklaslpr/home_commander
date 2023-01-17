@@ -7,6 +7,7 @@
                 <img src="{% static "main/pictures/bootstrap_icons/clock.svg" %}" height="50" alt="">
                 <h5 class="fw-bolder mb-3 mt-2">{{ rule_name }}</h5>
                 <p id="ruleTime-{{ rule_id }}">{{ rule_time }} Uhr</p>
+                <p id="ruleWeekdays-{{ rule_id }}">{{ rule_weekdays }}</p>
                 <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#rule-control-modal"></a>
             </div>
         </div>

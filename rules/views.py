@@ -22,9 +22,15 @@ UTC_ISO_RANDOMIZED_TIME = 5
 
 def convert_weekday_bitmap(weekday_bitmap):
     weekday_bitmap = str(weekday_bitmap)
-    possibleWeekdays = {1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 5: 'Friday', 6: 'Saturday',
-                        7: 'Sunday'}
-    return [possibleWeekdays.get(i) for i, c in enumerate(weekday_bitmap)]
+    possibleWeekdays = {1: 'Mo', 2: 'Di', 3: 'Mi', 4: 'Do', 5: 'Fr', 6: 'Sa',
+                        7: 'So'}
+    weekday_list = []
+    print(weekday_bitmap)
+    for i,c in enumerate(weekday_bitmap):
+        print(weekday_bitmap[i])
+        if weekday_bitmap[i] == '1':
+            weekday_list.append(' ' + possibleWeekdays.get(i+1))
+    return weekday_list
 
 
 def get_info_from_utc_iso_8601_2004_string(utc_iso_8601_2004_string, info):
@@ -119,17 +125,36 @@ def get_all_rule_data(request):
 
         response = []
         for key, value in response_tmp.items():
+            print("oh yes here we go")
+            if "localtime" in value.keys():    
+                if value["localtime"][0] == "W":
+                    i = value["localtime"].index("/")
+                    weekdays = value["localtime"][1:i]
+                    weekdays_bin = format(int(weekdays), '07b')
+                    weekdays = convert_weekday_bitmap(weekdays_bin)
+                    if weekdays == [' Mo', ' Di', ' Mi', ' Do', ' Fr', ' Sa', ' So']:
+                        weekdays = 'Jeden Tag'
+                      
+                    
+                else:
+                    weekdays = value["localtime"][0:10] 
+                   
+                
             response += [{"id": key,
                           "name": value["name"] if "name" in value.keys() else "unknown rule name",
                           "description": value["description"] if "description" in value.keys() else "",
-                          "localtime": value["localtime"][-8:-3],
+                          "localtime": value["localtime"][-8:-3] if "localtime" in value.keys() else None,
                           "active": True if "status" in value.keys() and value["status"] == "enabled" else False,
+                          "weekdays": weekdays if "localtime" in value.keys() else None,
+                    
+                          
+                          
                           "date": get_info_from_utc_iso_8601_2004_string(value["time"],
                                                                          UTC_ISO_DATE) if "time" in value.keys() else None,
                           "time": get_info_from_utc_iso_8601_2004_string(value["time"],
                                                                          UTC_ISO_TIME) if "time" in value.keys() else None,
-                          "weekdays": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                             UTC_ISO_WEEKDAYS) if "time" in value.keys() else None,
+                          # "weekdays": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                             # UTC_ISO_WEEKDAYS) if "time" in value.keys() else None,
                           "timer": get_info_from_utc_iso_8601_2004_string(value["time"],
                                                                           UTC_ISO_TIMER) if "time" in value.keys() else None,
                           "recurrent_timer": get_info_from_utc_iso_8601_2004_string(value["time"],

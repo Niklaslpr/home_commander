@@ -1,13 +1,57 @@
-
+let date;
+let time;
+let inputTimeNewRule;
+let dict_weekdays;
+let savedTimeNewRule;
+let selectedDaysNewRule;
+let checkboxRepeatNewRule;
 
 $(document).ready(() => {
     
     get_all_devices();
+    date = new Date();
+    time = date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
+    inputTimeNewRule = document.getElementById('inputTimeNewRule');
+    checkboxRepeatNewRule = document.getElementById('checkboxRepeatNewRule');
+    inputTimeNewRule.value = time;
+    var timePicker = new Picker(inputTimeNewRule, {
+        date: new Date(),
+        container: '#picker-container',
+        format: 'HH:mm',
+        controls: true,
+        rows: 3,
+        text: {
+            title: 'Uhrzeit auswählen',
+            cancel: 'Abbrechen',
+        }
+    });
     
+    dict_weekdays = {
+            'Mo, ' : document.getElementById('checkNewRuleMonday'),
+            'Di, ' : document.getElementById('checkNewRuleTuesday'),
+            'Mi, ' : document.getElementById('checkNewRuleWednesday'),
+            'Do, ' : document.getElementById('checkNewRuleThursday'),
+            'Fr, ' : document.getElementById('checkNewRuleFriday'),
+            'Sa, ' : document.getElementById('checkNewRuleSaturday'),
+            'So, ' : document.getElementById('checkNewRuleSunday'),
+        }
+    
+    checkboxRepeatNewRule.addEventListener('change', function(){
+            if(checkboxRepeatNewRule.checked == true){
+                for (const [key, value] of Object.entries(dict_weekdays)){
+                    value.disabled = false;
+                }
+            } else{
+                for (const [key, value] of Object.entries(dict_weekdays)){
+                    value.disabled = true;
+                }
+            }
+    })
 })
 
 function get_all_devices(){
     deviceList = [];
+    groupList = [];
     document.getElementById('new-rule-device-list').innerHTML = '';
     //document.getElementById('edit-rule-device-list').innerHTML = '';   #TODO
     $.ajax({
@@ -73,4 +117,98 @@ function get_all_devices(){
         }
         }
     });
+    $.ajax({
+        url: '../groups/group_info/all',
+        type: 'get',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.log(data);
+            for (let entry of data["groupsCollection"]) {
+                groupList.push(entry["id"].toString());
+                let tmp_name = entry['name'];
+                if (tmp_name.startsWith('room_')){
+                    tmp_name = tmp_name.split('_').pop();
+                }
+                
+                
+                $.ajax({
+                    url: './kit/group-item-new-rule',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "group-id": entry['id'].toString(),
+                        "group-name": tmp_name,
+                        
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('new-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+            });
+            // #TODO
+            //
+            //$.ajax({        
+                //url: './kit/device-item-edit-rule',
+                //type: 'get',
+                //data: {
+                    //"csrfmiddlewaretoken": getCookie('csrftoken'),
+                    //"device-id2": entry['id'].toString(),
+                    //"device-name2": entry['name'].toString(),
+                    //"device-type2": entry['type'].toString(),
+                //},
+                //headers: {
+                    //'Content-type': 'application/json', 'Accept': 'text/plain',
+                    //'X-CSRFToken': getCookie('csrftoken')
+                //},
+                //dataType: 'json',
+                //mode: 'same-origin'
+            //}).always((data) => {
+                //if (data.readyState === 4 && data.status === 200) {
+                    //document.getElementById('edit-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    
+                //}
+            //});
+        }
+        }
+    });
+    
+}
+
+function set_background_color_transparend(){
+     for (let element in deviceList){
+            try {document.getElementById('deviceCheckInNewRule-' + deviceList[element]).style.backgroundColor = "transparent";}
+            catch{}
+        }
+    for (let element in groupList){
+            try {document.getElementById('groupCheckInNewRule-' + groupList[element]).style.backgroundColor = "transparent";}
+            catch{}
+        }   
+}
+
+
+function set_background_color(id){
+    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)'){
+        document.getElementById(id).style.backgroundColor = "transparent";
+        
+    } else{
+        if (id.startsWith('deviceCheckInNewRule-') || id.startsWith('groupCheckInNewRule-')){
+            set_background_color_transparend();
+        }
+        document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
+        
+    }  
 }
