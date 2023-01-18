@@ -60,69 +60,69 @@ function get_all_devices(){
     groupList = [];
     document.getElementById('new-rule-device-list').innerHTML = '';
     //document.getElementById('edit-rule-device-list').innerHTML = '';   #TODO
-    $.ajax({
-        url: '../devices/device_info/all',
-        type: 'get',
-        data: {
-            csrfmiddlewaretoken: getCookie('csrftoken'),
-        },
-        headers: {
-            'Content-type': 'application/json', 'Accept': 'text/plain',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        dataType: 'json',
-        mode: 'same-origin',
-        success: function (data) {
-            for (let entry of data["devices"]) {
-                deviceList.push(entry["id"].toString());
+    //$.ajax({
+        //url: '../devices/device_info/all',
+        //type: 'get',
+        //data: {
+            //csrfmiddlewaretoken: getCookie('csrftoken'),
+        //},
+        //headers: {
+            //'Content-type': 'application/json', 'Accept': 'text/plain',
+            //'X-CSRFToken': getCookie('csrftoken')
+        //},
+        //dataType: 'json',
+        //mode: 'same-origin',
+        //success: function (data) {
+            //for (let entry of data["devices"]) {
+                //deviceList.push(entry["id"].toString());
                 
                 
-                $.ajax({
-                    url: './kit/device-item-new-rule',
-                    type: 'get',
-                    data: {
-                        "csrfmiddlewaretoken": getCookie('csrftoken'),
-                        "device-id": entry['id'].toString(),
-                        "device-name": entry['name'].toString(),
-                        "device-type": entry['type'].toString(),
-                    },
-                    headers: {
-                        'Content-type': 'application/json', 'Accept': 'text/plain',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    dataType: 'json',
-                    mode: 'same-origin'
-                }).always((data) => {
-                    if (data.readyState === 4 && data.status === 200) {
-                        document.getElementById('new-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                    }
-            });
-            // #TODO
-            //
-            //$.ajax({        
-                //url: './kit/device-item-edit-rule',
-                //type: 'get',
-                //data: {
-                    //"csrfmiddlewaretoken": getCookie('csrftoken'),
-                    //"device-id2": entry['id'].toString(),
-                    //"device-name2": entry['name'].toString(),
-                    //"device-type2": entry['type'].toString(),
-                //},
-                //headers: {
-                    //'Content-type': 'application/json', 'Accept': 'text/plain',
-                    //'X-CSRFToken': getCookie('csrftoken')
-                //},
-                //dataType: 'json',
-                //mode: 'same-origin'
-            //}).always((data) => {
-                //if (data.readyState === 4 && data.status === 200) {
-                    //document.getElementById('edit-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                    
-                //}
+                //$.ajax({
+                    //url: './kit/device-item-new-rule',
+                    //type: 'get',
+                    //data: {
+                        //"csrfmiddlewaretoken": getCookie('csrftoken'),
+                        //"device-id": entry['id'].toString(),
+                        //"device-name": entry['name'].toString(),
+                        //"device-type": entry['type'].toString(),
+                    //},
+                    //headers: {
+                        //'Content-type': 'application/json', 'Accept': 'text/plain',
+                        //'X-CSRFToken': getCookie('csrftoken')
+                    //},
+                    //dataType: 'json',
+                    //mode: 'same-origin'
+                //}).always((data) => {
+                    //if (data.readyState === 4 && data.status === 200) {
+                        //document.getElementById('new-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    //}
             //});
-        }
-        }
-    });
+            //// #TODO
+            ////
+            ////$.ajax({        
+                ////url: './kit/device-item-edit-rule',
+                ////type: 'get',
+                ////data: {
+                    ////"csrfmiddlewaretoken": getCookie('csrftoken'),
+                    ////"device-id2": entry['id'].toString(),
+                    ////"device-name2": entry['name'].toString(),
+                    ////"device-type2": entry['type'].toString(),
+                ////},
+                ////headers: {
+                    ////'Content-type': 'application/json', 'Accept': 'text/plain',
+                    ////'X-CSRFToken': getCookie('csrftoken')
+                ////},
+                ////dataType: 'json',
+                ////mode: 'same-origin'
+            ////}).always((data) => {
+                ////if (data.readyState === 4 && data.status === 200) {
+                    ////document.getElementById('edit-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    
+                ////}
+            ////});
+        //}
+        //}
+    //});
     $.ajax({
         url: '../groups/group_info/all',
         type: 'get',
@@ -195,10 +195,7 @@ function get_all_devices(){
 }
 
 function set_background_color_transparend(){
-     for (let element in deviceList){
-            try {document.getElementById('deviceCheckInNewRule-' + deviceList[element]).style.backgroundColor = "transparent";}
-            catch{}
-        }
+    
     for (let element in groupList){
             try {document.getElementById('groupCheckInNewRule-' + groupList[element]).style.backgroundColor = "transparent";}
             catch{}
@@ -236,7 +233,7 @@ function createNewRule(){
     for (let element in groupList){
         try{
             if (document.getElementById('groupCheckInNewRule-' + groupList[element]).style.backgroundColor == 'var(--tertiary-color)'){
-                selectedDeviceNewRule = "group_" + groupList[element];
+                selectedDeviceNewRule = groupList[element];
             }
         } catch{}
     }
@@ -265,7 +262,7 @@ function createNewRule(){
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
             'rule-name': newRuleName,
-            'rule-device': selectedDeviceNewRule,
+            'rule-group': selectedDeviceNewRule,
             'rule-time': savedTimeNewRule,
             'rule-days': selectedDaysNewRule,
         },
@@ -277,6 +274,7 @@ function createNewRule(){
         mode: 'same-origin',
         success: function (data) {
             console.log(data);
+            location.reload();
         }
         
     });
