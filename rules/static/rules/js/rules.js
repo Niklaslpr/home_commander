@@ -1,14 +1,26 @@
 let date;
 let time;
 let inputTimeNewRule;
+let inputTimeEditRule;
+let timeRule;
 let dict_weekdays;
 let savedTimeNewRule;
+let savedTimeEditRule;
 let selectedDaysNewRule;
+let selectedDaysEditRule;
 let checkboxRepeatNewRule;
+let checkboxRepeatEditRule;
 let createNewRuleButton;
 let newRuleName;
+let ruleControlModalLabel;
+let ruleControlModal;
+let editRuleName;
 let selectedDeviceNewRule;
+let selectedDeviceEditRule;
 let timePickerNewRule;
+let timePickerEditRule;
+let groupListAll;
+let currentRule;
 
 $(document).ready(() => {
     
@@ -16,8 +28,24 @@ $(document).ready(() => {
     date = new Date();
     time = date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
     inputTimeNewRule = document.getElementById('inputTimeNewRule');
+    inputTimeEditRule = document.getElementById('inputTimeEditRule');
+    timeRule = document.getElementById('timeRule');
     checkboxRepeatNewRule = document.getElementById('checkboxRepeatNewRule');
+    checkboxRepeatEditRule = document.getElementById('checkboxRepeatEditRule');
     inputTimeNewRule.value = time;
+    ruleControlModalLabel = document.getElementById('rule-control-modal-label');
+    ruleControlModal = document.getElementById('rule-control-modal');
+    editRuleName = document.getElementById('editRuleName');
+    
+    ruleControlModal.addEventListener('hide.bs.modal', function(){
+            for (let x of groupList){
+                document.getElementById("groupCheckInEditRule-" + x).style.backgroundColor = "transparent";
+            }
+            document.getElementById('rule-control-modal-label').hidden = false; 
+            document.getElementById('editRuleName').hidden = true; 
+            document.getElementById('modal-body-edit').hidden = true; 
+            document.getElementById('modal-body-normal').hidden = false;
+        })
     
     timePickerNewRule = new Picker(inputTimeNewRule, {
         date: new Date(),
@@ -58,71 +86,10 @@ $(document).ready(() => {
 function get_all_devices(){
     deviceList = [];
     groupList = [];
+    groupListAll = {};
     document.getElementById('new-rule-device-list').innerHTML = '';
-    //document.getElementById('edit-rule-device-list').innerHTML = '';   #TODO
-    //$.ajax({
-        //url: '../devices/device_info/all',
-        //type: 'get',
-        //data: {
-            //csrfmiddlewaretoken: getCookie('csrftoken'),
-        //},
-        //headers: {
-            //'Content-type': 'application/json', 'Accept': 'text/plain',
-            //'X-CSRFToken': getCookie('csrftoken')
-        //},
-        //dataType: 'json',
-        //mode: 'same-origin',
-        //success: function (data) {
-            //for (let entry of data["devices"]) {
-                //deviceList.push(entry["id"].toString());
-                
-                
-                //$.ajax({
-                    //url: './kit/device-item-new-rule',
-                    //type: 'get',
-                    //data: {
-                        //"csrfmiddlewaretoken": getCookie('csrftoken'),
-                        //"device-id": entry['id'].toString(),
-                        //"device-name": entry['name'].toString(),
-                        //"device-type": entry['type'].toString(),
-                    //},
-                    //headers: {
-                        //'Content-type': 'application/json', 'Accept': 'text/plain',
-                        //'X-CSRFToken': getCookie('csrftoken')
-                    //},
-                    //dataType: 'json',
-                    //mode: 'same-origin'
-                //}).always((data) => {
-                    //if (data.readyState === 4 && data.status === 200) {
-                        //document.getElementById('new-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                    //}
-            //});
-            //// #TODO
-            ////
-            ////$.ajax({        
-                ////url: './kit/device-item-edit-rule',
-                ////type: 'get',
-                ////data: {
-                    ////"csrfmiddlewaretoken": getCookie('csrftoken'),
-                    ////"device-id2": entry['id'].toString(),
-                    ////"device-name2": entry['name'].toString(),
-                    ////"device-type2": entry['type'].toString(),
-                ////},
-                ////headers: {
-                    ////'Content-type': 'application/json', 'Accept': 'text/plain',
-                    ////'X-CSRFToken': getCookie('csrftoken')
-                ////},
-                ////dataType: 'json',
-                ////mode: 'same-origin'
-            ////}).always((data) => {
-                ////if (data.readyState === 4 && data.status === 200) {
-                    ////document.getElementById('edit-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                    
-                ////}
-            ////});
-        //}
-        //}
-    //});
+    document.getElementById('edit-rule-group-list').innerHTML = ''; 
+   
     $.ajax({
         url: '../groups/group_info/all',
         type: 'get',
@@ -137,6 +104,7 @@ function get_all_devices(){
         mode: 'same-origin',
         success: function (data) {
             console.log(data);
+            groupListAll = data["groupsCollection"];
             for (let entry of data["groupsCollection"]) {
                 groupList.push(entry["id"].toString());
                 let tmp_name = entry['name'];
@@ -165,36 +133,33 @@ function get_all_devices(){
                         document.getElementById('new-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
                     }
             });
-            // #TODO
-            //
-            //$.ajax({        
-                //url: './kit/device-item-edit-rule',
-                //type: 'get',
-                //data: {
-                    //"csrfmiddlewaretoken": getCookie('csrftoken'),
-                    //"device-id2": entry['id'].toString(),
-                    //"device-name2": entry['name'].toString(),
-                    //"device-type2": entry['type'].toString(),
-                //},
-                //headers: {
-                    //'Content-type': 'application/json', 'Accept': 'text/plain',
-                    //'X-CSRFToken': getCookie('csrftoken')
-                //},
-                //dataType: 'json',
-                //mode: 'same-origin'
-            //}).always((data) => {
-                //if (data.readyState === 4 && data.status === 200) {
-                    //document.getElementById('edit-rule-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                    
-                //}
-            //});
+                $.ajax({
+                    url: './kit/group-item-edit-rule',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "group-id": entry['id'].toString(),
+                        "group-name": tmp_name,
+                        
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('edit-rule-group-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+                });
         }
         }
     });
     
 }
 
-function set_background_color_transparend(){
+function set_background_color_transparend_new(){
     
     for (let element in groupList){
             try {document.getElementById('groupCheckInNewRule-' + groupList[element]).style.backgroundColor = "transparent";}
@@ -202,6 +167,13 @@ function set_background_color_transparend(){
         }   
 }
 
+function set_background_color_transparend_edit(){
+    
+    for (let element in groupList){
+            try {document.getElementById('groupCheckInEditRule-' + groupList[element]).style.backgroundColor = "transparent";}
+            catch{}
+        }   
+}
 
 function set_background_color(id){
     if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)'){
@@ -209,7 +181,10 @@ function set_background_color(id){
         
     } else{
         if (id.startsWith('deviceCheckInNewRule-') || id.startsWith('groupCheckInNewRule-')){
-            set_background_color_transparend();
+            set_background_color_transparend_new();
+        }
+        if (id.startsWith('groupCheckInEditRule-')){
+            set_background_color_transparend_edit();
         }
         document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
         
@@ -278,8 +253,72 @@ function createNewRule(){
         }
         
     });
+}
+
+function loadRuleDataToModal(ruleId) {
+    let rules = JSON.parse(window.localStorage.getItem("rules"));
     
-    
-    
-    
+    if (rules.hasOwnProperty(ruleId)) {
+        currentRule = rules[ruleId];
+        console.log(currentRule);
+        timeRule.value = currentRule["localtime"];
+        inputTimeEditRule.value = currentRule["localtime"];
+        ruleControlModalLabel.innerHTML = currentRule["name"];
+        editRuleName.value = currentRule["name"];
+        console.log(currentRule["group_id"]);
+        console.log(groupListAll);
+        document.getElementById('rule-control-group-list').innerHTML = '';
+        
+        for (let element in groupListAll){
+            if (groupListAll[element]["id"] == currentRule["group_id"]){
+                $.ajax({
+                    url: './kit/group-item-control-rule',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "group-id": groupListAll[element]["id"].toString(),
+                        "group-name": groupListAll[element]["name"],
+                        
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('rule-control-group-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+                });
+            }
+        }
+        
+        
+        } else {
+            return null;
+        }
+}
+
+function deleteRule(){
+    console.log("Lösche: ",currentRule["id"]);
+    $.ajax({
+        url: './delete_rule',
+        type: 'get',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            'rule-id': currentRule["id"],
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.log(data);
+            location.reload();
+        }
+        
+    });
 }

@@ -8,7 +8,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from main.views import DECONZ_URL, API_KEY, TEST
 from main.views import get_data_from_input
-from rules.api_calls_deconz import createSchedule, createRule
+from rules.api_calls_deconz import createSchedule, createRule, deleteRule
 
 DECONZ_SCHEDULE_URL = DECONZ_URL + "/api/" + API_KEY + "/schedules"
 
@@ -72,7 +72,12 @@ def create_rule(request):
     if request.method == 'GET':
         response = createRule(request.GET['rule-name'], request.GET['rule-group'], request.GET['rule-time'], request.GET['rule-days'])
     return HttpResponse(response)
-
+    
+def delete_rule(request):    
+    if request.method == 'GET':
+        response = deleteRule(request.GET['rule-id'])
+    return HttpResponse(response)
+    
                   
 def kits(request, kit_name):
     data = get_data_from_input(request)
@@ -132,7 +137,13 @@ def get_all_rule_data(request):
         response = []
         for key, value in response_tmp.items():
             print("oh yes here we go")
-            print(value["localtime"])
+            print(value["command"]["address"])
+            if "command" in value.keys():
+                groupId = value["command"]["address"]
+                groupId = groupId.replace("/api/" + API_KEY + "/groups/", "")
+                groupId = groupId.split("/")
+                groupId = groupId[0]
+            
             if "localtime" in value.keys():    
                 if value["localtime"][0] == "W":
                     localtime_tmp = value["localtime"][-8:-3]
@@ -155,7 +166,7 @@ def get_all_rule_data(request):
                           "localtime": localtime_tmp if "localtime" in value.keys() else None,
                           "active": True if "status" in value.keys() and value["status"] == "enabled" else False,
                           "weekdays": weekdays if "localtime" in value.keys() else None,
-                    
+                          "group_id": groupId if "command" in value.keys() else "",
                           
                           
                           # "date": get_info_from_utc_iso_8601_2004_string(value["time"],

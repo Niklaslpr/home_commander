@@ -38,6 +38,7 @@ function loadRules() {
                     mode: 'same-origin'
                 }).always((data) => {
                     if (data.readyState === 4 && data.status === 200) {
+                        
                         document.getElementById('rule-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
                         
                     }
