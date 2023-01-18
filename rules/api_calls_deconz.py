@@ -60,3 +60,6 @@ def createRule(rule_name, rule_group, rule_time, rule_days):
     
     return ("true")
 
+
+def deleteRule(rule_id):
+    print("ACHTUNG LÖSCHEN:",  
