@@ -24,6 +24,8 @@ DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: s
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
 DECONZ_GROUPS_URL = DECONZ_URL + "/api/" + API_KEY + "/groups"
 
+ICON_PATH = "main/pictures/bootstrap_icons/"
+
 
 def get_data_from_input(data_input):
     # print("data_input", urllib.parse.unquote(data_input.read().decode("utf-8")))

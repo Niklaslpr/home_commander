@@ -7,6 +7,6 @@ class LogEntry(models.Model):
         DEVICE_STATE_CHANGE = 'dsc', _('state of device changed')
         OTHER = 'etc', _('non specified')
 
-    type = models.CharField(max_length=3, choices=LogType.choices)
+    type = models.CharField(max_length=3, choices=LogType.choices, default=LogType.OTHER)
     timestamp = models.DateTimeField(auto_now_add=True)
     message = models.CharField(max_length=255)

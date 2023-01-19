@@ -51,6 +51,7 @@ def createGroup(groupName, selectedDevices):
 def create_group(request_data):
     if isinstance(request_data, dict) and request_data != {}:
         response = requests.post(url=DECONZ_GROUPS_URL, data=request_data)
+        response = response.json()
     else:
         response = None
 

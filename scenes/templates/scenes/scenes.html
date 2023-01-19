@@ -11,7 +11,7 @@
 {% endblock %}
 {% block content %}
     <h1>Szenen
-        <a href="" data-bs-toggle="modal" data-bs-target="#modalNewScene">
+        <a href="" data-bs-toggle="modal" data-bs-target="#new-scene-modal">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}"
                  height="50" alt="">
         </a>
@@ -19,67 +19,67 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div id="scene-list" class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
-{#                <!--Szene 1-->#}
-{#                <div class="col mb-5">#}
-{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
-{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
-{#                            <div class="text-center">#}
-{#                                <img src="{% static "main/pictures/bootstrap_icons/film.svg" %}" height="50" alt="">#}
-{#                                <h5 class="fw-bolder mb-3 mt-2">Kinoabend</h5>#}
-{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
-{#                                   data-bs-target="#scene-control-modal"></a>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
-{#                            <div class="text-center">#}
-{#                                <div class="form-check form-switch d-flex justify-content-center">#}
-{#                                    <input class="form-check-input" type="checkbox" id="switch1">#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <!--Szene 2-->#}
-{#                <div class="col mb-5">#}
-{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
-{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
-{#                            <div class="text-center">#}
-{#                                <img src="{% static "main/pictures/bootstrap_icons/book.svg" %}" height="50" alt="">#}
-{#                                <h5 class="fw-bolder mb-3 mt-2">Lesen</h5>#}
-{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
-{#                                   data-bs-target="#ModalScene2"></a>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
-{#                            <div class="text-center">#}
-{#                                <div class="form-check form-switch d-flex justify-content-center">#}
-{#                                    <input class="form-check-input" type="checkbox" id="switch1">#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <!--Szene 3-->#}
-{#                <div class="col mb-5">#}
-{#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
-{#                        <div class="card-body p-4" style="transform: rotate(0);">#}
-{#                            <div class="text-center">#}
-{#                                <img src="{% static "main/pictures/relax.png" %}" height="50" style="border-radius:50%"#}
-{#                                     alt="">#}
-{#                                <h5 class="fw-bolder mb-3 mt-2">Entspannen</h5>#}
-{#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
-{#                                   data-bs-target="#ModalScene3"></a>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
-{#                            <div class="text-center">#}
-{#                                <div class="form-check form-switch d-flex justify-content-center">#}
-{#                                    <input class="form-check-input" type="checkbox" id="switch1">#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+                {#                <!--Szene 1-->#}
+                {#                <div class="col mb-5">#}
+                {#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+                {#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+                {#                            <div class="text-center">#}
+                {#                                <img src="{% static "main/pictures/bootstrap_icons/film.svg" %}" height="50" alt="">#}
+                {#                                <h5 class="fw-bolder mb-3 mt-2">Kinoabend</h5>#}
+                {#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+                {#                                   data-bs-target="#scene-control-modal"></a>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+                {#                            <div class="text-center">#}
+                {#                                <div class="form-check form-switch d-flex justify-content-center">#}
+                {#                                    <input class="form-check-input" type="checkbox" id="switch1">#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {#                <!--Szene 2-->#}
+                {#                <div class="col mb-5">#}
+                {#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+                {#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+                {#                            <div class="text-center">#}
+                {#                                <img src="{% static "main/pictures/bootstrap_icons/book.svg" %}" height="50" alt="">#}
+                {#                                <h5 class="fw-bolder mb-3 mt-2">Lesen</h5>#}
+                {#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+                {#                                   data-bs-target="#ModalScene2"></a>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+                {#                            <div class="text-center">#}
+                {#                                <div class="form-check form-switch d-flex justify-content-center">#}
+                {#                                    <input class="form-check-input" type="checkbox" id="switch1">#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                {#                <!--Szene 3-->#}
+                {#                <div class="col mb-5">#}
+                {#                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">#}
+                {#                        <div class="card-body p-4" style="transform: rotate(0);">#}
+                {#                            <div class="text-center">#}
+                {#                                <img src="{% static "main/pictures/relax.png" %}" height="50" style="border-radius:50%"#}
+                {#                                     alt="">#}
+                {#                                <h5 class="fw-bolder mb-3 mt-2">Entspannen</h5>#}
+                {#                                <a href="" class="stretched-link" data-bs-toggle="modal"#}
+                {#                                   data-bs-target="#ModalScene3"></a>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">#}
+                {#                            <div class="text-center">#}
+                {#                                <div class="form-check form-switch d-flex justify-content-center">#}
+                {#                                    <input class="form-check-input" type="checkbox" id="switch1">#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
 
                 <!-- Scene Control Modal -->
                 <div class="modal fade" id="scene-control-modal"
@@ -90,53 +90,230 @@
 
                             <div class="modal-header text-center" id="scene-control-modal-header">
                                 <h5 class="modal-title" id="scene-control-modal-label">Scene name unknown</h5>
+
+                                <input style="width: 50%" type="text" id="updateSceneName" class="form-control"
+                                       value="Scene name unknown" hidden
+                                       aria-describedby="inputSceneName">
+
                                 <div class="text-center">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"
-                                               id="scene-control-modal-switch">
-                                    </div>
+{#                                    <div class="form-check form-switch">#}
+                                        <button class="btn btn-primary" type="button"
+                                               id="scene-control-modal-button"
+                                               onclick="activateScene(document.getElementById('scene-control-modal').dataset['sceneId'])">Aktivieren</button>
+{#                                    </div>#}
                                 </div>
+                                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}"
+                                       onclick="document.getElementById('scene-control-modal-button').hidden = true; document.getElementById('scene-control-modal-label').hidden = true; document.getElementById('updateSceneName').hidden = false; document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true"
+                                       height="35" alt="">
                             </div>
-                            <div class="modal-body text-center">
-                                <h6>Geräte:</h6>
-                                <ul class="list-group" id="scene-control-device-list">
-                                    <li class="list-group-item">
-                                        <div class="container text-center">
-                                            <div class="row">
-                                                <div class="col-3">
-                                                    <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}"
-                                                         height="25" alt="">
-                                                </div>
-                                                <div class="col-6">
-                                                    Fuck you Device
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-check form-switch d-flex justify-content-center">
-                                                        <input class="form-check-input" type="checkbox"
-                                                               id="switchInGroup-1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="" class="stretched-link" data-bs-toggle="modal"
-                                           data-bs-target="#device-control-modal"></a>
-                                    </li>
+
+                            <div class="modal-body text-center" id="modal-body-edit" hidden>
+
+                                <h6>Geräte auswählen:</h6>
+                                <ul class="list-scene" id="edit-scene-device-list">
                                 </ul>
-{#                                <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px"#}
-{#                                     id="scene-control-modal-colorpicker"></div>#}
-{#                                <br>#}
-{#                                <label for="scene-control-modal-brightness" class="form-label">Helligkeit <p#}
-{#                                        id="scene-control-modal-brightness-display"></p></label>#}
-{#                                <input type="range" class="form-range" min="0" max="100"#}
-{#                                       id="scene-control-modal-brightness" value="{{ disclaimer }}"/>#}
+                                <table class="table table-borderless"
+                                       style="border-collapse: separate; border-spacing: 0 20px">
+                                    <tbody>
+                                    <tr>
+                                        <td><input type="image" id="collection.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/collection.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                        <td><input type="image" id="house.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/house.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                        <td><input type="image" id="controller.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/controller.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="image" id="archive.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/archive.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                        <td><input type="image" id="book.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/book.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                        <td><input type="image" id="wrench.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/wrench.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="image" id="brezel.png"
+                                                   src="{% static "main/pictures/bootstrap_icons/brezel.png" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                        <td><input type="image" id="plugin.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/plugin.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                        <td><input type="image" id="robot.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/robot.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="getIconId(this.id)"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" class="btn mt-5" id="saveIcon"
+                                        style="background-color: var(--tertiary-color)" onclick="saveIcon()">Speichern
+                                </button>
+                            </div>
+
+                            <div class="modal-body text-center" id="modal-body-normal">
+                                <h6>Geräte:</h6>
+                                <ul class="list-scene" id="scene-control-device-list">
+                                </ul>
+                                {#                                <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px"#}
+                                {#                                     id="scene-control-modal-colorpicker"></div>#}
+                                {#                                <br>#}
+                                {#                                <label for="group-control-modal-brightness" class="form-label">Helligkeit <p#}
+                                {#                                        id="group-control-modal-brightness-display"></p></label>#}
+                                {#                                <input type="range" class="form-range" min="0" max="100"#}
+                                {#                                       id="group-control-modal-brightness" value="{{ disclaimer }}"/>#}
+                                <button type="button" class="btn btn-danger mt-5" id="deleteScene"
+                                        onclick="deleteScene()">Löschen
+                                </button>
 
                             </div>
                         </div>
                     </div>
                 </div>
 
+
+                {#                <div class="modal fade" id="scene-control-modal"#}
+                {#                     onblur="saveSceneDataToLocalStorage(document.getElementById('scene-control-modal').dataset['sceneId'])"#}
+                {#                     tabindex="-1" aria-labelledby="scene-control-modal-label" aria-hidden="true">#}
+                {#                    <div class="modal-dialog modal-dialog-centered">#}
+                {#                        <div class="modal-content">#}
+                {##}
+                {#                            <div class="modal-header text-center" id="scene-control-modal-header">#}
+                {#                                <h5 class="modal-title" id="scene-control-modal-label">Scene name unknown</h5>#}
+                {#                                <div class="text-center">#}
+                {#                                    <div class="form-check form-switch">#}
+                {#                                        <input class="form-check-input" style="transform: scale(1.8)" type="checkbox"#}
+                {#                                               id="scene-control-modal-switch">#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                            <div class="modal-body text-center">#}
+                {#                                <h6>Geräte:</h6>#}
+                {#                                <ul class="list-scene" id="scene-control-device-list">#}
+                {#                                    <li class="list-scene-item">#}
+                {#                                        <div class="container text-center">#}
+                {#                                            <div class="row">#}
+                {#                                                <div class="col-3">#}
+                {#                                                    <img src="{% static "main/pictures/bootstrap_icons/lamp-fill.svg" %}"#}
+                {#                                                         height="25" alt="">#}
+                {#                                                </div>#}
+                {#                                                <div class="col-6">#}
+                {#                                                    some Device#}
+                {#                                                </div>#}
+                {#                                                <div class="col-3">#}
+                {#                                                    <div class="form-check form-switch d-flex justify-content-center">#}
+                {#                                                        <input class="form-check-input" type="checkbox"#}
+                {#                                                               id="switchInScene-1">#}
+                {#                                                    </div>#}
+                {#                                                </div>#}
+                {#                                            </div>#}
+                {#                                        </div>#}
+                {#                                        <a href="" class="stretched-link" data-bs-toggle="modal"#}
+                {#                                           data-bs-target="#scene-control-modal"></a>#}
+                {#                                    </li>#}
+                {#                                </ul>#}
+                {#                                <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px"#}
+                {#                                     id="scene-control-modal-colorpicker"></div>#}
+                {#                                <br>#}
+                {#                                <label for="scene-control-modal-brightness" class="form-label">Helligkeit <p#}
+                {#                                        id="scene-control-modal-brightness-display"></p></label>#}
+                {#                                <input type="range" class="form-range" min="0" max="100"#}
+                {#                                       id="scene-control-modal-brightness" value="{{ disclaimer }}"/>#}
+                {#                                <button type="button" class="btn btn-danger mt-5" id="deleteScene" onclick="deleteScene()">Löschen</button>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+
                 <!-- Device-Control-Modal -->
                 {% include "devices/device-control-modal.html" %}
+
+                <!-- Scene Create Modal -->
+                <div class="modal fade" id="new-scene-modal" tabindex="-1" aria-labelledby="new-scene-modal-label"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title" style="margin: auto" id="new-scene-modal-label">Neue Szene
+                                    erstellen</h5>
+                            </div>
+                            <div class="modal-body text-center">
+                                <label for="inputSceneNameName" class="form-label">Name</label>
+                                <input style="" type="text" id="inputSceneName" class="form-control"
+                                       aria-describedby="inputSceneName">
+                                <h6>Geräte auswählen:</h6>
+                                <ul class="list-scene" id="new-scene-device-list">
+                                </ul>
+                                <h6>Icon auswählen:</h6>
+                                <table class="table table-borderless"
+                                       style="border-collapse: separate; border-spacing: 0 20px">
+                                    <tbody>
+                                    <tr>
+                                        <td><input type="image" id="tmp_collection.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/collection.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                        <td><input type="image" id="tmp_house.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/house.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                        <td><input type="image" id="tmp_controller.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/controller.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="image" id="tmp_archive.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/archive.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                        <td><input type="image" id="tmp_book.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/book.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                        <td><input type="image" id="tmp_wrench.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/wrench.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="image" id="tmp_brezel.png"
+                                                   src="{% static "main/pictures/bootstrap_icons/brezel.png" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                        <td><input type="image" id="tmp_plugin.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/plugin.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                        <td><input type="image" id="tmp_robot.svg"
+                                                   src="{% static "main/pictures/bootstrap_icons/robot.svg" %}"
+                                                   height="75" alt="" style="border-style: solid; padding: 5px"
+                                                   onclick="setIcon(this.id)"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <button type="button" style="margin-top: 25px; background-color: var(--tertiary-color)"
+                                        class="btn" id="createScene" onclick="createScene()">
+                                    Erstellen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

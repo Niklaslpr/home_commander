@@ -2,13 +2,23 @@ import scenes.api_calls_deconz as deconz_api
 from devices.helper import format_light_attributes_for_deconz
 from devices.helper import get_device_data_from_deconz
 from groups.models import Group
+from main.views import ICON_PATH
 from main.views import TEST
+from scenes.models import Scene
+
+
+def get_scenes_group_id_from_deconz():
+    scenes_group = Group.objects.get(name="___scenes_group_deconz___").__dict__
+    scenes_group_id = scenes_group["group_id"]
+
+    return scenes_group_id
 
 
 def format_scene_data_from_deconz(scene_id, data):
     response = {"id": scene_id,
                 "name": data["name"] if "name" in data.keys() else "unknown scene name",
-                "lights": []
+                "lights": [],
+                "icon": ICON_PATH + Scene.objects.get(scene_id__exact=scene_id).icon
                 }
 
     if "lights" in data.keys() and data["lights"] != []:
@@ -29,6 +39,26 @@ def format_scene_data_from_deconz(scene_id, data):
                                         }]
 
     return response
+
+
+def format_scene_attributes_for_deconz(name=None):
+    request_data = {}
+    errors = []
+
+    if name is not None and isinstance(name, str) and 0 < name.__len__() <= 32:
+        request_data["name"] = name
+    elif name is not None:
+        errors += ["name"]
+
+    return {"error": errors, "request_data": request_data}
+
+
+def create_scene_in_deconz(name, username=None):
+    zwErg = format_scene_attributes_for_deconz(name)
+
+    response = deconz_api.create_scene(str(get_scenes_group_id_from_deconz()), zwErg["request_data"])
+
+    return {"error": zwErg["error"], "response": response}
 
 
 def get_scene_data_from_deconz(group_id, scene_id=None, username=None):
@@ -84,10 +114,7 @@ def get_scene_data_from_deconz(group_id, scene_id=None, username=None):
                         "name": "Party"
                     }
                 }
-
-            print("huren scenes", response_scenes)
             for key, value in response_scenes.items():
-                print("key", key, "value", value, "du ficker")
                 key = key.__str__()
                 if key == "1":
                     print("unos")
@@ -192,17 +219,14 @@ def get_all_scene_data_from_deconz(username):
         # for key in response_groups.keys():
         #     response[key] = get_scene_data_from_deconz(key, username)
 
-        scenes_group = Group.objects.get(name="___scenes_group_deconz___").__dict__
-        scenes_group_id = scenes_group["group_id"]
-
-        response = get_scene_data_from_deconz(scenes_group_id, username=username)
+        response = get_scene_data_from_deconz(str(get_scenes_group_id_from_deconz()), username=username)
     else:
         response = {}
 
     return response
 
 
-def update_scene_deconz(scene_id, request_data):
+def update_scene_light_states_deconz(scene_id, request_data):
     if not (isinstance(scene_id, int) or isinstance(scene_id, str) and scene_id.isnumeric()):
         return {"error", "scene id is not valid"}
 
@@ -227,6 +251,33 @@ def update_scene_light_state_deconz(scene_id, light_id, alert=None, brightness=N
                                     saturation=None, transition_time=None, x=None, y=None):
     zwErg = format_light_attributes_for_deconz(alert, brightness, color_loop_speed, ct, effect, hue, on, saturation,
                                                transition_time, x, y)
-    response = deconz_api.update_scene_light_state(scene_id.__str__(), light_id.__str__(), zwErg["request_data"])
+
+    response = deconz_api.update_scene_light_state(str(get_scenes_group_id_from_deconz()), scene_id.__str__(),
+                                                   light_id.__str__(),
+                                                   zwErg["request_data"])
 
     return {"error": zwErg["error"], "response": response}
+
+
+def update_scene_deconz(scene_id, name=None):
+    zwErg = format_scene_attributes_for_deconz(name)
+
+    response = deconz_api.update_scene_attributes(str(get_scenes_group_id_from_deconz()), scene_id.__str__(),
+                                                  zwErg["request_data"])
+
+    return {"error": zwErg["error"], "response": response}
+
+
+def update_scene_state_deconz(scene_id):
+    response = deconz_api.store_scene(str(get_scenes_group_id_from_deconz()), scene_id.__str__())
+    return response
+
+
+def delete_scene_deconz(scene_id, username=None):
+    response = deconz_api.delete_scene(str(get_scenes_group_id_from_deconz()), scene_id.__str__())
+    return response
+
+
+def activate_scene(scene_id, username=None):
+    response = deconz_api.recall_scene(str(get_scenes_group_id_from_deconz()), scene_id.__str__())
+    return response

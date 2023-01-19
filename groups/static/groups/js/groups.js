@@ -106,7 +106,8 @@ $(document).ready(() => {
             data: {
                 csrfmiddlewaretoken: getCookie('csrftoken'),
                 action: 'create',
-                state: {'name': newGroupName.value}
+                attributes: {'name': newGroupName.value},
+                features: {'icon': selectedIcon}
             },
             headers: {
                 'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -285,11 +286,13 @@ function saveIcon() {
 
 
     for (let entry of deviceList) {
-        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)') {
+        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
             selectedDevices.push(entry);
         }
     }
-    groupName = updateGroupName.value;
+    let groupName = updateGroupName.value;
+
+
 
     console.log("Selected Devices: " + selectedDevices);
     console.log(groupControlModal.dataset['groupId']);

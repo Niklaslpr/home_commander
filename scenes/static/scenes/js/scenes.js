@@ -68,6 +68,88 @@ $(document).ready(() => {
 //     })
 });
 
+function createScene() {
+    let lights = []
+
+    for (let dev of [...document.getElementById('scene-control-device-list').childNodes]) {
+        lights.push(dev.dataset["deviceId"]);
+    }
+
+    console.log("du Hurensohn", lights);
+
+    $.ajax({
+        url: './scene_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'create',
+            attributes: {'name': document.getElementById('inputSceneName').textContent}
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+
+            let lights = []
+
+            for (let dev of [...document.getElementById('scene-control-device-list').childNodes]) {
+                lights.push(dev.dataset["deviceId"]);
+            }
+
+            console.log("du Hurensohn", lights);
+
+            $.ajax({
+                url: './scene_change/',
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: getCookie('csrftoken'),
+                    action: 'update',
+                    scene_id: sceneControlModal.dataset['sceneId'],
+                    attributes: {'lights': lights}
+                },
+                headers: {
+                    'Content-type': 'application/json', 'Accept': 'text/plain',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                dataType: 'json',
+                mode: 'same-origin',
+                success: function (data) {
+                    console.info(data);
+
+                    location.reload();
+                }
+            });
+        }
+    });
+}
+
+function deleteScene() {
+    $.ajax({
+        url: './scene_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'delete',
+            scene_id: sceneControlModal.dataset['sceneId']
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+
+            location.reload();
+        }
+    });
+}
+
 function loadSceneDataToModal(sceneId) {
     let scenes = JSON.parse(window.localStorage.getItem("scenes"));
     console.log(scenes);
@@ -135,4 +217,74 @@ function saveSceneDataToLocalStorage(sceneId) {
     } else {
         return null;
     }
+}
+
+function getAllDevices() {
+    let devices = JSON.parse(window.localStorage.getItem("devices"));
+
+    for (let entry in devices) {
+        $.ajax({
+            url: './kit/device-item2',
+            type: 'get',
+            data: {
+                "csrfmiddlewaretoken": getCookie('csrftoken'),
+                "device-id": entry['id'].toString(),
+                "device-name": entry['name'].toString(),
+                "device-type": entry['type'].toString(),
+            },
+            headers: {
+                'Content-type': 'application/json', 'Accept': 'text/plain',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            dataType: 'json',
+            mode: 'same-origin'
+        }).always((data) => {
+            if (data.readyState === 4 && data.status === 200) {
+                document.getElementById('new-scene-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+            }
+        });
+        $.ajax({
+            url: './kit/device-item3',
+            type: 'get',
+            data: {
+                "csrfmiddlewaretoken": getCookie('csrftoken'),
+                "device-id2": entry['id'].toString(),
+                "device-name2": entry['name'].toString(),
+                "device-type2": entry['type'].toString(),
+            },
+            headers: {
+                'Content-type': 'application/json', 'Accept': 'text/plain',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            dataType: 'json',
+            mode: 'same-origin'
+        }).always((data) => {
+            if (data.readyState === 4 && data.status === 200) {
+                document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+            }
+        });
+    }
+}
+
+function activateScene(sceneId) {
+    $.ajax({
+        url: './scene_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'update',
+            scene_id: sceneControlModal.dataset['sceneId'],
+            states: {'on': 'y'}
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+            console.log("yes sir it hat wat jetan");
+        }
+    });
 }
