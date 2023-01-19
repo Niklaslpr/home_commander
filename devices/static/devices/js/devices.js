@@ -191,14 +191,14 @@ $(document).ready(() => {
             i++;
             if (i < 101) {
                 document.getElementById('searchProgressBar').style.width = i + '%';
-                const progressTime = Math.ceil((180 - (i * 1.8)) / 60);
+                const progressTime = Math.ceil((600 - (i * 0.6)) / 600);
                 document.getElementById('searchText').innerHTML = 'Suche läuft noch ' + progressTime + " Minuten";
             } else {
                 clearInterval(searchCounter);
                 startDeviceSearch.className = buttonClass;
                 document.getElementById('searchText').innerHTML = 'Suche beendet';
             }
-        }, 1800);
+        }, 600);
     });
 });
 

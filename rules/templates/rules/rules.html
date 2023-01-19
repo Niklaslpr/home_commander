@@ -8,99 +8,142 @@
     }
 
 {% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'rules/js/build.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rules/js/rules.js' %}"></script>
+{% endblock %}
 
 
 
 {% block content %}
     <h1>Regeln
-        <a href="" data-bs-toggle="modal" data-bs-target="#modalNewRule">
+        <a href="" data-bs-toggle="modal" data-bs-target="#modalNewRule" onclick="set_background_color_transparend_new();">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}" height="50" alt="">
         </a>
     </h1>
 
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-2 justify-content-center">
+            <div id="rule-list" class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-4 justify-content-center">
 
-                <!-- 1. Regel -->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4 text-center" style="transform: rotate(0);">
-                            <h5 class="fw-bolder mb-3 mt-2">Regel 1</h5>
-                            <span id="savedTimeRule1"></span>
-                            <p id="savedDays1"></p>
-                            <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#ruleModal1"></a>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <div class="form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input" type="checkbox" id="switch1">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- ruleModal -->
 
-                <!-- 2. Regel -->
-                <div class="col mb-5">
-                    <div class="card h-100" style="box-shadow: 0px 6px 17px 2px rgba(38,38,38,0.79)">
-                        <div class="card-body p-4" style="transform: rotate(0);">
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ruleModal1 -->
-
-                <div class="modal fade" id="ruleModal1" tabindex="-1" aria-labelledby="ruleModal1" aria-hidden="true">
+                <div class="modal fade" id="rule-control-modal" tabindex="-1" aria-labelledby="rule-control-modal-label" 
+                     data-rule-id="unknown" data-rule-name="unknown">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <div class="modal-header text-center" id="modalHeader1">
-                                <h5 class="modal-title" id="testModalLabel">Regel 1</h5>
+                        
+                            <div class="modal-header text-center" id="rule-control-modal-header">
+                                <h5 class="modal-title" id="rule-control-modal-label">Rule name unknown</h5>
+                                
+                                <input style="width: 50%" type="text" id="editRuleName" class="form-control" value="Rule name unknown" hidden
+                                       aria-describedby="inputRuleName">
+                                
+                                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="document.getElementById('rule-control-modal-label').hidden = true; document.getElementById('editRuleName').hidden = false; document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true" height="35" alt="">
                             </div>
-                            <div class="modal-body text-center align-items-center">
-                                <div class="d-flex justify-content-between" style="margin-top: 25px; margin-bottom: 25px;">
-                                    <input type="checkbox" class="btn-check" id="checkGroup1" autocomplete="off">
-                                    <label class="btn btn-outline-success " for="checkGroup1">Gruppe 1</label>
-                                    <input type="checkbox" class="btn-check" id="checkLight1" autocomplete="off">
-                                    <label class="btn btn-outline-success " for="checkLight1">Lampe 1</label>
-                                    <input type="checkbox" class="btn-check" id="checkPlug1" autocomplete="off">
-                                    <label class="btn btn-outline-success " for="checkPlug1">Steckdose 1</label>
-                                    <input type="checkbox" class="btn-check" id="checkLight2" autocomplete="off">
-                                    <label class="btn btn-outline-success " for="checkLight2">Lampe 2</label>
-                                </div>
 
-                                    <input type="text" style="width: 25%; margin: auto" class="form-control text-center" id="input" value="Uhrzeit auswählen">
 
+                            <div class="modal-body text-center" id="modal-body-edit" hidden>
+                                
+                                <h6>Gruppe auswählen:</h6>
+                                <ul class="list-group" id="edit-rule-group-list">
+                                </ul>
+                                <label for="inputTimeEditRule" style="margin-top: 25px;">Uhrzeit auswählen:</label>
+                                <input type="text" style="width: 25%; margin: auto;" class="form-control text-center" id="inputTimeEditRule" value="Uhrzeit auswählen">
+                                
                                 <div class="d-flex justify-content-between" style="margin-top: 25px;">
                                     <span>Wiederholen</span>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" style="" type="checkbox" id="checkboxRepeatRule">
+                                        <input class="form-check-input" style="" type="checkbox" id="checkboxRepeatEditRule">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between" style="margin-top: 25px;">
-                                    <input type="checkbox" class="btn-check" id="checkMonday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkMonday">M</label>
-                                    <input type="checkbox" class="btn-check" id="checkTuesday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkTuesday">D</label>
-                                    <input type="checkbox" class="btn-check" id="checkWednesday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkWednesday">M</label>
-                                    <input type="checkbox" class="btn-check" id="checkThursday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkThursday">D</label>
-                                    <input type="checkbox" class="btn-check" id="checkFriday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkFriday">F</label>
-                                    <input type="checkbox" class="btn-check" id="checkSaturday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkSaturday">S</label>
-                                    <input type="checkbox" class="btn-check" id="checkSunday" autocomplete="off" disabled>
-                                    <label class="btn btn-outline-success rounded-circle" for="checkSunday">S</label>
+                                                       
+                                    <input type="image" id="checkEditRuleMo" src="{% static "main/pictures/bootstrap_icons/m-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkEditRuleDi" src="{% static "main/pictures/bootstrap_icons/t-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkEditRuleMi" src="{% static "main/pictures/bootstrap_icons/w-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkEditRuleDo" src="{% static "main/pictures/bootstrap_icons/t-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkEditRuleFr" src="{% static "main/pictures/bootstrap_icons/f-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkEditRuleSa" src="{% static "main/pictures/bootstrap_icons/s-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkEditRuleSo" src="{% static "main/pictures/bootstrap_icons/s-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
 
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn mt-5 btn-secondary" id="cancelEditRule" style="" data-bs-dismiss="modal">Abbrechen</button>
+                                    <button type="button" class="btn mt-5" id="saveRule" style="background-color: var(--tertiary-color)" onclick="updateRule()">Speichern</button>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-body text-center" id="modal-body-normal">
+                                <h6>Gruppe:</h6>
+                                <ul class="list-group" id="rule-control-group-list">
+                                </ul>
+                                <label for="timeRule" style="margin-top: 25px;">Uhrzeit:</label>
+                                <input type="text" style="width: 25%; margin: auto;" class="form-control text-center" id="timeRule" value="Uhrzeit" disabled>
+                                <p class="mt-3">Wann:</p>
+                                <p id="ruleWeekdays-modal"></p>
+                                <button type="button" class="btn btn-danger mt-5" id="deleteRule" onclick="deleteRule()">Löschen</button>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- modal-new-rule -->
+                <div class="modal fade" id="modalNewRule" tabindex="-1" aria-labelledby="modalNewRuleLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h5 class="modal-title" style="margin: auto" id="modalNewGroupLabel">Neue Regel
+                                    erstellen</h5>
+                            </div>
+                            <div class="modal-body text-center">
+                                <label for="inputRuleName" class="form-label">Name</label>
+                                <input style="" type="text" id="inputRuleName" class="form-control"
+                                       aria-describedby="inputRuleName">
+                                <h6 style="margin-top: 25px;">Gerät oder Gruppe auswählen:</h6>
+                                <ul class="list-group" id="new-rule-device-list">
+                                </ul>
+                                <label for="inputTimeNewRule" style="margin-top: 25px;">Uhrzeit auswählen:</label>
+                                <input type="text" style="width: 25%; margin: auto;" class="form-control text-center" id="inputTimeNewRule" value="Uhrzeit auswählen">
+                                
+                                <div class="d-flex justify-content-between" style="margin-top: 25px;">
+                                    <span>Wiederholen</span>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" style="" type="checkbox" id="checkboxRepeatNewRule">
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between" style="margin-top: 25px;">
-                                    <button type="button" class="btn btn-outline-success" style="width: auto" data-bs-dismiss="modal">Abbrechen</button>
-                                    <button type="button" class="btn btn-outline-success" style="width: auto" id="saveRule" data-bs-dismiss="modal">Speichern</button>
+                                                       
+                                    <input type="image" id="checkNewRuleMonday" src="{% static "main/pictures/bootstrap_icons/m-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkNewRuleTuesday" src="{% static "main/pictures/bootstrap_icons/t-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkNewRuleWednesday" src="{% static "main/pictures/bootstrap_icons/w-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkNewRuleThursday" src="{% static "main/pictures/bootstrap_icons/t-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkNewRuleFriday" src="{% static "main/pictures/bootstrap_icons/f-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkNewRuleSaturday" src="{% static "main/pictures/bootstrap_icons/s-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+                                    <input type="image" id="checkNewRuleSunday" src="{% static "main/pictures/bootstrap_icons/s-solid.svg" %}" height="50" 
+                                    width="50" alt="" style="border: 1px solid; border-radius: 10px; padding: 5px" disabled onclick="set_background_color(this.id)">
+
                                 </div>
 
-
+                                <button type="button" style="margin-top: 25px; background-color: var(--tertiary-color)" class="btn" id="createNewRule" onclick="createNewRule()">
+                                    Erstellen
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -110,5 +153,5 @@
         </div>
     </section>
 
-<script type="text/javascript" src="{% static 'rules/js/rules.js' %}"></script>
+
 {% endblock %}

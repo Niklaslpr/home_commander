@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 import groups.helper as helper
-from groups.api_calls_deconz import createGroup
 from groups.api_calls_deconz import deleteGroup
 from groups.api_calls_deconz import putHue, putBri
 from groups.api_calls_deconz import putState
@@ -16,7 +15,8 @@ from .models import Group
 
 
 @login_required
-def groups(response):
+def groups(response):   
+    
     return render(response, "groups.html", {})
 
 
@@ -47,20 +47,25 @@ def creategroup(response):
         newgroup = createGroup(response.POST['groupName'], response.POST['selectedDevices'])
     return HttpResponse(newgroup)
 
-
+@login_required    
+def updategroup(response):
+    if response.method == 'POST':
+        updategroup = updateGroup(response.POST['groupName'], response.POST['selectedDevices'], response.POST['groupId'])
+    return HttpResponse(updategroup)
 @login_required
 def deletegroup(response):
     if response.method == 'POST':
-        deleteGroup(response.POST['groupId'])
+        print(response.POST['groupName'])
+        deleteGroup(response.POST['groupId'], response.POST['groupName'])
     return HttpResponse("True")
 
 
 def kits(request, kit_name):
     data = get_data_from_input(request)
-
+    print("was kommt hier", request)
     print("thats my data:", data)
     print("and thats my get", request.GET)
-
+    print("TOLLLLLLLLLLLLLLLLL")
     request_get_data = {}
     for entry in request.GET:
         print("ah thats bullshit", entry)

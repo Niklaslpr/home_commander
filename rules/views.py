@@ -2,13 +2,13 @@ import re
 
 import requests
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from main.views import DECONZ_URL, API_KEY, TEST
 from main.views import get_data_from_input
-from rules.api_calls_deconz import createSchedule
+from rules.api_calls_deconz import createSchedule, createRule, deleteRule, updateRule
 
 DECONZ_SCHEDULE_URL = DECONZ_URL + "/api/" + API_KEY + "/schedules"
 
@@ -20,11 +20,19 @@ UTC_ISO_RECURRING_TIMER = 4
 UTC_ISO_RANDOMIZED_TIME = 5
 
 
+
+
 def convert_weekday_bitmap(weekday_bitmap):
     weekday_bitmap = str(weekday_bitmap)
-    possibleWeekdays = {1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 5: 'Friday', 6: 'Saturday',
-                        7: 'Sunday'}
-    return [possibleWeekdays.get(i) for i, c in enumerate(weekday_bitmap)]
+    possibleWeekdays = {1: 'Mo', 2: 'Di', 3: 'Mi', 4: 'Do', 5: 'Fr', 6: 'Sa',
+                        7: 'So'}
+    weekday_list = []
+    print(weekday_bitmap)
+    for i,c in enumerate(weekday_bitmap):
+        print(weekday_bitmap[i])
+        if weekday_bitmap[i] == '1':
+            weekday_list.append(' ' + possibleWeekdays.get(i+1))
+    return weekday_list
 
 
 def get_info_from_utc_iso_8601_2004_string(utc_iso_8601_2004_string, info):
@@ -60,15 +68,38 @@ def createschedule(response):
     return render(response, "rules/rules.html", {})
 
 
+def create_rule(request):
+    if request.method == 'GET':
+        response = createRule(request.GET['rule-name'], request.GET['rule-group'], request.GET['rule-time'], request.GET['rule-days'], request.GET['repeat-rule'])
+        
+    return HttpResponse(response)
+    
+def update_rule(request):
+    if request.method == 'GET':
+      response = updateRule(request.GET['rule-name'], request.GET['rule-group'], request.GET['rule-time'], request.GET['rule-days'], request.GET['repeat-rule'], request.GET['rule-id'])  
+    
+    return HttpResponse(response)
+    
+def delete_rule(request):    
+    if request.method == 'GET':
+        response = deleteRule(request.GET['rule-id'], request.GET['rule-name'])
+    return HttpResponse(response)
+    
+                  
 def kits(request, kit_name):
     data = get_data_from_input(request)
 
-    return render(request, kit_name + ".html",
-                  {
-                      "id": request.GET["device-id"].__str__(),
-                      "name": request.GET["device-name"].__str__(),
-                      "has_color": True.__str__()
-                  })
+    print("thats my data:", data)
+    print("and thats my get", request.GET)
+    print("TOLLLLLLLLLLLLLLLLL")
+    request_get_data = {}
+    for entry in request.GET:
+        print("ah thats bullshit", entry)
+        request_get_data[entry.replace("-", "_")] = request.GET[entry]
+
+    print("krraaaakkeke", request_get_data)
+
+    return render(request, "rules/" +  kit_name + ".html", request_get_data)
 
 
 def get_all_rule_data(request):
@@ -78,6 +109,8 @@ def get_all_rule_data(request):
         if not TEST:
             response_tmp = requests.get(url=DECONZ_SCHEDULE_URL)
             response_tmp = response_tmp.json()
+            print("UFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+            print(response_tmp)
         else:
             response_tmp = {
                 "1": {
@@ -110,22 +143,51 @@ def get_all_rule_data(request):
 
         response = []
         for key, value in response_tmp.items():
+            print("oh yes here we go")
+            print(value["command"]["address"])
+            if "command" in value.keys():
+                groupId = value["command"]["address"]
+                groupId = groupId.replace("/api/" + API_KEY + "/groups/", "")
+                groupId = groupId.split("/")
+                groupId = groupId[0]
+            
+            if "localtime" in value.keys():    
+                if value["localtime"][0] == "W":
+                    localtime_tmp = value["localtime"][-8:-3]
+                    i = value["localtime"].index("/")
+                    weekdays = value["localtime"][1:i]
+                    weekdays_bin = format(int(weekdays), '07b')
+                    weekdays = convert_weekday_bitmap(weekdays_bin)
+                    if weekdays == [' Mo', ' Di', ' Mi', ' Do', ' Fr', ' Sa', ' So']:
+                        weekdays = 'Jeden Tag'
+                      
+                    
+                else:
+                    localtime_tmp = value["localtime"][-8:-3]
+                    weekdays = value["localtime"][0:10] 
+                   
+                
             response += [{"id": key,
                           "name": value["name"] if "name" in value.keys() else "unknown rule name",
                           "description": value["description"] if "description" in value.keys() else "",
+                          "localtime": localtime_tmp if "localtime" in value.keys() else None,
                           "active": True if "status" in value.keys() and value["status"] == "enabled" else False,
-                          "date": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                         UTC_ISO_DATE) if "time" in value.keys() else None,
-                          "time": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                         UTC_ISO_TIME) if "time" in value.keys() else None,
-                          "weekdays": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                             UTC_ISO_WEEKDAYS) if "time" in value.keys() else None,
-                          "timer": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                          UTC_ISO_TIMER) if "time" in value.keys() else None,
-                          "recurrent_timer": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                                    UTC_ISO_RECURRING_TIMER) if "time" in value.keys() else None,
-                          "randomized_time": get_info_from_utc_iso_8601_2004_string(value["time"],
-                                                                                    UTC_ISO_RANDOMIZED_TIME) if "time" in value.keys() else None,
+                          "weekdays": weekdays if "localtime" in value.keys() else None,
+                          "group_id": groupId if "command" in value.keys() else "",
+                          
+                          
+                          # "date": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                        # UTC_ISO_DATE) if "time" in value.keys() else None,
+                          # "time": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                        # UTC_ISO_TIME) if "time" in value.keys() else None,
+                          # "weekdays": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                             # UTC_ISO_WEEKDAYS) if "time" in value.keys() else None,
+                          # "timer": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                         # UTC_ISO_TIMER) if "time" in value.keys() else None,
+                          # "recurrent_timer": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                                   # UTC_ISO_RECURRING_TIMER) if "time" in value.keys() else None,
+                          # "randomized_time": get_info_from_utc_iso_8601_2004_string(value["time"],
+                                                                                   # UTC_ISO_RANDOMIZED_TIME) if "time" in value.keys() else None,
                           # "has_color": value["hascolor"] if "hascolor" in value.keys() else False,
                           # "name": value["name"] if "name" in value.keys() else "unknown device name",
                           # "type": value["type"] if "type" in value.keys() else "unknown device type",

@@ -6,12 +6,12 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="{% static 'groups/js/build.js' %}"></script>
-    <script type="text/javascript" src="{% static 'groups/js/groups.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rooms/js/build.js' %}"></script>
+    <script type="text/javascript" src="{% static 'rooms/js/rooms.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-    <h1>Gruppen
+    <h1>Räume
         <a href="" data-bs-toggle="modal" data-bs-target="#modalNewGroup" onclick="get_all_devices()">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}"
                  height="50" alt="">
@@ -70,10 +70,9 @@
                                     </tbody>
                                 </table>
                                 <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn mt-5 btn-secondary" id="cancelEditGroup" style="" data-bs-dismiss="modal">Abbrechen</button>
+                                    <button type="button" class="btn mt-5 btn-secondary" id="cancelEditRoom" style="" data-bs-dismiss="modal">Abbrechen</button>
                                     <button type="button" class="btn mt-5" id="saveIcon" style="background-color: var(--tertiary-color)" onclick="saveIcon()">Speichern</button>
                                 </div>
-                                
                             </div>
 
                             <div class="modal-body text-center" id="modal-body-normal">
@@ -157,7 +156,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header text-center">
-                                <h5 class="modal-title" style="margin: auto" id="modalNewGroupLabel">Neue Gruppe
+                                <h5 class="modal-title" style="margin: auto" id="modalNewGroupLabel">Neuen Raum
                                     erstellen</h5>
                             </div>
                             <div class="modal-body text-center">
