@@ -75,23 +75,7 @@ def home(response):
         logs['message'+str(x)] = last_entries[x].message
         
         
-        x = x+1
-    
-    
-    # timestamp1 = last_entries[0].timestamp.strftime("%d.%m.%Y, %H:%M")
-    # timestamp2 = last_entries[1].timestamp.strftime("%d.%m.%Y, %H:%M")
-    # timestamp3 = last_entries[2].timestamp.strftime("%d.%m.%Y, %H:%M")
-
-    # logs = {
-        # "timestamp1": str(timestamp1), 
-        # "message1":last_entries[0].message,
-        # "timestamp2": str(timestamp2), 
-        # "message2":last_entries[1].message,
-        # "timestamp3": str(timestamp3), 
-        # "message3":last_entries[2].message,
-    # }
-    
-    
+        x = x+1    
     print(logs) 
    
     return render(response, "main/home.html", logs)

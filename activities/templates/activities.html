@@ -1,8 +1,188 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
+{% block css %}
+    /* The actual timeline (the vertical ruler) */
+    .timeline {
+      position: relative;
+      max-width: 750px;
+    }
+
+    /* The actual timeline (the vertical ruler) */
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: #343DF4;
+      top: 0;
+      bottom: 0;
+      left: 31px;
+      margin-left: -3px;
+
+    }
+
+    /* Container around content */
+    .containerbox {
+      padding: 10px 40px;
+      position: relative;
+      background-color: inherit;
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+
+    /* The circles on the timeline */
+    .containerbox::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      right: -17px;
+      background-color: #343DF4;
+      border: 4px solid #F5814C;
+      top: 18px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+
+
+    /* Place the container to the right */
+    .right {
+      left: 50%;
+    }
+
+
+
+    /* Add arrows to the right container (pointing left) */
+    .right::before {
+      content: " ";
+      height: 0;
+      position: absolute;
+      top: 22px;
+      width: 0;
+      z-index: 1;
+      left: 30px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent #F5814C transparent transparent;
+    }
+
+    /* Fix the circle for containers on the right side */
+    .right::after {
+      left: -16px;
+    }
+
+    /* The actual content */
+    .content {
+      padding: 10px 30px;
+      background-color: #F5814C;
+      position: relative;
+      border-radius: 6px;
+    }
+
+
+      /* Make sure that all arrows are pointing leftwards */
+      .containerbox::before {
+      left: 60px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent #F5814C transparent transparent;
+      }
+
+      /* Make sure all circles are at the same spot */
+      .left::after, .right::after {
+      left: 18px;
+      }
+
+      /* Make all right containers behave like the left ones */
+      .right {
+      left: 0%;
+      }
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'activities/js/activities.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <h1>Aktivitäten</h1>
-
-
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-xl-8">
+                
+                <div class="timeline">
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp0 }}</h2>
+                      <p>{{ message0 }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp1 }}</h2>
+                    <p>{{ message1 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp2 }}</h2>
+                    <p>{{ message2 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp3 }}</h2>
+                    <p>{{ message3 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp4 }}</h2>
+                    <p>{{ message4 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp5 }}</h2>
+                      <p>{{ message5 }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp6 }}</h2>
+                    <p>{{ message6 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp7 }}</h2>
+                    <p>{{ message7 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp8 }}</h2>
+                    <p>{{ message8 }}</p></div>
+                  </div>
+                  
+                  <div class="containerbox right">
+                    <div class="content">
+                      <h4>{{ timestamp9 }}</h2>
+                    <p>{{ message9 }}</p></div>
+                  </div>
+                 
+                  
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-8">
+                <button type="button" class="btn mt-5 ms-5 mb-5" id="show-next-logs" style="background-color: var(--tertiary-color)" onclick="loadLogs()">Nächsten Einträge</button>
+            </div>
+        </div>
+    </div>
 {% endblock %}
