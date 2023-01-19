@@ -64,6 +64,7 @@ function loadDevices() {
                     });
                 }
             }
+            console.log("dat ding hier sollte gespeichert werden", devicesJson);
             window.localStorage.setItem('devices', JSON.stringify(devicesJson));
         }
     });

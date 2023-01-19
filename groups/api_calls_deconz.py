@@ -1,4 +1,7 @@
+import json
+
 import requests
+
 from main.views import DECONZ_URL, API_KEY
 from activities.models import LogEntry
 
@@ -11,7 +14,7 @@ def putState(state, groupID):
     p = requests.put(url, data=data)
     print(p.status_code)
     print(p.content)
-    
+
 def putHue(hue, sat, groupId):
     data = '{"hue":' + hue + ', "sat":' + sat + '}'
     url = DECONZ_GROUPS_URL + '/' + groupId + '/action'
@@ -37,28 +40,28 @@ def createGroup(groupName, selectedDevices):
     tmp = '['
     for x in selectedDevices:
         tmp = tmp + '"' + x + '", '
-    tmp = tmp + ']'    
+    tmp = tmp + ']'
     data = '{"lights": ' + tmp + '}"'
     url = DECONZ_GROUPS_URL + '/' + groupId
     r = requests.put(url, data=data)
     print(r.status_code)
     print(r.content)
-    
+
     new_log_entry = LogEntry(message="Gruppe " + groupName + " wurde erstellt")
     new_log_entry.save()
-    
+
     return p.status_code
-    
+
 def updateGroup(groupName, selectedDevices, groupId):
     selectedDevices = selectedDevices.split(",")
-    
+
     if selectedDevices == ['']:
         tmp = '[]'
-    else:    
+    else:
         tmp = '['
         for x in selectedDevices:
             tmp = tmp + '"' + x + '", '
-        tmp = tmp + ']'    
+        tmp = tmp + ']'
     data = '{"name": "' + groupName + '","lights": ' + tmp + '}"'
     print(data)
     url = DECONZ_GROUPS_URL + '/' + groupId
@@ -70,6 +73,16 @@ def updateGroup(groupName, selectedDevices, groupId):
     new_log_entry.save()
     return r.status_code
 
+def create_group(request_data):
+    if isinstance(request_data, dict) and request_data != {}:
+        response = requests.post(url=DECONZ_GROUPS_URL, data=request_data)
+        response = response.json()
+    else:
+        response = None
+
+    return response
+
+
 def get_all_groups():
     response = requests.get(url=DECONZ_GROUPS_URL)
     response = response.json()
@@ -77,8 +90,8 @@ def get_all_groups():
     return response
 
 
-def get_group_attributes(id):
-    response = requests.get(url=DECONZ_GROUPS_URL + "/" + id)
+def get_group_attributes(group_id):
+    response = requests.get(url=DECONZ_GROUPS_URL + "/" + group_id)
     response = response.json()
 
     return response
@@ -96,4 +109,13 @@ def deleteGroup(groupId, groupName):
     print(p.content)
     new_log_entry = LogEntry(message="Gruppe " + groupName + " wurde gelöscht")
     new_log_entry.save()
-    
+
+
+
+def update_group_attributes(group_id, request_data):
+    if isinstance(request_data, dict) and request_data != {}:
+        response = requests.put(url=DECONZ_GROUPS_URL + group_id.__str__(), data=json.dumps(request_data))
+    else:
+        response = None
+
+    return response

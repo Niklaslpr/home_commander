@@ -1,5 +1,5 @@
 {% load static %}
-<li class="list-group-item">
+<li class="list-group-item" onclick="loadDeviceDataToModal({{ device_id }})" data-device-id="{{ device_id }}">
     <div class="container text-center">
         <div class="row">
             <div class="col-3">
@@ -11,10 +11,11 @@
             </div>
             <div class="col-3">
                 <div class="form-check form-switch d-flex justify-content-center">
-                    <input class="form-check-input" type="checkbox"
-                           id="switchInGroup-{{ device_id }}">
+{#                    <input class="form-check-input" type="checkbox"#}
+{#                           id="switchInGroup-{{ device_id }}">#}
                 </div>
             </div>
         </div>
     </div>
+    <a href="" class="stretched-link" data-bs-toggle="modal" data-bs-target="#device-control-modal"></a>
 </li>

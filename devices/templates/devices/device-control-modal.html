@@ -15,7 +15,7 @@
                                onchange="lightOnOff(document.getElementById('device-control-modal-switch').checked, document.getElementById('device-control-modal').dataset['deviceId'])">
                     </div>
                 </div>
-                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true" height="35" alt="">
+                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="toggleEdit(false)" height="35" alt="">
             </div>
 
             <div class="modal-body text-center" id="modal-body-edit" hidden>
@@ -48,7 +48,7 @@
             <div class="modal-body text-center" id="modal-body-normal">
                 <div>
                     <input type="checkbox" class="btn-check" id="deviceToFav" autocomplete="off">
-                    <label class="btn" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img
+                    <label class="btn m-3" id="deviceToFavLabel" style="border-color: black" for="deviceToFav"><img
                             src="{% static "main/pictures/bootstrap_icons/star.svg" %}" height="25" alt="">
                         <p id="deviceToFavText">Zu Favoriten hinzufügen</p></label>
                 </div>

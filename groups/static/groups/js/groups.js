@@ -15,9 +15,9 @@ let updateGroupName;
 
 
 $(document).ready(() => {
-    
+
     get_all_devices();
-    
+
     groupControlColorPicker = new iro.ColorPicker('#group-control-modal-colorpicker', {
         borderWidth: 2,
         layout: [
@@ -37,25 +37,27 @@ $(document).ready(() => {
             for (let x of deviceList){
                 document.getElementById("checkInEditGroup-" + x).style.backgroundColor = "transparent";
             }
-            document.getElementById('group-control-modal-switch').hidden = false; 
-            document.getElementById('group-control-modal-label').hidden = false; 
-            document.getElementById('updateGroupName').hidden = true; 
-            document.getElementById('modal-body-edit').hidden = true; 
+            document.getElementById('group-control-modal-switch').hidden = false;
+            document.getElementById('group-control-modal-label').hidden = false;
+            document.getElementById('updateGroupName').hidden = true;
+            document.getElementById('modal-body-edit').hidden = true;
             document.getElementById('modal-body-normal').hidden = false;
         })
-    
+
 
     groupControlColorPicker.on('color:change', function (color) {
         if (groupControlModal.classList.contains('show') === true) {
             console.log(color.hue);
             console.log(color.saturation);
             groupControlModalHeader.style.backgroundColor = color.hexString;
-            if (color.saturation > 55 && color.hue > 212){
-                        groupControlModalLabel.style.color = 'white';
-            } else {groupControlModalLabel.style.color = 'black';}
+            if (color.saturation > 55 && color.hue > 212) {
+                groupControlModalLabel.style.color = 'white';
+            } else {
+                groupControlModalLabel.style.color = 'black';
+            }
             let hue = Math.round(color.hue * 65535 / 360);
             let sat = Math.round(color.saturation * 2.55);
-            
+
             let formData = new FormData();
             formData.append('hue', hue);
             formData.append('sat', sat);
@@ -67,7 +69,7 @@ $(document).ready(() => {
             http.send(formData);
         }
     });
-    
+
     groupControlModalBrightnessSlider = document.getElementById("group-control-modal-brightness");
     groupControlModalBrightnessDisplay = document.getElementById("group-control-modal-brightness-display");
     groupControlModalBrightnessDisplay.innerHTML = groupControlModalBrightnessSlider.value + '%';
@@ -77,7 +79,7 @@ $(document).ready(() => {
         let bri = this.value;
         groupControlModalBrightnessDisplay.innerHTML = bri + '%';
         bri = Math.round(bri * 2.55);
-        
+
         // sending Brightness
         let formData = new FormData();
         formData.append('bri', bri);
@@ -87,15 +89,61 @@ $(document).ready(() => {
         let http = new XMLHttpRequest();
         http.open('POST', './groupsetbri/');
         http.send(formData);
-        
+
     }
 
 // let switchGroup1 = document.getElementById('switchGroup1');
     groupControlModalSwitch = document.getElementById('group-control-modal-switch');
 
+    let newGroupName = document.getElementById('inputGroupName');
+
+    document.getElementById('createGroup').addEventListener('click', function () {
+        // let formData = new FormData();
+        // formData.append('groupName', newGroupName.value);
+        // formData.append('csrfmiddlewaretoken', csrftoken);
+        //
+        // const http = new XMLHttpRequest();
+        //
+        // http.onreadystatechange = function () {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         location.reload();
+        //     }
+        // }
+        //
+        // http.open('POST', '/creategroup/');
+        // http.send(formData);
+
+        $.ajax({
+            url: './group_change/',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: getCookie('csrftoken'),
+                action: 'create',
+                attributes: {'name': newGroupName.value},
+                features: {'icon': selectedIcon}
+            },
+            headers: {
+                'Content-type': 'application/json', 'Accept': 'text/plain',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            dataType: 'json',
+            mode: 'same-origin',
+            success: function (data) {
+                console.info(data);
+
+                // let groups = JSON.parse(window.localStorage.getItem('groups'))
+                // groups[data.group_id]['name'] = data.name;
+                // window.localStorage.setItem('groups', JSON.stringify(groups));
+            }
+        }).always((data) => {
+            if (data.readyState === 4 && data.status === 200) {
+                location.reload();
+            }
+        });
+    })
     deleteGroupButton = document.getElementById("deleteGroup");
-    deleteGroupButton.addEventListener('click', function(){
-        
+    deleteGroupButton.addEventListener('click', function () {
+
         if (confirm('Bist Du sicher?')) {
             deleteGroup(groupControlModal.dataset['groupId'], groupControlModal.dataset['groupName']);
         }
@@ -130,7 +178,7 @@ function loadGroupDataToModal(groupId) {
 
         groupControlModal.dataset['groupId'] = currentGroup['id'];
         groupControlModal.dataset['groupName'] = currentGroup['name'];
-        
+
 
         let deviceType = null;
         for (let entry of currentGroup["devices"]) {
@@ -151,11 +199,11 @@ function loadGroupDataToModal(groupId) {
                 mode: 'same-origin'
             }).always((data) => {
                 if (data.readyState === 4 && data.status === 200) {
-                    
+
                     document.getElementById('group-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
                 }
             });
-            
+
             set_background_color('checkInEditGroup-' + entry['id']);
             set_background_color('checkInNewGroup-' + entry['id']);
             $.ajax({
@@ -174,8 +222,8 @@ function loadGroupDataToModal(groupId) {
                 success: function (data) {
                     document.getElementById("switchInGroup-" + data["id"]).checked = data["on"];
                 }
-            });  
-            
+            });
+
         }
 
         console.log('currentGroup', currentGroup);
@@ -214,9 +262,9 @@ function saveGroupDataToLocalStorage(groupId) {
 }
 
 // setIcon for createGroup()
-function setIcon(IconId){
+function setIcon(IconId) {
     icons = ["tmp_collection.svg", "tmp_house.svg", "tmp_controller.svg", "tmp_archive.svg", "tmp_book.svg", "tmp_wrench.svg", "tmp_brezel.png", "tmp_plugin.svg", "tmp_robot.svg"];
-    for (const tmp in icons){
+    for (const tmp in icons) {
         document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
     }
     document.getElementById(IconId).style.backgroundColor = "var(--tertiary-color)";
@@ -224,68 +272,69 @@ function setIcon(IconId){
     selectedIcon = tmp_array[1];
 }
 
-function createGroup(){
-        selectedDevices = [];
-        newGroupName = document.getElementById('inputGroupName');
-        console.log(newGroupName.value);
-        console.log(selectedIcon);
-        console.log(deviceList);
-        
-        for (let entry of deviceList){
-            if (document.getElementById("checkInNewGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
-                selectedDevices.push(entry);
-            }
-        }
-        console.log("Selected Devices: " + selectedDevices);
-        
-        let formData = new FormData();
-        formData.append('groupName', newGroupName.value);
-        formData.append('selectedDevices', selectedDevices);
-        formData.append('csrfmiddlewaretoken', csrftoken);
-        const http = new XMLHttpRequest();
+function createGroup() {
+    selectedDevices = [];
+    newGroupName = document.getElementById('inputGroupName');
+    console.log(newGroupName.value);
+    console.log(selectedIcon);
+    console.log(deviceList);
 
-        http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                location.reload();
-            } else {
-                console.log("Fehler beim Erstellen der Gruppe");
-            }
+    for (let entry of deviceList) {
+        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)') {
+            selectedDevices.push(entry);
         }
-        http.open('POST', './creategroup/');
-        http.send(formData);
-    
+    }
+    console.log("Selected Devices: " + selectedDevices);
+
+    let formData = new FormData();
+    formData.append('groupName', newGroupName.value);
+    formData.append('selectedDevices', selectedDevices);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    const http = new XMLHttpRequest();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+        } else {
+            console.log("Fehler beim Erstellen der Gruppe");
+        }
+    }
+    http.open('POST', './creategroup/');
+    http.send(formData);
+
 }
 
 
 // getIconId for saveIcon()
-function getIconId(IconId){
+function getIconId(IconId) {
     icons = ["collection.svg", "house.svg", "controller.svg", "archive.svg", "book.svg", "wrench.svg", "brezel.png", "plugin.svg", "robot.svg"];
-    for (const tmp in icons){
+    for (const tmp in icons) {
         document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
     }
     selectedIcon = IconId;
     document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
 }
 
-function saveIcon(){
+function saveIcon() {
     document.getElementById('modal-body-edit').hidden = true;
     document.getElementById('modal-body-normal').hidden = false;
     selectedDevices = [];
 
-    
-        
-    for (let entry of deviceList){
-        if (document.getElementById("checkInEditGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)'){
+
+    for (let entry of deviceList) {
+        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
             selectedDevices.push(entry);
         }
     }
-    groupName = updateGroupName.value;
-    
+    let groupName = updateGroupName.value;
+
+
+
     console.log("Selected Devices: " + selectedDevices);
     console.log(groupControlModal.dataset['groupId']);
     console.log(selectedIcon);
     console.log(groupName);
-    
+
     let formData = new FormData();
     formData.append('groupId', groupControlModal.dataset['groupId']);
     formData.append('groupName', updateGroupName.value);
@@ -304,9 +353,18 @@ function saveIcon(){
     http.send(formData);
 }
 
+function toggleEdit(isActive) {
+    if (isActive) {
+        document.getElementById('modal-body-edit').hidden = true;
+        document.getElementById('modal-body-normal').hidden = false;
+    } else {
+        document.getElementById('modal-body-edit').hidden = false;
+        document.getElementById('modal-body-normal').hidden = true;
+    }
+}
 
 function deleteGroup(groupId, groupName){
-    
+
     let formData = new FormData();
     formData.append('groupId', groupId);
     formData.append('groupName', groupName);
@@ -321,7 +379,7 @@ function deleteGroup(groupId, groupName){
     http.send(formData);
 }
 
-function get_all_devices(){
+function get_all_devices() {
     deviceList = [];
     document.getElementById('new-group-device-list').innerHTML = '';
     document.getElementById('edit-group-device-list').innerHTML = '';
@@ -340,60 +398,59 @@ function get_all_devices(){
         success: function (data) {
             for (let entry of data["devices"]) {
                 deviceList.push(entry["id"].toString());
-                
-                
-            $.ajax({
-                url: './kit/device-item2',
-                type: 'get',
-                data: {
-                    "csrfmiddlewaretoken": getCookie('csrftoken'),
-                    "device-id": entry['id'].toString(),
-                    "device-name": entry['name'].toString(),
-                    "device-type": entry['type'].toString(),
-                },
-                headers: {
-                    'Content-type': 'application/json', 'Accept': 'text/plain',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                dataType: 'json',
-                mode: 'same-origin'
-            }).always((data) => {
-                if (data.readyState === 4 && data.status === 200) {
-                    document.getElementById('new-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                }
-            });
-            $.ajax({
-                url: './kit/device-item3',
-                type: 'get',
-                data: {
-                    "csrfmiddlewaretoken": getCookie('csrftoken'),
-                    "device-id2": entry['id'].toString(),
-                    "device-name2": entry['name'].toString(),
-                    "device-type2": entry['type'].toString(),
-                },
-                headers: {
-                    'Content-type': 'application/json', 'Accept': 'text/plain',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                dataType: 'json',
-                mode: 'same-origin'
-            }).always((data) => {
-                if (data.readyState === 4 && data.status === 200) {
-                    document.getElementById('edit-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-                    
-                }
-            });
-        }
+
+
+                $.ajax({
+                    url: './kit/device-item2',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "device-id": entry['id'].toString(),
+                        "device-name": entry['name'].toString(),
+                        "device-type": entry['type'].toString(),
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('new-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+                });
+                $.ajax({
+                    url: './kit/device-item3',
+                    type: 'get',
+                    data: {
+                        "csrfmiddlewaretoken": getCookie('csrftoken'),
+                        "device-id2": entry['id'].toString(),
+                        "device-name2": entry['name'].toString(),
+                        "device-type2": entry['type'].toString(),
+                    },
+                    headers: {
+                        'Content-type': 'application/json', 'Accept': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    dataType: 'json',
+                    mode: 'same-origin'
+                }).always((data) => {
+                    if (data.readyState === 4 && data.status === 200) {
+                        document.getElementById('edit-group-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    }
+                });
+            }
         }
     });
 }
 
-function set_background_color(id){
-    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)'){
+function set_background_color(id) {
+    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)') {
         document.getElementById(id).style.backgroundColor = "transparent";
-    } else{
+    } else {
         document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
-    }  
+    }
 }
 
 function deviceOnOff(state, deviceId){
@@ -418,6 +475,5 @@ function deviceOnOff(state, deviceId){
             console.info(data);
         }
     });
-      
-}
 
+}

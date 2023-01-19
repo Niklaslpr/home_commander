@@ -1,5 +1,4 @@
 import requests
-import socket
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -21,7 +20,6 @@ def devices(request):
     if request.method == 'POST':
         putstate1(request.POST['state'])
     return render(request, "devices/devices.html", {})
-
 
 
 @login_required
@@ -124,7 +122,9 @@ def modify_device(request):
                             data["state"]["xy"], list) else None
                     }
 
-                    if "device_id" in data.keys() and (isinstance(data["device_id"], int) or isinstance(data["device_id"], str) and data["device_id"].isnumeric()):
+                    if "device_id" in data.keys() and (
+                            isinstance(data["device_id"], int) or isinstance(data["device_id"], str) and data[
+                        "device_id"].isnumeric()):
                         print("Affenarsch", request_data)
                         response = helper.update_light_state_deconz(int(data["device_id"]), **request_data)
                         print('Hier bin ich type:')
@@ -144,6 +144,7 @@ def modify_device(request):
         else:
             return JsonResponse({"error": "unknown action"})
 
+
 @login_required
 def addDeviceToFavorites(request):
     if request.method == 'POST':
@@ -161,6 +162,7 @@ def addDeviceToFavorites(request):
         data = '{ "lights": [ "' + '", "'.join(lightslist) + '" ] }'
         z = requests.put(DECONZ_GROUPS_URL + "/" + favoritesGroupID, data=data)
     return HttpResponse(z.json())
+
 
 @login_required
 def deleteDeviceFromFavorites(request):
@@ -190,6 +192,7 @@ def deleteDeviceFromFavorites(request):
         print(z.json())
     return HttpResponse(z.json())
 
+
 @login_required
 def isDeviceinFavorites(request):
     if request.method == 'POST':
@@ -211,6 +214,7 @@ def isDeviceinFavorites(request):
         else:
             tmp = False
     return HttpResponse(tmp)
+
 
 @login_required
 def deleteDevice(request):

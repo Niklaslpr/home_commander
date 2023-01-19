@@ -14,14 +14,14 @@ import rooms.helper as helper
 @login_required
 def rooms(response):
     return render(response, "rooms.html", {})
-    
-    
+
+
 @login_required
 def grouponoff(response):
     if response.method == 'POST':
         putState(response.POST['state'], response.POST['groupID'])
     return render(response, "groups.html", {})
-    
+
 @login_required
 def groupsethue(response):
     if response.method == 'POST':
@@ -41,7 +41,7 @@ def creategroup(response):
         newgroup = createGroup(response.POST['groupName'], response.POST['selectedDevices'])
     return HttpResponse(newgroup)
 
-@login_required    
+@login_required
 def updategroup(response):
     if response.method == 'POST':
         updategroup = updateGroup(response.POST['groupName'], response.POST['selectedDevices'], response.POST['groupId'])
@@ -92,7 +92,7 @@ def get_group_data(request, id):
         return JsonResponse(response)
 
 
-def modify_device(request):
+def modify_room(request):
     if request.method == "POST":
         data = get_data_from_input(request)
 
@@ -104,4 +104,3 @@ def modify_device(request):
             pass
         else:
             return JsonResponse({"error": "unknown action"})
-    

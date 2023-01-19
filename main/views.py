@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from activities.models import LogEntry
 
-TEST = False  # @Niklas set it to False
+TEST = True  # @Niklas set it to False
 onRasp = True  # True, if Code is running on Raspberry Pi
 
 RASPI_IP = socket.gethostbyname(socket.gethostname())
@@ -24,6 +24,8 @@ API_KEY = "973FC5C763"
 DECONZ_DEVICE_LIGHTS_URL = DECONZ_URL + "/api/" + API_KEY + "/lights"  # TODO: settings file
 DECONZ_DEVICE_SENSORS_URL = DECONZ_URL + "/api/" + API_KEY + "/sensors"
 DECONZ_GROUPS_URL = DECONZ_URL + "/api/" + API_KEY + "/groups"
+
+ICON_PATH = "main/pictures/bootstrap_icons/"
 
 
 def get_data_from_input(data_input):

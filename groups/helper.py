@@ -1,10 +1,70 @@
+import groups.api_calls_deconz as deconz_api
+from devices.helper import \
+    get_device_data_from_deconz  # TODO: check if sensors and lights have their own id counter -> yes!!!
 from main.views import TEST
 
-import groups.api_calls_deconz as deconz_api
-from devices.helper import get_device_data_from_deconz # TODO: check if sensors and lights have their own id counter
+
+def format_group_data_from_deconz(group_id, data, devices=None):
+    return {"id": group_id,
+            "name": data["name"].split("_")[4] if "name" in data.keys() else "unknown group name",
+            "devices": devices if devices is not None else [],
+            "on": data["action"]["on"] if "action" in data.keys() and "on" in data[
+                "action"].keys() else False,
+            "brightness": int(
+                data["action"]["bri"] / 255 * 100) if "action" in data.keys() and "bri" in data[
+                "action"].keys() else 0,
+            "hue": int(data["action"]["hue"] / 65535 * 360) if "action" in data.keys() and "hue" in
+                                                                data["action"].keys() else 0,
+            "saturation": int(
+                data["action"]["sat"] / 255 * 100) if "action" in data.keys() and "sat" in data[
+                "action"].keys() else 0
+            }
 
 
-def get_group_data_from_deconz(id, username):
+def format_group_attributes_for_deconz(name=None, lights=None, hidden=None, light_sequence=None, multi_device_ids=None):
+    request_data = {}
+    errors = []
+
+    if name is not None and isinstance(name, str) and 0 < name.__len__() <= 32:
+        request_data["name"] = name
+    elif name is not None:
+        errors += ["name"]
+
+    if lights is not None and isinstance(lights, list):
+        request_data["lights"] = lights
+    elif lights is not None:
+        errors += ["lights"]
+
+    if hidden is not None and (
+            isinstance(hidden, bool) or isinstance(hidden, str) and hidden in ["True", "true", "False", "false"]):
+        if isinstance(hidden, str) and hidden in ["False", "false"]:
+            request_data["hidden"] = bool(0)
+        else:
+            request_data["hidden"] = bool(hidden)
+    elif hidden is not None:
+        errors += ["hidden"]
+
+    if light_sequence is not None and isinstance(light_sequence, list):
+        request_data["lightsequence"] = light_sequence
+    elif light_sequence is not None:
+        errors += ["lightsequence"]
+
+    if multi_device_ids is not None and isinstance(multi_device_ids, list):
+        request_data["mulitdeviceids"] = multi_device_ids
+    elif multi_device_ids is not None:
+        errors += ["mulitdeviceids"]
+
+    return {"error": errors, "request_data": request_data}
+
+
+def create_group_in_deconz(name, username=None):
+    response = deconz_api.create_group({"name": name})
+    print("create response:", response)
+
+    return response
+
+
+def get_group_data_from_deconz(id, username=None):
     if id == -1:
         if not TEST:
             response_tmp = deconz_api.get_all_groups()
@@ -80,7 +140,7 @@ def get_group_data_from_deconz(id, username):
                             ],
                             "state": 0
                         }
-                
+
                 print("EY JO 2", zwErg["name"].split("_")[0])
                 print("xxx", username)
 
@@ -100,40 +160,42 @@ def get_group_data_from_deconz(id, username):
                             devices += [{"type": "light", "id": entry, "name": nameZwErg}]
 
                 # devices = [["light", request.get().json(), entry] for entry in zwErg["lights"]] if "lights" in zwErg.keys() else []
-                
+
                 # TODO: Loop over Sensors to find all Sensors related to that Group!
 
                 # if (zwErg["name"].split("_")[2] if "name" in zwErg.keys() else "") == "group" and (
                         # zwErg["name"].split("_")[3] if "name" in zwErg.keys() else "") in ["all", username]:
-                
-                
+
+
                 # Pass the favorite-groups
                 if zwErg["name"].split("_")[0] == "favorites":
                     pass
                 else:
-                
-                    response += [{"id": key,
-                                  "name": zwErg["name"] if "name" in zwErg.keys() else "unknown group name",
-                                  "devices": devices,
-                                  "on": zwErg["action"]["on"] if "action" in zwErg.keys() and "on" in zwErg[
-                                      "action"].keys() else False,
-                                  "brightness": int(
-                                      zwErg["action"]["bri"] / 255 * 100) if "action" in zwErg.keys() and "bri" in zwErg[
-                                      "action"].keys() else 0,
-                                  "hue": int(zwErg["action"]["hue"] / 65535 * 360) if "action" in zwErg.keys() and "hue" in
-                                                                                      zwErg["action"].keys() else 0,
-                                  "saturation": int(
-                                      zwErg["action"]["sat"] / 255 * 100) if "action" in zwErg.keys() and "sat" in zwErg[
-                                      "action"].keys() else 0
-                                  }]
-                    
+
+                    # TODO: Loop over Sensors to find all Sensors related to that Group!
+
+                    if (zwErg["name"].split("_")[2] if "name" in zwErg.keys() else "") == "group" and (
+                            zwErg["name"].split("_")[3] if "name" in zwErg.keys() else "") in ["all", username]:
+                        response += [format_group_data_from_deconz(key, zwErg, devices)]
+                    else:
+                        # nothing so far
+                        pass
+
                 # else:
                     # # nothing so far
                     # pass
-        
+
         return response
     else:
         response = deconz_api.get_group_attributes(id)
         response = response.json()
 
         return response
+
+
+def update_group_deconz(group_id, name=None, lights=None, hidden=None, light_sequence=None, multi_device_ids=None):
+    zwErg = format_group_attributes_for_deconz(name, lights, hidden, light_sequence, multi_device_ids)
+
+    response = deconz_api.update_group_attributes(group_id.__str__(), zwErg["request_data"])
+
+    return {"error": zwErg["error"], "response": response}
