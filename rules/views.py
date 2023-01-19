@@ -8,7 +8,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 from main.views import DECONZ_URL, API_KEY, TEST
 from main.views import get_data_from_input
-from rules.api_calls_deconz import createSchedule, createRule, deleteRule
+from rules.api_calls_deconz import createSchedule, createRule, deleteRule, updateRule
 
 DECONZ_SCHEDULE_URL = DECONZ_URL + "/api/" + API_KEY + "/schedules"
 
@@ -70,7 +70,14 @@ def createschedule(response):
 
 def create_rule(request):
     if request.method == 'GET':
-        response = createRule(request.GET['rule-name'], request.GET['rule-group'], request.GET['rule-time'], request.GET['rule-days'])
+        response = createRule(request.GET['rule-name'], request.GET['rule-group'], request.GET['rule-time'], request.GET['rule-days'], request.GET['repeat-rule'])
+        
+    return HttpResponse(response)
+    
+def update_rule(request):
+    if request.method == 'GET':
+      response = updateRule(request.GET['rule-name'], request.GET['rule-group'], request.GET['rule-time'], request.GET['rule-days'], request.GET['repeat-rule'], request.GET['rule-id'])  
+    
     return HttpResponse(response)
     
 def delete_rule(request):    

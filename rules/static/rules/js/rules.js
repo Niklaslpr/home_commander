@@ -21,6 +21,7 @@ let timePickerNewRule;
 let timePickerEditRule;
 let groupListAll;
 let currentRule;
+let repeatRule;
 
 $(document).ready(() => {
     
@@ -59,6 +60,18 @@ $(document).ready(() => {
         }
     });
     
+    timePickerEditRule = new Picker(inputTimeEditRule, {
+        date: new Date(),
+        container: '#picker-container',
+        format: 'HH:mm',
+        controls: true,
+        rows: 3,
+        text: {
+            title: 'Uhrzeit auswählen',
+            cancel: 'Abbrechen',
+        }
+    });
+    
     dict_weekdays = {
             'Mo, ' : document.getElementById('checkNewRuleMonday'),
             'Di, ' : document.getElementById('checkNewRuleTuesday'),
@@ -76,6 +89,28 @@ $(document).ready(() => {
                 }
             } else{
                 for (const [key, value] of Object.entries(dict_weekdays)){
+                    value.disabled = true;
+                }
+            }
+    })
+    dict_weekdays_edit = {
+            'Mo, ' : document.getElementById('checkEditRuleMo'),
+            'Di, ' : document.getElementById('checkEditRuleDi'),
+            'Mi, ' : document.getElementById('checkEditRuleMi'),
+            'Do, ' : document.getElementById('checkEditRuleDo'),
+            'Fr, ' : document.getElementById('checkEditRuleFr'),
+            'Sa, ' : document.getElementById('checkEditRuleSa'),
+            'So, ' : document.getElementById('checkEditRuleSo'),
+        }
+    
+    checkboxRepeatEditRule.addEventListener('change', function(){
+            if(checkboxRepeatEditRule.checked == true){
+                for (const [key, value] of Object.entries(dict_weekdays_edit)){
+                    value.disabled = false;
+                }
+            } else{
+                for (const [key, value] of Object.entries(dict_weekdays_edit)){
+                    value.style.backgroundColor = "transparent";
                     value.disabled = true;
                 }
             }
@@ -196,6 +231,7 @@ function createNewRule(){
     newRuleName = "";
     savedTimeNewRule = "";
     selectedDaysNewRule = "";
+    repeatRule = false;
     
     newRuleName = document.getElementById('inputRuleName').value;
     for (let element in deviceList){
@@ -223,9 +259,11 @@ function createNewRule(){
         }
     }
     
+    repeatRule = document.getElementById('checkboxRepeatNewRule').checked;
     
     
     console.log(newRuleName);
+    console.log(repeatRule);
     console.log(selectedDeviceNewRule);
     console.log(savedTimeNewRule);
     console.log(selectedDaysNewRule);
@@ -240,6 +278,7 @@ function createNewRule(){
             'rule-group': selectedDeviceNewRule,
             'rule-time': savedTimeNewRule,
             'rule-days': selectedDaysNewRule,
+            'repeat-rule': repeatRule,
         },
         headers: {
             'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -258,6 +297,10 @@ function createNewRule(){
 function loadRuleDataToModal(ruleId) {
     let rules = JSON.parse(window.localStorage.getItem("rules"));
     
+    for (const [key, value] of Object.entries(dict_weekdays_edit)){
+                    value.style.backgroundColor = 'transparent';
+                }
+    
     if (rules.hasOwnProperty(ruleId)) {
         currentRule = rules[ruleId];
         console.log(currentRule);
@@ -268,17 +311,25 @@ function loadRuleDataToModal(ruleId) {
         console.log(currentRule["group_id"]);
         console.log(groupListAll);
         document.getElementById('rule-control-group-list').innerHTML = '';
+        document.getElementById('groupCheckInEditRule-'+ currentRule["group_id"]).style.backgroundColor = 'var(--tertiary-color)';
         
         for (let element in groupListAll){
             if (groupListAll[element]["id"] == currentRule["group_id"]){
+                
+                let tmp = groupListAll[element]["name"];
+                if (tmp.startsWith('room_')){
+                    tmp = tmp.split('_').pop();
+                }
+                
+                
+                
                 $.ajax({
                     url: './kit/group-item-control-rule',
                     type: 'get',
                     data: {
                         "csrfmiddlewaretoken": getCookie('csrftoken'),
                         "group-id": groupListAll[element]["id"].toString(),
-                        "group-name": groupListAll[element]["name"],
-                        
+                        "group-name": tmp,
                     },
                     headers: {
                         'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -293,6 +344,26 @@ function loadRuleDataToModal(ruleId) {
                 });
             }
         }
+        document.getElementById('ruleWeekdays-modal').innerHTML = currentRule["weekdays"];
+        if (typeof(currentRule['weekdays']) == 'string'){
+            checkboxRepeatEditRule.checked = false;
+            
+        } else if (typeof(currentRule['weekdays']) == 'object'){
+            checkboxRepeatEditRule.checked = true;
+            
+            for (const [key, value] of Object.entries(dict_weekdays_edit)){
+                    value.disabled = false;
+            }
+            
+            for (let z in currentRule['weekdays']){
+                day = currentRule['weekdays'][z]
+                day = day.replace(" ", "");
+                document.getElementById('checkEditRule' + day).style.backgroundColor = 'var(--tertiary-color)';
+            
+            }
+            
+        }
+        
         
         
         } else {
@@ -301,13 +372,63 @@ function loadRuleDataToModal(ruleId) {
 }
 
 function deleteRule(){
-    console.log("Lösche: ",currentRule["id"]);
-    $.ajax({
-        url: './delete_rule',
+    if (confirm('Bist Du sicher?')) {
+        console.log("Lösche: ",currentRule["id"]);
+        $.ajax({
+            url: './delete_rule',
+            type: 'get',
+            data: {
+                csrfmiddlewaretoken: getCookie('csrftoken'),
+                'rule-id': currentRule["id"],
+            },
+            headers: {
+                'Content-type': 'application/json', 'Accept': 'text/plain',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            dataType: 'json',
+            mode: 'same-origin',
+            success: function (data) {
+                console.log(data);
+                location.reload();
+            }
+            
+        });
+        }
+}
+
+function updateRule(){
+    let updateRuleName, updateRuleGroup, updateRuleTime, updateRuleDays, updateRuleRepeat;
+    updateRuleName = document.getElementById('editRuleName').value;
+    updateRuleGroup = "";  
+    updateRuleTime = document.getElementById("inputTimeEditRule").value;
+    updateRuleDays = ""
+    for (const [key, value] of Object.entries(dict_weekdays_edit)){
+        if (value.style.backgroundColor == 'var(--tertiary-color)'){
+            updateRuleDays += '1';
+        } else if (value.style.backgroundColor == '' || value.style.backgroundColor == 'transparent'){
+            updateRuleDays += '0';
+        }
+    }
+    updateRuleRepeat = document.getElementById('checkboxRepeatEditRule').checked;
+    for (thing in groupListAll){
+        
+        if (document.getElementById('groupCheckInEditRule-' + groupListAll[thing]["id"]).style.backgroundColor == "var(--tertiary-color)"){
+            updateRuleGroup = groupListAll[thing]["id"];
+        }
+    }
+     console.log("Change Rule: ", updateRuleName, updateRuleGroup, updateRuleTime, updateRuleDays, updateRuleRepeat);
+     
+     $.ajax({
+        url: './update_rule',
         type: 'get',
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
-            'rule-id': currentRule["id"],
+            'rule-name': updateRuleName,
+            'rule-group': updateRuleGroup,
+            'rule-time': updateRuleTime,
+            'rule-days': updateRuleDays,
+            'repeat-rule': updateRuleRepeat,
+            'rule-id': currentRule['id'],
         },
         headers: {
             'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -321,4 +442,5 @@ function deleteRule(){
         }
         
     });
+     
 }
