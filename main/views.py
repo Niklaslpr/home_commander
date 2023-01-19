@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 from django.shortcuts import render
 import urllib.parse
 import requests
@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
+from activities.models import LogEntry
 
 TEST = False  # @Niklas set it to False
 onRasp = True  # True, if Code is running on Raspberry Pi
@@ -63,7 +64,37 @@ def get_data_from_input(data_input):
 
 @login_required
 def home(response):
-    return render(response, "main/home.html", {})
+    print("Hallo Logs")
+    last_entries = LogEntry.objects.order_by('-timestamp')[:3]
+    
+    
+    logs = {}
+    x = 0
+    while x < 3:
+        logs['timestamp'+str(x)] = str(last_entries[x].timestamp.strftime("%d.%m.%Y, %H:%M"))
+        logs['message'+str(x)] = last_entries[x].message
+        
+        
+        x = x+1
+    
+    
+    # timestamp1 = last_entries[0].timestamp.strftime("%d.%m.%Y, %H:%M")
+    # timestamp2 = last_entries[1].timestamp.strftime("%d.%m.%Y, %H:%M")
+    # timestamp3 = last_entries[2].timestamp.strftime("%d.%m.%Y, %H:%M")
+
+    # logs = {
+        # "timestamp1": str(timestamp1), 
+        # "message1":last_entries[0].message,
+        # "timestamp2": str(timestamp2), 
+        # "message2":last_entries[1].message,
+        # "timestamp3": str(timestamp3), 
+        # "message3":last_entries[2].message,
+    # }
+    
+    
+    print(logs) 
+   
+    return render(response, "main/home.html", logs)
 
 
 def weather(request):

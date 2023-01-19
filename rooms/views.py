@@ -50,7 +50,7 @@ def updategroup(response):
 @login_required
 def deletegroup(response):
     if response.method == 'POST':
-        deleteGroup(response.POST['groupId'])
+        deleteGroup(response.POST['groupId'], response.POST['groupName'])
     return HttpResponse("True")
 
 def kits(request, kit_name):

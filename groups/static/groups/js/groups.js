@@ -97,7 +97,7 @@ $(document).ready(() => {
     deleteGroupButton.addEventListener('click', function(){
         
         if (confirm('Bist Du sicher?')) {
-            deleteGroup(groupControlModal.dataset['groupId']);
+            deleteGroup(groupControlModal.dataset['groupId'], groupControlModal.dataset['groupName']);
         }
     })
 
@@ -305,9 +305,11 @@ function saveIcon(){
 }
 
 
-function deleteGroup(groupId){
+function deleteGroup(groupId, groupName){
+    
     let formData = new FormData();
     formData.append('groupId', groupId);
+    formData.append('groupName', groupName);
     formData.append('csrfmiddlewaretoken', csrftoken);
     let http = new XMLHttpRequest();
     http.onreadystatechange = function () {

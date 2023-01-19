@@ -374,12 +374,14 @@ function loadRuleDataToModal(ruleId) {
 function deleteRule(){
     if (confirm('Bist Du sicher?')) {
         console.log("Lösche: ",currentRule["id"]);
+        
         $.ajax({
             url: './delete_rule',
             type: 'get',
             data: {
                 csrfmiddlewaretoken: getCookie('csrftoken'),
                 'rule-id': currentRule["id"],
+                'rule-name': currentRule["name"],
             },
             headers: {
                 'Content-type': 'application/json', 'Accept': 'text/plain',

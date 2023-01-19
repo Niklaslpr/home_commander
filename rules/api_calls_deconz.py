@@ -1,6 +1,7 @@
 import requests
 import json
 from datetime import datetime, timedelta
+from activities.models import LogEntry
 from main.views import DECONZ_URL, API_KEY, DECONZ_GROUPS_URL, DECONZ_DEVICE_LIGHTS_URL
 DECONZ_SCHEDULE_URL = DECONZ_URL + "/api/" + API_KEY + "/schedules"
 
@@ -46,9 +47,9 @@ def createRule(rule_name, rule_group, rule_time, rule_days, repeat_rule):
     
     if repeat_rule == 'false':        
         real_time = datetime.now().strftime('%H:%M')
-        if real_time > rule_time:
-            rule_date = datetime.today() + timedelta(days=1)
-        elif real_time < rule_time:  
+        rule_date = datetime.today() + timedelta(days=1)
+        
+        if real_time < rule_time:  
             rule_date = datetime.today()
         
         rule_date = rule_date.strftime('%Y-%m-%d')
@@ -65,6 +66,8 @@ def createRule(rule_name, rule_group, rule_time, rule_days, repeat_rule):
     response = requests.post(url, data = data)
     print(response.status_code)
     print(response.content)
+    new_log_entry = LogEntry(message="Regel " + rule_name + " wurde erstellt")
+    new_log_entry.save()
     
     return ("true")
     
@@ -119,11 +122,16 @@ def updateRule(rule_name, rule_group, rule_time, rule_days, repeat_rule, rule_id
     response = requests.put(url, data = data)
     print(response.status_code)
     print(response.content)
+    new_log_entry = LogEntry(message="Regel " + rule_name + " wurde geändert")
+    new_log_entry.save()
     
     return ("true")
 
-def deleteRule(rule_id):
+def deleteRule(rule_id, rule_name):
     response = requests.delete(DECONZ_SCHEDULE_URL + '/' + rule_id)
     print(response.status_code)
     print(response.content)
+    new_log_entry = LogEntry(message="Regel " + rule_name + " wurde gelöscht")
+    new_log_entry.save()
     return response.content
+    

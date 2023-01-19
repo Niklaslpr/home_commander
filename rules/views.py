@@ -82,7 +82,7 @@ def update_rule(request):
     
 def delete_rule(request):    
     if request.method == 'GET':
-        response = deleteRule(request.GET['rule-id'])
+        response = deleteRule(request.GET['rule-id'], request.GET['rule-name'])
     return HttpResponse(response)
     
                   

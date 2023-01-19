@@ -10,12 +10,14 @@ from groups.api_calls_deconz import putState
 from groups.api_calls_deconz import putHue, putBri
 from groups.api_calls_deconz import deleteGroup
 from main.views import get_data_from_input, DECONZ_URL, API_KEY, TEST
+from activities.models import LogEntry
 
 import groups.helper as helper
 
 
 @login_required
-def groups(response):
+def groups(response):   
+    
     return render(response, "groups.html", {})
 
 
@@ -53,7 +55,8 @@ def updategroup(response):
 @login_required
 def deletegroup(response):
     if response.method == 'POST':
-        deleteGroup(response.POST['groupId'])
+        print(response.POST['groupName'])
+        deleteGroup(response.POST['groupId'], response.POST['groupName'])
     return HttpResponse("True")
 
 def kits(request, kit_name):

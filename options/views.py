@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.http import HttpResponse
+from activities.models import LogEntry
 from datetime import datetime
 import pytz
 
@@ -37,6 +38,8 @@ def delete_user(request):
             u = User.objects.get(username = username)
             u.delete()
             print(username + " wurde gelöscht")
+            new_log_entry = LogEntry(message="User " + username + " wurde gelöscht")
+            new_log_entry.save()
             
             # TODO: delete Favorite-Group in deCONZ
             
