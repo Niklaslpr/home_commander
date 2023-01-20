@@ -22,13 +22,14 @@ function loadGroups() {
                     console.log(entry['name']);
                     
                     $.ajax({
-                        url: './kit/group-tile',
+                        url: './kit/rooms-tile',
                         type: 'get',
                         data: {
                             "csrfmiddlewaretoken": getCookie('csrftoken'),
                             "group-id": entry['id'].toString(),
                             "group-name": entry['name'].toString().replace('room_',''),
                             "group-state": entry['on'].toString(),
+                            "room-icon": entry['icon'].toString(),
                         },
                         headers: {
                             'Content-type': 'application/json', 'Accept': 'text/plain',

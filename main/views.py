@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from activities.models import LogEntry
 
-TEST = True  # @Niklas set it to False
+TEST = False  # @Niklas set it to False
 onRasp = True  # True, if Code is running on Raspberry Pi
 
 RASPI_IP = socket.gethostbyname(socket.gethostname())
@@ -44,7 +44,9 @@ def get_data_from_input(data_input):
 
     if raw_data != "":
         for entry in raw_data.split("&"):
-            if re.search(r"^\w+\[\w+]=\w+$", entry):
+            if re.search(r"^\w+\[\w+]\[]=\w.*$", entry):
+                entry = entry.replace("[]","")
+            if re.search(r"^\w+\[\w+]=\w.*$", entry):
                 print("it goes here", entry)
                 parent = entry.split("[")[0]
                 child = entry.split("[")[1].split("]")[0]
@@ -56,7 +58,14 @@ def get_data_from_input(data_input):
 
                 if parent not in data.keys():
                     data[parent] = {}
-                data[parent][child] = value
+                if child in data[parent].keys():
+                    if isinstance(data[parent][child], list):
+                        data[parent][child].append(value)
+                    else:
+                        data[parent][child] = [data[parent][child], value] 
+                else:
+                    data[parent][child] = value
+                
             else:
                 print("nope here", entry)
                 data[entry.split("=")[0]] = entry.split("=")[1]

@@ -1,5 +1,5 @@
-let selectedIcon
-let icons
+selectedIcon
+icons
 
 $(document).ready(() => {
 

@@ -11,7 +11,7 @@
 {% endblock %}
 {% block content %}
     <h1>Szenen
-        <a href="" data-bs-toggle="modal" data-bs-target="#new-scene-modal">
+        <a href="" data-bs-toggle="modal" data-bs-target="#new-scene-modal" onclick="getAllDevices()">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}"
                  height="50" alt="">
         </a>
@@ -110,7 +110,7 @@
                             <div class="modal-body text-center" id="modal-body-edit" hidden>
 
                                 <h6>Geräte auswählen:</h6>
-                                <ul class="list-scene" id="edit-scene-device-list">
+                                <ul class="list-group" id="edit-scene-device-list">
                                 </ul>
                                 <table class="table table-borderless"
                                        style="border-collapse: separate; border-spacing: 0 20px">
@@ -119,48 +119,48 @@
                                         <td><input type="image" id="collection.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/collection.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                         <td><input type="image" id="house.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/house.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                         <td><input type="image" id="controller.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/controller.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                     </tr>
                                     <tr>
                                         <td><input type="image" id="archive.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/archive.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                         <td><input type="image" id="book.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/book.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                         <td><input type="image" id="wrench.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/wrench.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                     </tr>
                                     <tr>
                                         <td><input type="image" id="brezel.png"
                                                    src="{% static "main/pictures/bootstrap_icons/brezel.png" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                         <td><input type="image" id="plugin.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/plugin.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                         <td><input type="image" id="robot.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/robot.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="getIconId(this.id)"></td>
+                                                   onclick="getIconId2(this.id)"></td>
                                     </tr>
                                     </tbody>
                                 </table>
                                 <button type="button" class="btn mt-5" id="saveIcon"
-                                        style="background-color: var(--tertiary-color)" onclick="saveIcon()">Speichern
+                                        style="background-color: var(--tertiary-color)" onclick="saveIcon2()">Speichern
                                 </button>
                             </div>
 
@@ -251,11 +251,11 @@
                                     erstellen</h5>
                             </div>
                             <div class="modal-body text-center">
-                                <label for="inputSceneNameName" class="form-label">Name</label>
+                                <label for="inputSceneName" class="form-label">Name</label>
                                 <input style="" type="text" id="inputSceneName" class="form-control"
                                        aria-describedby="inputSceneName">
                                 <h6>Geräte auswählen:</h6>
-                                <ul class="list-scene" id="new-scene-device-list">
+                                <ul class="list-group" id="new-scene-device-list">
                                 </ul>
                                 <h6>Icon auswählen:</h6>
                                 <table class="table table-borderless"
@@ -265,43 +265,43 @@
                                         <td><input type="image" id="tmp_collection.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/collection.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                         <td><input type="image" id="tmp_house.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/house.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                         <td><input type="image" id="tmp_controller.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/controller.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                     </tr>
                                     <tr>
                                         <td><input type="image" id="tmp_archive.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/archive.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                         <td><input type="image" id="tmp_book.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/book.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                         <td><input type="image" id="tmp_wrench.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/wrench.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                     </tr>
                                     <tr>
                                         <td><input type="image" id="tmp_brezel.png"
                                                    src="{% static "main/pictures/bootstrap_icons/brezel.png" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                         <td><input type="image" id="tmp_plugin.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/plugin.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                         <td><input type="image" id="tmp_robot.svg"
                                                    src="{% static "main/pictures/bootstrap_icons/robot.svg" %}"
                                                    height="75" alt="" style="border-style: solid; padding: 5px"
-                                                   onclick="setIcon(this.id)"></td>
+                                                   onclick="setIcon2(this.id)"></td>
                                     </tr>
                                     </tbody>
                                 </table>

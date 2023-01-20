@@ -97,9 +97,9 @@ def update_light_state(light_id, request_data):
         response = requests.put(DECONZ_DEVICE_LIGHTS_URL + "/" + light_id + "/state", data=json.dumps(request_data))
         response = response.json() # TODO
 
-        print("Update Light Status", response.status_code)
-        print("Update Light Content", response.content)
-        response = response.json()
+        # print("Update Light Status", response.status_code)
+        print("Update Light Content", response)
+        
     else:
         response = None
 

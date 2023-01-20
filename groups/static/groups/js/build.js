@@ -28,6 +28,7 @@ function loadGroups() {
                             "group-id": entry['id'].toString(),
                             "group-name": entry['name'].toString(),
                             "group-state": entry['on'].toString(),
+                            "group-icon": entry['icon'].toString(),
                         },
                         headers: {
                             'Content-type': 'application/json', 'Accept': 'text/plain',

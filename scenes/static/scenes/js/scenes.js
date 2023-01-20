@@ -6,8 +6,13 @@
 // let sceneDeviceControlModalBrightnessSlider;
 // let sceneDeviceControlModalBrightnessDisplay;
 
+let deviceList;
+let selectedDevices;
+let updateSceneName;
 let sceneControlModal;
 let sceneControlModalHeader;
+let selectedIcon2;
+let icons2;
 let sceneControlModalLabel;
 
 $(document).ready(() => {
@@ -19,10 +24,13 @@ $(document).ready(() => {
     //         },
     //     ]
     // });
-
+    getAllDevices();
+    
+    groupControlModal = document.getElementById("group-control-modal")
     sceneControlModal = document.getElementById("scene-control-modal")
     sceneControlModalHeader = document.getElementById("scene-control-modal-header");
     sceneControlModalLabel = document.getElementById("scene-control-modal-label");
+    updateSceneName = document.getElementById("updateSceneName");
 
     // sceneDeviceControlModal = document.getElementById("device-control-modal")
     // sceneDeviceControlModalHeader = document.getElementById("device-control-modal-header");
@@ -71,9 +79,11 @@ $(document).ready(() => {
 function createScene() {
     let lights = []
 
-    for (let dev of [...document.getElementById('scene-control-device-list').childNodes]) {
+    for (let dev of document.getElementById('new-scene-device-list').children) {
+        console.log("Tach", dev);
         lights.push(dev.dataset["deviceId"]);
     }
+    
 
     console.log("du Hurensohn", lights);
 
@@ -83,7 +93,8 @@ function createScene() {
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
             action: 'create',
-            attributes: {'name': document.getElementById('inputSceneName').textContent}
+            attributes: {'name': document.getElementById('inputSceneName').value.toString()},
+            features: {'icon': selectedIcon2.toString()},
         },
         headers: {
             'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -94,21 +105,17 @@ function createScene() {
         success: function (data) {
             console.info(data);
 
-            let lights = []
 
-            for (let dev of [...document.getElementById('scene-control-device-list').childNodes]) {
-                lights.push(dev.dataset["deviceId"]);
-            }
 
             console.log("du Hurensohn", lights);
-
+            
             $.ajax({
                 url: './scene_change/',
                 type: 'POST',
                 data: {
                     csrfmiddlewaretoken: getCookie('csrftoken'),
                     action: 'update',
-                    scene_id: sceneControlModal.dataset['sceneId'],
+                    scene_id: data.response[0]["success"]["id"],
                     attributes: {'lights': lights}
                 },
                 headers: {
@@ -221,16 +228,17 @@ function saveSceneDataToLocalStorage(sceneId) {
 
 function getAllDevices() {
     let devices = JSON.parse(window.localStorage.getItem("devices"));
-
+    document.getElementById('new-scene-device-list').innerHTML = "";
+    document.getElementById('edit-scene-device-list').innerHTML = "";
     for (let entry in devices) {
         $.ajax({
             url: './kit/device-item2',
             type: 'get',
             data: {
                 "csrfmiddlewaretoken": getCookie('csrftoken'),
-                "device-id": entry['id'].toString(),
-                "device-name": entry['name'].toString(),
-                "device-type": entry['type'].toString(),
+                "device-id": devices[entry]['id'].toString(),
+                "device-name": devices[entry]['name'].toString(),
+                "device-type": devices[entry]['type'].toString(),
             },
             headers: {
                 'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -248,9 +256,9 @@ function getAllDevices() {
             type: 'get',
             data: {
                 "csrfmiddlewaretoken": getCookie('csrftoken'),
-                "device-id2": entry['id'].toString(),
-                "device-name2": entry['name'].toString(),
-                "device-type2": entry['type'].toString(),
+                "device-id2": devices[entry]['id'].toString(),
+                "device-name2": devices[entry]['name'].toString(),
+                "device-type2": devices[entry]['type'].toString(),
             },
             headers: {
                 'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -263,6 +271,14 @@ function getAllDevices() {
                 document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
             }
         });
+    }
+}
+
+function set_background_color(id) {
+    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)') {
+        document.getElementById(id).style.backgroundColor = "transparent";
+    } else {
+        document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
     }
 }
 
@@ -287,4 +303,62 @@ function activateScene(sceneId) {
             console.log("yes sir it hat wat jetan");
         }
     });
+}
+
+function getIconId2(IconId) {
+    icons2 = ["collection.svg", "house.svg", "controller.svg", "archive.svg", "book.svg", "wrench.svg", "brezel.png", "plugin.svg", "robot.svg"];
+    for (const tmp in icons2) {
+        document.getElementById(icons2[tmp]).style.backgroundColor = "transparent";
+    }
+    selectedIcon2 = IconId;
+    document.getElementById(selectedIcon2).style.backgroundColor = "var(--tertiary-color)";
+}
+
+function saveIcon2() {
+    document.getElementById('modal-body-edit').hidden = true;
+    document.getElementById('modal-body-normal').hidden = false;
+    selectedDevices = [];
+
+
+    for (let entry of deviceList) {
+        if (document.getElementById("checkInEditGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
+            selectedDevices.push(entry);
+        }
+    }
+    let sceneName = updateSceneName.value;
+
+
+
+    console.log("Selected Devices: " + selectedDevices);
+    console.log(sceneControlModal.dataset['sceneId']);
+    console.log(selectedIcon2);
+    console.log(sceneName);
+
+    let formData = new FormData();
+    formData.append('sceneId', sceneControlModal.dataset['sceneId']);
+    formData.append('sceneName', updateSceneName.value);
+    formData.append('selectedDevices', selectedDevices);
+    formData.append('selectedIcon', selectedIcon2);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    const http = new XMLHttpRequest();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+        } else {
+            console.log("Fehler beim Erstellen der Gruppe");
+        }
+    }
+    http.open('POST', './updategroup/');
+    http.send(formData);
+}
+
+function setIcon2(IconId) {
+    icons = ["tmp_collection.svg", "tmp_house.svg", "tmp_controller.svg", "tmp_archive.svg", "tmp_book.svg", "tmp_wrench.svg", "tmp_brezel.png", "tmp_plugin.svg", "tmp_robot.svg"];
+    for (const tmp in icons) {
+        document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
+    }
+    document.getElementById(IconId).style.backgroundColor = "var(--tertiary-color)";
+    const tmp_array = IconId.split("_");
+    selectedIcon2 = tmp_array[1];
 }

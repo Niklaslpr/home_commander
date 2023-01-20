@@ -243,6 +243,7 @@ function createGroup(){
         let formData = new FormData();
         formData.append('groupName', newGroupName);
         formData.append('selectedDevices', selectedDevices);
+        formData.append('selectedIcon', selectedIcon);
         formData.append('csrfmiddlewaretoken', csrftoken);
         const http = new XMLHttpRequest();
 
@@ -293,6 +294,7 @@ function saveIcon(){
     formData.append('groupId', groupControlModal.dataset['groupId']);
     formData.append('groupName', groupName);
     formData.append('selectedDevices', selectedDevices);
+    formData.append('selectedIcon', selectedIcon);
     formData.append('csrfmiddlewaretoken', csrftoken);
     const http = new XMLHttpRequest();
 

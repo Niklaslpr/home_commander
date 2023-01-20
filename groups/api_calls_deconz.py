@@ -50,7 +50,7 @@ def createGroup(groupName, selectedDevices):
     new_log_entry = LogEntry(message="Gruppe " + groupName + " wurde erstellt")
     new_log_entry.save()
 
-    return p.status_code
+    return p.json()
 
 def updateGroup(groupName, selectedDevices, groupId):
     selectedDevices = selectedDevices.split(",")
@@ -75,7 +75,7 @@ def updateGroup(groupName, selectedDevices, groupId):
 
 def create_group(request_data):
     if isinstance(request_data, dict) and request_data != {}:
-        response = requests.post(url=DECONZ_GROUPS_URL, data=request_data)
+        response = requests.post(url=DECONZ_GROUPS_URL, data=json.dumps(request_data))
         response = response.json()
     else:
         response = None

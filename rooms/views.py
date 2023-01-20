@@ -10,6 +10,8 @@ from rooms.api_calls_deconz import putHue, putBri
 from rooms.api_calls_deconz import deleteGroup
 from main.views import get_data_from_input, DECONZ_URL, API_KEY, TEST
 import rooms.helper as helper
+from groups.models import Group
+from main.views import ICON_PATH
 
 @login_required
 def rooms(response):
@@ -39,12 +41,28 @@ def groupsetbri(response):
 def creategroup(response):
     if response.method == 'POST':
         newgroup = createGroup(response.POST['groupName'], response.POST['selectedDevices'])
+        print("HIER", newgroup)
+        new_group = Group(group_id=newgroup[0]["success"]["id"].__str__(),
+                                    name=response.POST["groupName"],
+                                    is_room=False)
+        new_group.icon = response.POST["selectedIcon"]
+        new_group.save()
     return HttpResponse(newgroup)
 
 @login_required
 def updategroup(response):
     if response.method == 'POST':
+        
+        group_id = response.POST['groupId']
+        group_name = response.POST['groupName']
+        group_devices = response.POST['selectedDevices']
+        group_icon = response.POST['selectedIcon']
         updategroup = updateGroup(response.POST['groupName'], response.POST['selectedDevices'], response.POST['groupId'])
+        
+        group = Group.objects.get(group_id__exact=group_id.__str__())
+        group.icon = group_icon
+        group.save()
+        
     return HttpResponse(updategroup)
 
 @login_required
@@ -74,8 +92,11 @@ def get_all_group_data(request):
         data = get_data_from_input(request)
 
         response = helper.get_group_data_from_deconz(-1, request.user.get_username())
+        for entry in response:
+            group = Group.objects.get(group_id__exact=entry['id'].__str__())
+            entry["icon"] = ICON_PATH + group.icon
         response = {"groupsCollection": response}
-
+        print("HIIIIIIER", response)
         return JsonResponse(response)
 
 

@@ -47,7 +47,7 @@ def createGroup(groupName, selectedDevices):
         groupName = groupName.replace("room_", "")
     new_log_entry = LogEntry(message="Raum " + groupName + " wurde erstellt")
     new_log_entry.save()
-    return p.status_code
+    return p.json()
     
 def updateGroup(groupName, selectedDevices, groupId):
     selectedDevices = selectedDevices.split(",")

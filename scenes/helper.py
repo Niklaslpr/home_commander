@@ -41,7 +41,7 @@ def format_scene_data_from_deconz(scene_id, data):
     return response
 
 
-def format_scene_attributes_for_deconz(name=None):
+def format_scene_attributes_for_deconz(name=None, lights=None):
     request_data = {}
     errors = []
 
@@ -49,7 +49,12 @@ def format_scene_attributes_for_deconz(name=None):
         request_data["name"] = name
     elif name is not None:
         errors += ["name"]
-
+    
+    if lights is not None and isinstance(lights, list):
+        request_data["lights"] = lights
+    elif lights is not None:
+        errors += ["lights"]
+        
     return {"error": errors, "request_data": request_data}
 
 
@@ -259,8 +264,8 @@ def update_scene_light_state_deconz(scene_id, light_id, alert=None, brightness=N
     return {"error": zwErg["error"], "response": response}
 
 
-def update_scene_deconz(scene_id, name=None):
-    zwErg = format_scene_attributes_for_deconz(name)
+def update_scene_deconz(scene_id, name=None, lights=None):
+    zwErg = format_scene_attributes_for_deconz(name, lights)
 
     response = deconz_api.update_scene_attributes(str(get_scenes_group_id_from_deconz()), scene_id.__str__(),
                                                   zwErg["request_data"])

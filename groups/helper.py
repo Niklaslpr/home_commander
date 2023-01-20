@@ -6,7 +6,7 @@ from main.views import TEST
 
 def format_group_data_from_deconz(group_id, data, devices=None):
     return {"id": group_id,
-            "name": data["name"].split("_")[4] if "name" in data.keys() else "unknown group name",
+            "name": data["name"] if "name" in data.keys() else "unknown group name",
             "devices": devices if devices is not None else [],
             "on": data["action"]["on"] if "action" in data.keys() and "on" in data[
                 "action"].keys() else False,
@@ -174,12 +174,9 @@ def get_group_data_from_deconz(id, username=None):
 
                     # TODO: Loop over Sensors to find all Sensors related to that Group!
 
-                    if (zwErg["name"].split("_")[2] if "name" in zwErg.keys() else "") == "group" and (
-                            zwErg["name"].split("_")[3] if "name" in zwErg.keys() else "") in ["all", username]:
-                        response += [format_group_data_from_deconz(key, zwErg, devices)]
-                    else:
-                        # nothing so far
-                        pass
+                    
+                    response += [format_group_data_from_deconz(key, zwErg, devices)]
+                    
 
                 # else:
                     # # nothing so far

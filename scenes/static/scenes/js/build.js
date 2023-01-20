@@ -15,7 +15,7 @@ function loadScenes() {
             console.info(data);
 
             let scenesJson = {};
-            for (let entry of data.scenes.reverse()) {
+            for (let entry of data.scenes) {
                 scenesJson[entry['id']] = entry;
 
                 $.ajax({

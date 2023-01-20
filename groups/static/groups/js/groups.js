@@ -97,50 +97,50 @@ $(document).ready(() => {
 
     let newGroupName = document.getElementById('inputGroupName');
 
-    document.getElementById('createGroup').addEventListener('click', function () {
-        // let formData = new FormData();
-        // formData.append('groupName', newGroupName.value);
-        // formData.append('csrfmiddlewaretoken', csrftoken);
-        //
-        // const http = new XMLHttpRequest();
-        //
-        // http.onreadystatechange = function () {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         location.reload();
-        //     }
-        // }
-        //
-        // http.open('POST', '/creategroup/');
-        // http.send(formData);
+    //document.getElementById('createGroup').addEventListener('click', function () {
+         //let formData = new FormData();
+         //formData.append('groupName', newGroupName.value);
+         //formData.append('csrfmiddlewaretoken', csrftoken);
+        
+         //const http = new XMLHttpRequest();
+        
+         //http.onreadystatechange = function () {
+             //if (this.readyState == 4 && this.status == 200) {
+                 //location.reload();
+             //}
+         //}
+        
+         //http.open('POST', '/creategroup/');
+         //http.send(formData);
 
-        $.ajax({
-            url: './group_change/',
-            type: 'POST',
-            data: {
-                csrfmiddlewaretoken: getCookie('csrftoken'),
-                action: 'create',
-                attributes: {'name': newGroupName.value},
-                features: {'icon': selectedIcon}
-            },
-            headers: {
-                'Content-type': 'application/json', 'Accept': 'text/plain',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            dataType: 'json',
-            mode: 'same-origin',
-            success: function (data) {
-                console.info(data);
+        //$.ajax({
+            //url: './group_change/',
+            //type: 'POST',
+            //data: {
+                //csrfmiddlewaretoken: getCookie('csrftoken'),
+                //action: 'create',
+                //attributes: {'name': newGroupName.value},
+                //features: {'icon': selectedIcon}
+            //},
+            //headers: {
+                //'Content-type': 'application/json', 'Accept': 'text/plain',
+                //'X-CSRFToken': getCookie('csrftoken')
+            //},
+            //dataType: 'json',
+            //mode: 'same-origin',
+            //success: function (data) {
+                //console.info(data);
 
-                // let groups = JSON.parse(window.localStorage.getItem('groups'))
-                // groups[data.group_id]['name'] = data.name;
-                // window.localStorage.setItem('groups', JSON.stringify(groups));
-            }
-        }).always((data) => {
-            if (data.readyState === 4 && data.status === 200) {
-                location.reload();
-            }
-        });
-    })
+                 //let groups = JSON.parse(window.localStorage.getItem('groups'))
+                 //groups[data.group_id]['name'] = data.name;
+                 //window.localStorage.setItem('groups', JSON.stringify(groups));
+            //}
+        //}).always((data) => {
+            //if (data.readyState === 4 && data.status === 200) {
+                //location.reload();
+            //}
+        //});
+    //})
     deleteGroupButton = document.getElementById("deleteGroup");
     deleteGroupButton.addEventListener('click', function () {
 
@@ -277,10 +277,12 @@ function createGroup() {
     newGroupName = document.getElementById('inputGroupName');
     console.log(newGroupName.value);
     console.log(selectedIcon);
+    console.log("HIER");
     console.log(deviceList);
-
+    
     for (let entry of deviceList) {
-        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)') {
+        
+        if (document.getElementById("checkInNewGroup-" + entry).style.backgroundColor == 'var(--tertiary-color)') {
             selectedDevices.push(entry);
         }
     }
@@ -288,6 +290,7 @@ function createGroup() {
 
     let formData = new FormData();
     formData.append('groupName', newGroupName.value);
+    formData.append('selectedIcon', selectedIcon);
     formData.append('selectedDevices', selectedDevices);
     formData.append('csrfmiddlewaretoken', csrftoken);
     const http = new XMLHttpRequest();
@@ -322,7 +325,7 @@ function saveIcon() {
 
 
     for (let entry of deviceList) {
-        if (document.getElementById("checkInGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
+        if (document.getElementById("checkInEditGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
             selectedDevices.push(entry);
         }
     }
@@ -339,6 +342,7 @@ function saveIcon() {
     formData.append('groupId', groupControlModal.dataset['groupId']);
     formData.append('groupName', updateGroupName.value);
     formData.append('selectedDevices', selectedDevices);
+    formData.append('selectedIcon', selectedIcon);
     formData.append('csrfmiddlewaretoken', csrftoken);
     const http = new XMLHttpRequest();
 
