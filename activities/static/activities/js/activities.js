@@ -1,11 +1,14 @@
+let x;
+let z;
 function loadLogs() {
+	
 	$.ajax({
 		url: './load_logs',
-		type: 'post',
+		type: 'get',
 		data: {
 			csrfmiddlewaretoken: getCookie('csrftoken'),
-			'a': 0,
-			'b': 10,
+			'a': x,
+			'b': x+10,
 		},
 		headers: {
             'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -14,9 +17,23 @@ function loadLogs() {
 		dataType: 'json',
         mode: 'same-origin',
         success: function (data) {
-			console.log(data)
+			console.log(data);
+			
+			if (data["timestamp0"] == "stop"){
+				document.getElementById("show-next-logs").innerHTML = "Keine weiteren Einträge";
+				document.getElementById("show-next-logs").disabled = true;
+				document.getElementById("show-next-logs").style.backgroundColor = "";
+				document.getElementById("show-next-logs").classList.add("btn-secondary");
+			}
+			z = 0;
+			while (z < 10){
+				document.getElementById("timestamp" + z).innerHTML = data["timestamp"+z];
+				document.getElementById("message" + z).innerHTML = data["message"+z];
+				z += 1;
+			}
 		}
 	})
+	x += 10;
 }
 
 
@@ -72,7 +89,7 @@ function loadLogs() {
 //}
 
 $(document).ready(() => {
-  
+	x = 10;
 });
 
 

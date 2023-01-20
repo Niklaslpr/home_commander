@@ -116,7 +116,7 @@ def updateRule(rule_name, rule_group, rule_time, rule_days, repeat_rule, rule_id
         rule_date = 'W' + str(rule_days_bit) + '/'
         print(rule_date)
     
-    data = '{"name": "' + rule_name + '", "command": {"address": "' + '/api/' + API_KEY + '/groups/' + rule_group + '/scenes/' + scene_id + '/recall", "method": "PUT", "body": {} },"autodelete": false,"localtime": "' + rule_date + 'T' + rule_time + ':00"}'
+    data = '{"name": "' + rule_name + '", "command": {"address": "' + '/api/' + API_KEY + '/groups/' + rule_group + '/scenes/' + scene_id + '/recall", "method": "PUT", "body": {} },"autodelete": false, "status": "enabled","localtime": "' + rule_date + 'T' + rule_time + ':00"}'
     print(data)
     url = DECONZ_SCHEDULE_URL + '/' + rule_id
     response = requests.put(url, data = data)
