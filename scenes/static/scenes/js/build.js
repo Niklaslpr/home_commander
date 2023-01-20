@@ -15,10 +15,13 @@ function loadScenes() {
             console.info(data);
 
             let scenesJson = {};
+            console.log("A", data.scenes);
             for (let group in data.scenes) {
+                scenesJson[group] = {};
                 for (let entry of data.scenes[group]) {
-                    scenesJson[entry['id']] = entry;
-                    scenesJson[entry['id']]['group_id'] = group;
+                    
+                    scenesJson[group][entry['id']] = entry;
+                    scenesJson[group][entry['id']]['group_id'] = group;
 
                     $.ajax({
                         url: './kit/scene-tile',
@@ -28,6 +31,7 @@ function loadScenes() {
                             "scene-id": entry['id'].toString(),
                             "scene-name": entry['name'].toString(),
                             "scene-icon": entry['icon'].toString(),
+                            "group-id": group.toString()
                         },
                         headers: {
                             'Content-type': 'application/json', 'Accept': 'text/plain',

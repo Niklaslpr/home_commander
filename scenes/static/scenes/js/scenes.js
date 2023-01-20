@@ -180,14 +180,17 @@ function saveSceneState() {
     });
 }
 
-function loadSceneDataToModal(sceneId) {
+function loadSceneDataToModal(group_id, sceneId) {
     let scenes = JSON.parse(window.localStorage.getItem("scenes"));
     document.getElementById('deviceEditToggle').hidden = true;
-
-    if (scenes.hasOwnProperty(sceneId)) {
-        let currentScene = scenes[sceneId];
-
+    console.log("HI", scenes);
+    if (scenes.hasOwnProperty(group_id)) {
+        let currentScene = scenes[group_id][sceneId];
+        console.log("Hier");
+        console.log(scenes);
+        console.log(currentScene);
         document.getElementById('scene-control-device-list').innerHTML = '';
+        document.getElementById('scene-control-group').innerHTML = '';
 
         sceneControlModal.dataset['sceneId'] = currentScene['id'];
         sceneControlModal.dataset['sceneName'] = currentScene['name'];
@@ -238,7 +241,7 @@ function loadSceneDataToModal(sceneId) {
                 mode: 'same-origin'
             }).always((data) => {
                 if (data.readyState === 4 && data.status === 200) {
-                    document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    document.getElementById('scene-control-group').insertAdjacentHTML('afterbegin', data.responseText.toString());
                 }
             });
 
