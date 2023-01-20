@@ -28,6 +28,7 @@ function loadScenes() {
                             "scene-id": entry['id'].toString(),
                             "scene-name": entry['name'].toString(),
                             "scene-icon": entry['icon'].toString(),
+                            "group-id": group.toString()
                         },
                         headers: {
                             'Content-type': 'application/json', 'Accept': 'text/plain',

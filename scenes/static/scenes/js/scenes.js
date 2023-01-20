@@ -180,12 +180,12 @@ function saveSceneState() {
     });
 }
 
-function loadSceneDataToModal(sceneId) {
+function loadSceneDataToModal(group_id, sceneId) {
     let scenes = JSON.parse(window.localStorage.getItem("scenes"));
     document.getElementById('deviceEditToggle').hidden = true;
 
-    if (scenes.hasOwnProperty(sceneId)) {
-        let currentScene = scenes[sceneId];
+    if (scenes.hasOwnProperty(group_id)) {
+        let currentScene = scenes[group_id][sceneId];
 
         document.getElementById('scene-control-device-list').innerHTML = '';
 
@@ -238,7 +238,7 @@ function loadSceneDataToModal(sceneId) {
                 mode: 'same-origin'
             }).always((data) => {
                 if (data.readyState === 4 && data.status === 200) {
-                    document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                    document.getElementById('scene-control-group').insertAdjacentHTML('afterbegin', data.responseText.toString());
                 }
             });
 
