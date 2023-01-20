@@ -15,7 +15,7 @@
                                onchange="lightOnOff(document.getElementById('device-control-modal-switch').checked, document.getElementById('device-control-modal').dataset['deviceId'])">
                     </div>
                 </div>
-                <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="toggleEdit(false)" height="35" alt="">
+                <input id="deviceEditToggle" type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}" onclick="toggleEdit(false)" height="35" alt="">
             </div>
 
             <div class="modal-body text-center" id="modal-body-edit" hidden>

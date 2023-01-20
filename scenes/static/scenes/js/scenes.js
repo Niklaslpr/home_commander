@@ -24,8 +24,8 @@ $(document).ready(() => {
     //         },
     //     ]
     // });
-    getAllDevices();
-    
+    getAllGroups();
+
     groupControlModal = document.getElementById("group-control-modal")
     sceneControlModal = document.getElementById("scene-control-modal")
     sceneControlModalHeader = document.getElementById("scene-control-modal-header");
@@ -77,15 +77,13 @@ $(document).ready(() => {
 });
 
 function createScene() {
-    let lights = []
+    let groupId = null;
 
-    for (let dev of document.getElementById('new-scene-device-list').children) {
-        console.log("Tach", dev);
-        lights.push(dev.dataset["deviceId"]);
+    for (let dev of document.getElementById('new-scene-group-list').children) {
+        if (document.getElementById("checkInNewScene-" + dev.dataset["groupId"]).style.backgroundColor === 'var(--tertiary-color)') {
+            groupId = dev.dataset["groupId"];
+        }
     }
-    
-
-    console.log("du Hurensohn", lights);
 
     $.ajax({
         url: './scene_change/',
@@ -93,6 +91,7 @@ function createScene() {
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
             action: 'create',
+            group_id: groupId.toString(),
             attributes: {'name': document.getElementById('inputSceneName').value.toString()},
             features: {'icon': selectedIcon2.toString()},
         },
@@ -105,31 +104,29 @@ function createScene() {
         success: function (data) {
             console.info(data);
 
+            location.reload();
 
-
-            console.log("du Hurensohn", lights);
-            
-            $.ajax({
-                url: './scene_change/',
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: getCookie('csrftoken'),
-                    action: 'update',
-                    scene_id: data.response[0]["success"]["id"],
-                    attributes: {'lights': lights}
-                },
-                headers: {
-                    'Content-type': 'application/json', 'Accept': 'text/plain',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                dataType: 'json',
-                mode: 'same-origin',
-                success: function (data) {
-                    console.info(data);
-
-                    location.reload();
-                }
-            });
+            // $.ajax({
+            //     url: './scene_change/',
+            //     type: 'POST',
+            //     data: {
+            //         csrfmiddlewaretoken: getCookie('csrftoken'),
+            //         action: 'update',
+            //         scene_id: data.response[0]["success"]["id"],
+            //         attributes: {'lights': lights}
+            //     },
+            //     headers: {
+            //         'Content-type': 'application/json', 'Accept': 'text/plain',
+            //         'X-CSRFToken': getCookie('csrftoken')
+            //     },
+            //     dataType: 'json',
+            //     mode: 'same-origin',
+            //     success: function (data) {
+            //         console.info(data);
+            //
+            //         location.reload();
+            //     }
+            // });
         }
     });
 }
@@ -141,7 +138,33 @@ function deleteScene() {
         data: {
             csrfmiddlewaretoken: getCookie('csrftoken'),
             action: 'delete',
+            group_id: sceneControlModal.dataset['groupId'],
             scene_id: sceneControlModal.dataset['sceneId']
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+
+            location.reload();
+        }
+    });
+}
+
+function saveSceneState() {
+    $.ajax({
+        url: './scene_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'delete',
+            group_id: sceneControlModal.dataset['groupId'],
+            scene_id: sceneControlModal.dataset['sceneId'],
+            states: {"all": "store_current_states"}
         },
         headers: {
             'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -159,7 +182,7 @@ function deleteScene() {
 
 function loadSceneDataToModal(sceneId) {
     let scenes = JSON.parse(window.localStorage.getItem("scenes"));
-    console.log(scenes);
+    document.getElementById('deviceEditToggle').hidden = true;
 
     if (scenes.hasOwnProperty(sceneId)) {
         let currentScene = scenes[sceneId];
@@ -168,6 +191,7 @@ function loadSceneDataToModal(sceneId) {
 
         sceneControlModal.dataset['sceneId'] = currentScene['id'];
         sceneControlModal.dataset['sceneName'] = currentScene['name'];
+        sceneControlModal.dataset['groupId'] = currentScene['group_id'];
         sceneControlModalLabel.innerText = currentScene['name'];
 
         let deviceType = null;
@@ -193,6 +217,30 @@ function loadSceneDataToModal(sceneId) {
                 }
             });
         }
+
+        let groups = JSON.parse(window.localStorage.getItem("groups"));
+
+        $.ajax({
+                url: './kit/group-item3',
+                type: 'get',
+                data: {
+                    "csrfmiddlewaretoken": getCookie('csrftoken'),
+                    "group-id2": currentScene['group_id'].toString(),
+                    "group-name2": groups[currentScene['group_id']]['name'],
+                    "group-icon2": groups[currentScene['group_id']]['icon'],
+                    // "device-type": entry['type'].toString(),
+                },
+                headers: {
+                    'Content-type': 'application/json', 'Accept': 'text/plain',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                dataType: 'json',
+                mode: 'same-origin'
+            }).always((data) => {
+                if (data.readyState === 4 && data.status === 200) {
+                    document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                }
+            });
 
         // console.log('currentGroup', currentGroup);
         // groupControlModalSwitch.checked = currentGroup['on'];
@@ -226,63 +274,118 @@ function saveSceneDataToLocalStorage(sceneId) {
     }
 }
 
-function getAllDevices() {
-    let devices = JSON.parse(window.localStorage.getItem("devices"));
-    document.getElementById('new-scene-device-list').innerHTML = "";
-    document.getElementById('edit-scene-device-list').innerHTML = "";
-    for (let entry in devices) {
-        $.ajax({
-            url: './kit/device-item2',
-            type: 'get',
-            data: {
-                "csrfmiddlewaretoken": getCookie('csrftoken'),
-                "device-id": devices[entry]['id'].toString(),
-                "device-name": devices[entry]['name'].toString(),
-                "device-type": devices[entry]['type'].toString(),
-            },
-            headers: {
-                'Content-type': 'application/json', 'Accept': 'text/plain',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            dataType: 'json',
-            mode: 'same-origin'
-        }).always((data) => {
-            if (data.readyState === 4 && data.status === 200) {
-                document.getElementById('new-scene-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+function getAllGroups() {
+    document.getElementById('new-scene-group-list').innerHTML = "";
+    // document.getElementById('edit-scene-group-list').innerHTML = "";
+
+    $.ajax({
+        url: '/groups/group_info/all',
+        type: 'get',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+
+            let groupsJson = {};
+            for (let entry of data.groupsCollection.reverse()) {
+                groupsJson[entry['id']] = entry;
+                if (entry['name'].startsWith('room_')) {
+
+                } else {
+                    $.ajax({
+                        url: './kit/group-item2',
+                        type: 'get',
+                        data: {
+                            "csrfmiddlewaretoken": getCookie('csrftoken'),
+                            "group-id": entry['id'].toString(),
+                            "group-name": entry['name'].toString(),
+                            "group-icon": entry['icon'].toString(),
+                        },
+                        headers: {
+                            'Content-type': 'application/json', 'Accept': 'text/plain',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        dataType: 'json',
+                        mode: 'same-origin'
+                    }).always((data) => {
+                        if (data.readyState === 4 && data.status === 200) {
+                            document.getElementById('new-scene-group-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+                        }
+                    });
+                }
             }
-        });
-        $.ajax({
-            url: './kit/device-item3',
-            type: 'get',
-            data: {
-                "csrfmiddlewaretoken": getCookie('csrftoken'),
-                "device-id2": devices[entry]['id'].toString(),
-                "device-name2": devices[entry]['name'].toString(),
-                "device-type2": devices[entry]['type'].toString(),
-            },
-            headers: {
-                'Content-type': 'application/json', 'Accept': 'text/plain',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            dataType: 'json',
-            mode: 'same-origin'
-        }).always((data) => {
-            if (data.readyState === 4 && data.status === 200) {
-                document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
-            }
-        });
-    }
+
+            window.localStorage.setItem('groups', JSON.stringify(groupsJson));
+        }
+    });
+
+    // let devices = JSON.parse(window.localStorage.getItem("devices"));
+    // document.getElementById('new-scene-device-list').innerHTML = "";
+    // document.getElementById('edit-scene-device-list').innerHTML = "";
+    // for (let entry in devices) {
+    //     $.ajax({
+    //         url: './kit/device-item2',
+    //         type: 'get',
+    //         data: {
+    //             "csrfmiddlewaretoken": getCookie('csrftoken'),
+    //             "device-id": devices[entry]['id'].toString(),
+    //             "device-name": devices[entry]['name'].toString(),
+    //             "device-type": devices[entry]['type'].toString(),
+    //         },
+    //         headers: {
+    //             'Content-type': 'application/json', 'Accept': 'text/plain',
+    //             'X-CSRFToken': getCookie('csrftoken')
+    //         },
+    //         dataType: 'json',
+    //         mode: 'same-origin'
+    //     }).always((data) => {
+    //         if (data.readyState === 4 && data.status === 200) {
+    //             document.getElementById('new-scene-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+    //         }
+    //     });
+    //     $.ajax({
+    //         url: './kit/device-item3',
+    //         type: 'get',
+    //         data: {
+    //             "csrfmiddlewaretoken": getCookie('csrftoken'),
+    //             "device-id2": devices[entry]['id'].toString(),
+    //             "device-name2": devices[entry]['name'].toString(),
+    //             "device-type2": devices[entry]['type'].toString(),
+    //         },
+    //         headers: {
+    //             'Content-type': 'application/json', 'Accept': 'text/plain',
+    //             'X-CSRFToken': getCookie('csrftoken')
+    //         },
+    //         dataType: 'json',
+    //         mode: 'same-origin'
+    //     }).always((data) => {
+    //         if (data.readyState === 4 && data.status === 200) {
+    //             document.getElementById('scene-control-device-list').insertAdjacentHTML('afterbegin', data.responseText.toString());
+    //         }
+    //     });
+    // }
 }
 
 function set_background_color(id) {
-    if (document.getElementById(id).style.backgroundColor == 'var(--tertiary-color)') {
+    for (let dev of document.querySelectorAll('.checkInNewScene')) {
+        dev.style.backgroundColor = "transparent";
+    }
+
+    if (document.getElementById(id).style.backgroundColor === 'var(--tertiary-color)') {
         document.getElementById(id).style.backgroundColor = "transparent";
     } else {
         document.getElementById(id).style.backgroundColor = 'var(--tertiary-color)';
     }
 }
 
-function activateScene(sceneId) {
+function activateScene() {
     $.ajax({
         url: './scene_change/',
         type: 'POST',
@@ -290,6 +393,7 @@ function activateScene(sceneId) {
             csrfmiddlewaretoken: getCookie('csrftoken'),
             action: 'update',
             scene_id: sceneControlModal.dataset['sceneId'],
+            group_id: sceneControlModal.dataset['groupId'],
             states: {'on': 'y'}
         },
         headers: {
@@ -315,42 +419,65 @@ function getIconId2(IconId) {
 }
 
 function saveIcon2() {
+    console.log("aba hier oda was");
     document.getElementById('modal-body-edit').hidden = true;
     document.getElementById('modal-body-normal').hidden = false;
-    selectedDevices = [];
 
-
-    for (let entry of deviceList) {
-        if (document.getElementById("checkInEditGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
-            selectedDevices.push(entry);
-        }
-    }
-    let sceneName = updateSceneName.value;
-
-
-
-    console.log("Selected Devices: " + selectedDevices);
-    console.log(sceneControlModal.dataset['sceneId']);
-    console.log(selectedIcon2);
-    console.log(sceneName);
-
-    let formData = new FormData();
-    formData.append('sceneId', sceneControlModal.dataset['sceneId']);
-    formData.append('sceneName', updateSceneName.value);
-    formData.append('selectedDevices', selectedDevices);
-    formData.append('selectedIcon', selectedIcon2);
-    formData.append('csrfmiddlewaretoken', csrftoken);
-    const http = new XMLHttpRequest();
-
-    http.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+    $.ajax({
+        url: './scene_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'update',
+            scene_id: sceneControlModal.dataset['sceneId'],
+            group_id: sceneControlModal.dataset['groupId'],
+            features: {'icon': selectedIcon2} // TODO: CHANGE
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+            console.log("yes sir it hat wat jetan");
             location.reload();
-        } else {
-            console.log("Fehler beim Erstellen der Gruppe");
         }
-    }
-    http.open('POST', './updategroup/');
-    http.send(formData);
+    });
+    // selectedDevices = [];
+    //
+    //
+    // for (let entry of deviceList) {
+    //     if (document.getElementById("checkInEditGroup-" + entry).style.backgroundColor === 'var(--tertiary-color)') {
+    //         selectedDevices.push(entry);
+    //     }
+    // }
+    // let sceneName = updateSceneName.value;
+    //
+    //
+    // console.log("Selected Devices: " + selectedDevices);
+    // console.log(sceneControlModal.dataset['sceneId']);
+    // console.log(selectedIcon2);
+    // console.log(sceneName);
+    //
+    // let formData = new FormData();
+    // formData.append('sceneId', sceneControlModal.dataset['sceneId']);
+    // formData.append('sceneName', updateSceneName.value);
+    // formData.append('selectedDevices', selectedDevices);
+    // formData.append('selectedIcon', selectedIcon2);
+    // formData.append('csrfmiddlewaretoken', csrftoken);
+    // const http = new XMLHttpRequest();
+    //
+    // http.onreadystatechange = function () {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         location.reload();
+    //     } else {
+    //         console.log("Fehler beim Erstellen der Gruppe");
+    //     }
+    // }
+    // http.open('POST', './updategroup/');
+    // http.send(formData);
 }
 
 function setIcon2(IconId) {
@@ -361,4 +488,35 @@ function setIcon2(IconId) {
     document.getElementById(IconId).style.backgroundColor = "var(--tertiary-color)";
     const tmp_array = IconId.split("_");
     selectedIcon2 = tmp_array[1];
+}
+
+function set_color_background_devices() {
+    document.getElementById("list-device-item-" + deviceControlModal.dataset["deviceId"]).style.backgroundColor = deviceControlModalHeader.style.backgroundColor;
+}
+
+
+function saveSceneName() {
+    console.log("do it");
+    $.ajax({
+        url: './scene_change/',
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: getCookie('csrftoken'),
+            action: 'update',
+            scene_id: sceneControlModal.dataset['sceneId'],
+            group_id: sceneControlModal.dataset['groupId'],
+            attributes: {'name': document.getElementById('updateSceneName').value} // TODO: CHANGE
+        },
+        headers: {
+            'Content-type': 'application/json', 'Accept': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        dataType: 'json',
+        mode: 'same-origin',
+        success: function (data) {
+            console.info(data);
+            console.log("yes sir it hat wat jetan");
+            location.reload();
+        }
+    });
 }

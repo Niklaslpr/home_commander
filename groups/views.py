@@ -108,6 +108,7 @@ def get_all_group_data(request):
         for entry in response:
             group = Group.objects.get(group_id__exact=entry["id"].__str__())
             entry["icon"] = ICON_PATH + group.icon
+            # entry["icon"] = ICON_PATH + "apple.svg"
 
         response = {"groupsCollection": response}
 

@@ -11,7 +11,7 @@
 {% endblock %}
 {% block content %}
     <h1>Szenen
-        <a href="" data-bs-toggle="modal" data-bs-target="#new-scene-modal" onclick="getAllDevices()">
+        <a href="" data-bs-toggle="modal" data-bs-target="#new-scene-modal" onclick="getAllGroups()">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}"
                  height="50" alt="">
         </a>
@@ -84,6 +84,7 @@
                 <!-- Scene Control Modal -->
                 <div class="modal fade" id="scene-control-modal"
                      onblur="saveSceneDataToLocalStorage(document.getElementById('scene-control-modal').dataset['sceneId'])"
+                     onfocusin="set_color_background_devices()"
                      tabindex="-1" aria-labelledby="scene-control-modal-label" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -103,15 +104,15 @@
 {#                                    </div>#}
                                 </div>
                                 <input type="image" src="{% static "main/pictures/bootstrap_icons/pencil-square.svg" %}"
-                                       onclick="document.getElementById('scene-control-modal-button').hidden = true; document.getElementById('scene-control-modal-label').hidden = true; document.getElementById('updateSceneName').hidden = false; document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true"
+                                       onclick="document.getElementById('scene-control-modal-button').hidden = true; document.getElementById('scene-control-modal-label').hidden = true; document.getElementById('updateSceneName').hidden = false; document.getElementById('modal-body-edit').hidden = false; document.getElementById('modal-body-normal').hidden = true;document.getElementById('updateSceneName').value = document.getElementById('scene-control-modal').dataset['sceneName'];"
                                        height="35" alt="">
                             </div>
 
                             <div class="modal-body text-center" id="modal-body-edit" hidden>
 
-                                <h6>Geräte auswählen:</h6>
-                                <ul class="list-group" id="edit-scene-device-list">
-                                </ul>
+{#                                <h6>Geräte auswählen:</h6>#}
+{#                                <ul class="list-group" id="edit-scene-device-list">#}
+{#                                </ul>#}
                                 <table class="table table-borderless"
                                        style="border-collapse: separate; border-spacing: 0 20px">
                                     <tbody>
@@ -160,13 +161,16 @@
                                     </tbody>
                                 </table>
                                 <button type="button" class="btn mt-5" id="saveIcon"
-                                        style="background-color: var(--tertiary-color)" onclick="saveIcon2()">Speichern
+                                        style="background-color: var(--tertiary-color)" onclick="saveIcon2();saveSceneName();">Speichern
                                 </button>
                             </div>
 
                             <div class="modal-body text-center" id="modal-body-normal">
+                                <h6>Gruppe:</h6>
+                                <ul class="list-group" id="scene-control-group">
+                                </ul>
                                 <h6>Geräte:</h6>
-                                <ul class="list-scene" id="scene-control-device-list">
+                                <ul class="list-group" id="scene-control-device-list">
                                 </ul>
                                 {#                                <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px"#}
                                 {#                                     id="scene-control-modal-colorpicker"></div>#}
@@ -178,7 +182,9 @@
                                 <button type="button" class="btn btn-danger mt-5" id="deleteScene"
                                         onclick="deleteScene()">Löschen
                                 </button>
-
+                                <button type="button" class="btn mt-5" id="saveScene"
+                                        style="background-color: var(--tertiary-color)" onclick="saveSceneState()">Speichern
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -254,8 +260,8 @@
                                 <label for="inputSceneName" class="form-label">Name</label>
                                 <input style="" type="text" id="inputSceneName" class="form-control"
                                        aria-describedby="inputSceneName">
-                                <h6>Geräte auswählen:</h6>
-                                <ul class="list-group" id="new-scene-device-list">
+                                <h6>Gruppe auswählen:</h6>
+                                <ul class="list-group" id="new-scene-group-list">
                                 </ul>
                                 <h6>Icon auswählen:</h6>
                                 <table class="table table-borderless"
