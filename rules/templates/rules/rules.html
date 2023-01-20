@@ -16,7 +16,7 @@
 
 
 {% block content %}
-    <h1>Regeln
+    <h1>Regeln / Automatisches Einschalten
         <a href="" data-bs-toggle="modal" data-bs-target="#modalNewRule" onclick="set_background_color_transparend_new();">
             <img style="float: right" src="{% static "main/pictures/bootstrap_icons/plus-circle-fill.svg" %}" height="50" alt="">
         </a>
@@ -110,7 +110,7 @@
                                 <label for="inputRuleName" class="form-label">Name</label>
                                 <input style="" type="text" id="inputRuleName" class="form-control"
                                        aria-describedby="inputRuleName">
-                                <h6 style="margin-top: 25px;">Gerät oder Gruppe auswählen:</h6>
+                                <h6 style="margin-top: 25px;">Gruppe zum Einschalten auswählen:</h6>
                                 <ul class="list-group" id="new-rule-device-list">
                                 </ul>
                                 <label for="inputTimeNewRule" style="margin-top: 25px;">Uhrzeit auswählen:</label>

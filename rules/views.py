@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_sameorigin
-
+from datetime import datetime
 from main.views import DECONZ_URL, API_KEY, TEST
 from main.views import get_data_from_input
 from rules.api_calls_deconz import createSchedule, createRule, deleteRule, updateRule
@@ -165,6 +165,10 @@ def get_all_rule_data(request):
                 else:
                     localtime_tmp = value["localtime"][-8:-3]
                     weekdays = value["localtime"][0:10] 
+                    print("GUTEN TAG", weekdays)
+                    weekdays = datetime.strptime(weekdays, "%Y-%m-%d")
+                    weekdays = datetime.strftime(weekdays, "%d.%m.%Y")
+                    print("GUTEN TAG überarbeitet", weekdays)
                    
                 
             response += [{"id": key,

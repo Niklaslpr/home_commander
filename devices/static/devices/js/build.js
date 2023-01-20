@@ -16,6 +16,7 @@ function loadDevices() {
 
             let devicesJson = {};
             for (let entry of data.devices.reverse()) {
+                
                 // ID = 1 ==> Configuration-Tool überspringen
                 if (entry['id'] == ''){
                     console.log(entry['id'] + ' übersprungen');
@@ -28,6 +29,7 @@ function loadDevices() {
                             "csrfmiddlewaretoken": getCookie('csrftoken'),
                             "device-id": entry['id'].toString(),
                             "device-name": entry['name'].toString(),
+                            "device-icon": entry['icon'].toString(),
                         },
                         headers: {
                             'Content-type': 'application/json', 'Accept': 'text/plain',
@@ -49,6 +51,7 @@ function loadDevices() {
                             "csrfmiddlewaretoken": getCookie('csrftoken'),
                             "device-id": entry['id'].toString(),
                             "device-name": entry['name'].toString(),
+                            "device-icon": entry['icon'].toString(),
                         },
                         headers: {
                             'Content-type': 'application/json', 'Accept': 'text/plain',

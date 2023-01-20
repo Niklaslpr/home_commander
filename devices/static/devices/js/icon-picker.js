@@ -18,5 +18,27 @@ function getIconId(IconId){
 function saveIcon(){
     document.getElementById('modal-body-edit').hidden = true;
     document.getElementById('modal-body-normal').hidden = false;
+    let editDeviceName = deviceControlModalLabel.innerHTML;
     console.log(selectedIcon);
+    console.log(editDeviceName);
+    console.log(deviceControlModal.dataset['deviceId']);
+    
+    
+    let formData = new FormData();
+    formData.append('deviceId', deviceControlModal.dataset['deviceId']);
+    formData.append('deviceName', editDeviceName);
+    formData.append('selectedIcon', selectedIcon);
+    formData.append('csrfmiddlewaretoken', csrftoken);
+    const http = new XMLHttpRequest();
+
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+            console.log(http.response);
+        } 
+    }
+    http.open('POST', './updatedevice/');
+    http.send(formData);
+   
+    
 }

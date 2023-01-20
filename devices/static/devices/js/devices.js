@@ -286,6 +286,9 @@ function loadDeviceDataToModal(deviceId) {
         deviceControlModal.dataset['deviceName'] = currentDevice['name'];
 
         document.getElementById('device-control-modal-colorpicker').hidden = currentDevice['type'] !== 'Extended color light';
+        document.getElementById('device-control-modal-brightness-display').hidden = currentDevice['type'] !== 'Extended color light';
+        document.getElementById('device-control-modal-brightness').hidden = currentDevice['type'] !== 'Extended color light';
+        document.getElementById('device-control-modal-brightness-label').hidden = currentDevice['type'] !== 'Extended color light';
 
         deviceControlModalSwitch.checked = currentDevice['on'];
         deviceControlColorPicker.color.hue = currentDevice['hue'];
@@ -349,20 +352,25 @@ function saveDeviceDataToLocalStorage(deviceId) {
     }
 }
 
-function getIconId(IconId) {
-    icons = ["lamp-fill.svg", "lamp.svg", "lightbulb.svg", "lightbulb-fill.svg", "plug.svg", "plug-fill.svg", "brezel.png", "plugin.svg", "robot.svg"];
-    for (const tmp in icons) {
-        document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
-    }
-    selectedIcon = IconId;
-    document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
-}
+//function getIconId(IconId) {
+    //icons = ["lamp-fill.svg", "lamp.svg", "lightbulb.svg", "lightbulb-fill.svg", "plug.svg", "plug-fill.svg", "brezel.png", "plugin.svg", "robot.svg"];
+    //for (const tmp in icons) {
+        //document.getElementById(icons[tmp]).style.backgroundColor = "transparent";
+    //}
+    //selectedIcon = IconId;
+    //document.getElementById(selectedIcon).style.backgroundColor = "var(--tertiary-color)";
+//}
 
-function saveIcon() {
-    document.getElementById('modal-body-edit').hidden = true;
-    document.getElementById('modal-body-normal').hidden = false;
-    console.log(selectedIcon);
-}
+//function saveIcon() {
+    
+    //let newDeviceName = deviceControlModalLabel.value;
+    //console.log(selectedIcon);
+    //console.log(newDeviceName);
+    //document.getElementById('modal-body-edit').hidden = true;
+    //document.getElementById('modal-body-normal').hidden = false;
+    
+    
+//}
 
 function toggleEdit(isActive) {
     if (isActive) {

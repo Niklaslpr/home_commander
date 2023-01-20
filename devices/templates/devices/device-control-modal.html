@@ -39,8 +39,8 @@
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-between">
-                    <button type="button" class="btn mt-5 btn-secondary" id="cancelEditDevice" style="" data-bs-dismiss="modal">Abbrechen</button>
-                    <button type="button" class="btn mt-5" id="saveIcon" style="background-color: var(--tertiary-color)" onclick="saveIcon()">Speichern</button>
+                    <button type="button" class="btn mt-5 btn-secondary" id="cancelEditDevice" style="" onclick="toggleEdit(true)">Abbrechen</button>
+                    <button type="button" class="btn mt-5" id="saveIcon" style="background-color: var(--tertiary-color)" onclick="saveIcon(); toggleEdit(true)">Speichern</button>
                 </div>
                 
             </div>
@@ -55,7 +55,7 @@
                 <div style="display: flex; justify-content: center; align-items: center"
                      id="device-control-modal-colorpicker"></div>
                 <br>
-                <label for="device-control-modal-brightness" class="form-label">Helligkeit <p
+                <label for="device-control-modal-brightness" id="device-control-modal-brightness-label" class="form-label">Helligkeit <p
                         id="device-control-modal-brightness-display"></p></label>
                 <input type="range" class="form-range" min="0" max="100"
                        id="device-control-modal-brightness"

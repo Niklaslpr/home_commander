@@ -13,6 +13,8 @@ from devices.api_calls_deconz import putstate1
 from devices.api_calls_deconz import startscan
 from main.views import get_data_from_input
 from main.views import DECONZ_GROUPS_URL, DECONZ_DEVICE_LIGHTS_URL, DECONZ_DEVICE_SENSORS_URL
+from .models import Device
+from main.views import ICON_PATH
 
 
 @login_required
@@ -60,6 +62,7 @@ def kits(request, kit_name):
                   {
                       "id": request.GET["device-id"].__str__(),
                       "name": request.GET["device-name"].__str__(),
+                      "device_icon": request.GET["device-icon"].__str__(),
                       "has_color": True.__str__()
                   })
 
@@ -69,6 +72,15 @@ def get_all_device_data(request):
         data = get_data_from_input(request)
 
         response = helper.get_device_data_from_deconz(-1, request.user.get_username())
+        
+        for entry in response:
+            try:
+                device = Device.objects.get(device_id__exact=entry["id"].__str__())
+                print("Device in DB gefunden", device)
+                entry["icon"] = ICON_PATH + device.icon
+            except:
+                entry["icon"] = ICON_PATH + "lamp-fill.svg"
+            
         response = {"devices": response}
 
         return JsonResponse(response)
@@ -85,6 +97,32 @@ def get_device_data(request, id):
         print(data)
 
         return JsonResponse(response)
+
+def updatedevice(request):
+    if request.method == "POST":
+        formData = request.POST
+        data = '{"name": "' + formData["deviceName"] + '"}'
+        url = DECONZ_DEVICE_LIGHTS_URL + '/' + formData["deviceId"]
+        response = requests.put(url, data = data)
+        response = response.json()
+        
+        
+        if Device.objects.filter(device_id__exact=formData["deviceId"].__str__()).exists():
+            device = Device.objects.get(device_id__exact=formData["deviceId"].__str__())
+            if formData["selectedIcon"] != "undefined":
+                device.icon = formData["selectedIcon"]
+            else:
+                device.icon = "lamp-fill.svg"
+            device.save()    
+        else:    
+            if formData["selectedIcon"] != "undefined":
+                new_device = Device(device_id=formData["deviceId"].__str__(), name=formData["deviceName"], icon=formData["selectedIcon"])
+            else:
+                new_device = Device(device_id=formData["deviceId"].__str__(), name=formData["deviceName"], icon="lamp-fill.svg")
+            
+        
+            new_device.save()
+        return JsonResponse(response[0])
 
 
 def modify_device(request):
