@@ -163,7 +163,7 @@ def modify_device(request):
                     if "device_id" in data.keys() and (
                             isinstance(data["device_id"], int) or isinstance(data["device_id"], str) and data[
                         "device_id"].isnumeric()):
-                        print("Affenarsch", request_data)
+
                         response = helper.update_light_state_deconz(int(data["device_id"]), **request_data)
                         print('Hier bin ich type:')
                         print(response)

@@ -94,7 +94,7 @@ def kits(request, kit_name):
     print("TOLLLLLLLLLLLLLLLLL")
     request_get_data = {}
     for entry in request.GET:
-        print("ah thats bullshit", entry)
+
         request_get_data[entry.replace("-", "_")] = request.GET[entry]
 
     print("krraaaakkeke", request_get_data)
@@ -109,7 +109,7 @@ def get_all_rule_data(request):
         if not TEST:
             response_tmp = requests.get(url=DECONZ_SCHEDULE_URL)
             response_tmp = response_tmp.json()
-            print("UFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+
             print(response_tmp)
         else:
             response_tmp = {

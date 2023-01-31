@@ -55,7 +55,8 @@ def get_scene_data(request, id):
 def modify_scene(request):
     if request.method == "POST":
         data = get_data_from_input(request)
-        print('JabadabaDU', data)
+
+
 
         if data["action"] == "create":
             if "group_id" in data.keys() and (

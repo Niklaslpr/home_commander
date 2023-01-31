@@ -47,7 +47,7 @@ def update_scene_attributes(group_id, scene_id, request_data):
     if isinstance(request_data, dict) and request_data != {}:
         response = requests.put(DECONZ_SCENES_URL.replace("<GROUP_ID>", group_id) + "/" + scene_id,
                                 data=json.dumps(request_data))
-        print("LLLLLLLLLLLLLLLLLLLL",response.content)
+
         response = response.json()
     else:
         response = None

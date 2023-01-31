@@ -79,7 +79,7 @@ def kits(request, kit_name):
 
     request_get_data = {}
     for entry in request.GET:
-        print("ah thats bullshit", entry)
+
         request_get_data[entry.replace("-", "_")] = request.GET[entry]
 
     print("krraaaakkeke", request_get_data)

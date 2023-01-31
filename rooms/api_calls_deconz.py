@@ -63,7 +63,7 @@ def updateGroup(groupName, selectedDevices, groupId):
     print(data)
     url = DECONZ_GROUPS_URL + '/' + groupId
     r = requests.put(url, data=data)
-    print("Ach du scheiße")
+
     print(r.status_code)
     print(r.content)
     if groupName.startswith("room_"):
